@@ -1,0 +1,28 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
+
+# Data and private material
+data/
+private/
+notes/
+exports/
+ecoinvent/
+
+# Build, editor, and operating-system files
+bin/
+obj/
+.vs/
+.vscode/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+*.3dmbak
+*.ghbak
+
