@@ -1,0 +1,234 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Material Catalogue V1 — dataset audit · RAW LCA</title><link rel="stylesheet" href="../research.css"><link rel="stylesheet" href="../materials/catalogue.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research notebooks</a><nav><a href="../materials/index.html">Material Explorer</a><a href="index.html">All notebooks</a><a href="../components.html">Components</a></nav></header><main><p class="eyebrow">Material Catalogue V1 · current audit</p><h1>Material Catalogue V1 — dataset audit</h1>
+<p>Audit snapshot: <strong>18 October 2026</strong>. This is a read-only research catalogue of the current local library, not an updated import or an environmental assessment.</p>
+<h2>What was inspected</h2>
+<p>The two visible selectors resolve a user-selected or discovered compact SQLite library. They do not embed an entire environmental database in the plugin. This audit reads the current development library and the exact source/staging files registered in it. Test fixtures, old caches and custom user-created materials are not additional selector packs. The Danish English-name resource supplies display translations, not environmental factors.</p>
+<p>The audit uses the actual Danish family function and German browser family function from the current source. It checks the source XLSX/CSV cells against their staging records, then checks every stored GWP observation and declared quantity against the mapped source evidence. Read-only connections and before/after hashes protect the originals. The full audit stays private; the public catalogue is an explicit projection.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Records</th>
+<th>Density supplied</th>
+<th>Missing density</th>
+<th>Explicit thickness</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Danish BR18</td>
+<td>441</td>
+<td>155</td>
+<td>286</td>
+<td>0</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>5079</td>
+<td>1934</td>
+<td>3145</td>
+<td>1639</td>
+</tr>
+</tbody></table>
+<p>Counts are pinned dataset revisions/scenarios, not necessarily distinct manufactured products. Source pack release metadata is null; the download sidecars identify Danish Table 7 2025 and a German 2024-II download. Individual German records have their own versions, reference years and validity dates. Neither label means “latest available”.</p>
+<h2>Original units versus RAW aliases</h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Original unit</th>
+<th>RAW code</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Danish BR18</td>
+<td>kg</td>
+<td>kg</td>
+<td>132</td>
+</tr>
+<tr>
+<td>Danish BR18</td>
+<td>m</td>
+<td>m</td>
+<td>19</td>
+</tr>
+<tr>
+<td>Danish BR18</td>
+<td>m²</td>
+<td>m2</td>
+<td>124</td>
+</tr>
+<tr>
+<td>Danish BR18</td>
+<td>m³</td>
+<td>m3</td>
+<td>74</td>
+</tr>
+<tr>
+<td>Danish BR18</td>
+<td>stk</td>
+<td>item</td>
+<td>65</td>
+</tr>
+<tr>
+<td>Danish BR18</td>
+<td>ton</td>
+<td>t</td>
+<td>27</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>MJ</td>
+<td>MJ</td>
+<td>49</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>kg</td>
+<td>kg</td>
+<td>915</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>kgkm</td>
+<td>kgkm</td>
+<td>9</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>m</td>
+<td>m</td>
+<td>102</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>m3</td>
+<td>m3</td>
+<td>692</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>pcs.</td>
+<td>item</td>
+<td>1834</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>qm</td>
+<td>m2</td>
+<td>1478</td>
+</tr>
+</tbody></table>
+<p>The original strings are preserved. RAW already maps aliases such as <code>qm</code> to <code>m2</code>, <code>pcs.</code>/<code>stk</code> to <code>item</code> and <code>ton</code> to <code>t</code>. The catalogue does not introduce or alter these mappings. All factors retain their original declared/reference amount, including non-unit quantities and floating-point values in the pinned representation. Exact raw numerical cell text is also available in each German record&#39;s traceability section.</p>
+<h2>Module and metadata availability</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Danish numeric</th>
+<th>German numeric</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td>0</td>
+<td>466</td>
+</tr>
+<tr>
+<td>A1-A3</td>
+<td>441</td>
+<td>3811</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>0</td>
+<td>466</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>0</td>
+<td>466</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>0</td>
+<td>2904</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>0</td>
+<td>2963</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>0</td>
+<td>2153</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>0</td>
+<td>1992</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>0</td>
+<td>1724</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>0</td>
+<td>1675</td>
+</tr>
+<tr>
+<td>B5</td>
+<td>0</td>
+<td>1679</td>
+</tr>
+<tr>
+<td>B6</td>
+<td>0</td>
+<td>2018</td>
+</tr>
+<tr>
+<td>B7</td>
+<td>0</td>
+<td>1800</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>0</td>
+<td>3579</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>0</td>
+<td>4021</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>441</td>
+<td>4143</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>441</td>
+<td>3819</td>
+</tr>
+<tr>
+<td>D</td>
+<td>441</td>
+<td>4337</td>
+</tr>
+</tbody></table>
+<p>“Available” here means a finite stored GWP observation, including explicit source zero. Missing is never converted into zero. A1–A3 aggregate and A1/A2/A3 leaves are not additive. The explorer shows the source aggregate when present and lists leaves separately; it does not calculate a new product-stage factor.</p>
+<p>All 5,520 current records have unresolved typed LCIA method metadata. A source <code>Konformitaet</code> statement is retained but is not promoted to a resolved compatibility contract. Numeric coverage does not establish scenario applicability, matching methodology or a verified whole-life result. Some source EPDs contain more information than the imported Table 7 subset.</p>
+<p>Structured thickness is available in some German native metadata but is not a universal reference-area conversion. Names, reference-flow descriptions and source scenario differences must also be reviewed. Danish mass-per-area fields are not volumetric density; their existence does not justify populating density with an invented number.</p>
+<p><a id="publication"></a></p>
+<h2>Publication and exclusions</h2>
+<p><strong>ÖKOBAUDAT:</strong> its official data-user terms permit free distribution of unmodified data with attribution. V1 publishes original field excerpts and original GWP observations from the pinned download, attributes ÖKOBAUDAT/BMWSB–BBSR and record owners, and retains source URLs/versions. RAW category labels and review hypotheses are clearly separate analysis, not altered source values. No new open-data licence is asserted. No original EPD PDFs, background LCI databases, logos or unrelated third-party files are redistributed. <a href="https://oekobaudat.de/en/guidance/data-users.html">Official terms</a>.</p>
+<p><strong>Danish BR18:</strong> the official Table 7 page provides the workbook, but this review did not confirm blanket bulk-republication permission, including material derived from third-party EPDs. Accordingly <strong>all 441 individual Danish records are excluded from public JSON</strong>. The public site contains RAW&#39;s aggregate audit statistics and a limited cited case study, with links to the original sources. This is an unresolved permission question, not a declaration that all use is prohibited. <a href="https://www.bygningsreglementet.dk/Bilag/B2/Bilag_2/Tabel_7">Official Table 7</a>. General online availability alone does not establish permission: <a href="https://kum.dk/kulturomraader/ophavsret/ophavsret-paa-internettet">Danish Ministry of Culture guidance</a>.</p>
+<p>The complete record audit remains in the private repository. Internal paths, private annotations, raw source packages, source code and credentials are excluded from public JSON. The website does not offer editing or writeback.</p>
+<h2>Export contract</h2>
+<p><code>schema_version = 1.0.0</code>. A record is identified by <strong>(id, revision)</strong>. <code>source</code> holds original identity, category, native unit/quantity text, source metadata, version, URLs and source row references. <code>raw</code> holds the pinned RAW name, browsing family, existing unit alias, density and exact stored module observations. <code>analysis</code> holds conditional quantity paths, review suggestions and warnings. No field under <code>analysis</code> is an approved data change.</p>
+<p>For future SQLite/Supabase storage, retain the composite record key and separate observation rows <code>(record, revision, module, indicator, evidence row)</code>; do not overwrite source with derived annotations. Preserve numeric null/status, raw cell strings and factor/reference units. The V1 static JSON is generated, never manually edited. It has no backend, authentication or Grasshopper dependency at runtime.</p>
+<p><a href="../materials/index.html">Explore records</a> · <a href="../materials/data/schema-v1.json">JSON schema</a> · <a href="../materials/data/provenance-v1.json">Snapshot provenance</a> · <a href="raw-material-reference-quantity-study.html">Reference-quantity study</a> · <a href="raw-material-classification-review.html">Classification review</a></p>
+<p><a href="raw-material-catalogue-audit.md">Markdown source</a></p></main><footer>Read-only audit · no material or calculator changes · 18 October 2026</footer></body></html>

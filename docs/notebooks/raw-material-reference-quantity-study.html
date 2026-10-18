@@ -1,0 +1,140 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reference quantities — geometry is not a declared product · RAW LCA</title><link rel="stylesheet" href="../research.css"><link rel="stylesheet" href="../materials/catalogue.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research notebooks</a><nav><a href="../materials/index.html">Material Explorer</a><a href="index.html">All notebooks</a><a href="../components.html">Components</a></nav></header><main><p class="eyebrow">Material Catalogue V1 · current audit</p><h1>Reference quantities — geometry is not a declared product</h1>
+<p>Material Catalogue V1 / 18 October 2026. Research only: no conversion code, source factors or Grasshopper behaviour changed.</p>
+<h2>Two questions, kept separate</h2>
+<ol>
+<li>Can an element supply the declared product quantity with appropriate evidence?</li>
+<li>Is the selected factor/module/method applicable and available?</li>
+</ol>
+<p>A successful quantity match answers only the first. The usual arithmetic is <strong>impact = factor × matching quantity / declared reference quantity</strong>. An original factor per 1,000 units must not silently become a factor per one unit.</p>
+<h2>Conditional resolution classes</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Meaning</th>
+<th>Example</th>
+<th>Gate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>Direct matching quantity</td>
+<td>Product reference area; actual volume; measured mass; explicit product count</td>
+<td>Same product, capacity, state, geometry convention and reference basis</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Mathematical path with source information</td>
+<td>Volume × explicitly supplied density; potential volume/reference-thickness relation</td>
+<td>Evidence must apply to the exact record; metadata presence alone is not conversion approval</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Additional project evidence required</td>
+<td>Missing density; project thickness/section; explicit count absent</td>
+<td>User must supply justified quantity/provenance; do not infer from a name</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Unresolved for the current workflow</td>
+<td>Metre-only factors, energy/transport activity, treatment processes</td>
+<td>A suitable product/activity adapter and boundary contract are needed</td>
+</tr>
+</tbody></table>
+<p>An individual record can have several paths. For example, kg can have A with measured mass and C with volume when density is missing. To avoid double-counting, the <strong>geometry-route chart</strong> uses one stated starting condition: matching product area/volume for m²/m³, volume for kg/t, and count still to be supplied for item. Activity/treatment records are D even if their unit is kg. The direct-matching count includes measured mass and explicit count, so it is a different statistic.</p>
+<table>
+<thead>
+<tr>
+<th>Starting geometry-route class</th>
+<th>Danish</th>
+<th>German</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>198</td>
+<td>2170</td>
+<td>2368</td>
+</tr>
+<tr>
+<td>B</td>
+<td>74</td>
+<td>724</td>
+<td>798</td>
+</tr>
+<tr>
+<td>C</td>
+<td>150</td>
+<td>2008</td>
+<td>2158</td>
+</tr>
+<tr>
+<td>D</td>
+<td>19</td>
+<td>177</td>
+<td>196</td>
+</tr>
+</tbody></table>
+<p>A: matching product area/volume. B: volume with source density. C: volume needing density or explicit count still needed. D: unsupported unit or treatment/activity role. These are conditional paths, not automatic conversion permissions.</p>
+<h2>Geometry paths</h2>
+<table>
+<thead>
+<tr>
+<th>Declared basis</th>
+<th>Quantity path</th>
+<th>Current RAW limitation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>kg / t</td>
+<td>Measured mass; or V × ρ; or A × t × ρ; or L × section area × ρ</td>
+<td>Evidence for density, moisture/state, thickness and section as needed. Tonnes require the existing explicit 1,000 kg scale.</td>
+</tr>
+<tr>
+<td>m³</td>
+<td>Matching solid V; or A × t; or L × section area</td>
+<td>Voids, layers and product boundary must be consistent.</td>
+</tr>
+<tr>
+<td>m²</td>
+<td>Declared reference A</td>
+<td>Product thickness does not automatically rescale an area factor. All external faces of a solid are not its reference area.</td>
+</tr>
+<tr>
+<td>m</td>
+<td>Matching product L</td>
+<td>Length is measurable, but current direct factor resolution does not support m. Do not relabel as m³.</td>
+</tr>
+<tr>
+<td>item</td>
+<td>Explicit count of the declared product</td>
+<td>Existing saved Unit/count workflows exist; the current visible Construct Element offers Linear, Surface, Volume. Do not infer count from arbitrary Breps.</td>
+</tr>
+<tr>
+<td>MJ / kgkm</td>
+<td>Matching energy or transport activity</td>
+<td>These are not product geometry quantities; need an activity/boundary resolver. No conversion implemented in this task.</td>
+</tr>
+</tbody></table>
+<p>The current visible <strong>RAW Physical Properties is read-only</strong>. It does not repair missing density. A future or explicitly supported user-derived material workflow must retain provenance; do not follow historical notebook instructions that describe an older override component as the current visible inspector.</p>
+<h2>Four different areas/volumes</h2>
+<figure class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 210" role="img" aria-label="One reference surface, solid volume and total boundary area are different quantities"><g fill="none" stroke="#415448" stroke-width="2"><path d="M35 45H195V145H35Z"/><path d="M310 60H470V160H310ZM310 60l25-25h160v100l-25 25M470 60l25-25"/><path d="M595 45H755V145H595ZM595 45l25-25h160v100l-25 25M755 45l25-25" stroke="#ad693f"/></g><g fill="#28392f" font-family="sans-serif" font-size="16"><text x="35" y="185">Reference surface · A</text><text x="310" y="185">Matching solid · V</text><text x="590" y="185">All faces · S ≠ A</text></g></svg><figcaption>Conceptual quantity diagram, not project geometry. The product's declared convention determines which area is applicable.</figcaption></figure>
+
+<p>For a simple rectangular solid without openings, volume is <code>L × H × t</code>, one planar face is <code>L × H</code>, while total external area is <code>2(LH + Lt + Ht)</code>. They are different quantities. Even equal volumes can have different reference areas when thickness differs. Without the applicable thickness and product convention, volume alone is insufficient.</p>
+<h2>Danish concrete wall-panel case</h2>
+<p>The local workbook row 17 / <strong>#B1393</strong> is the 20 cm wall panel with 16–25 kg reinforcement and 11% openings. Its pinned A1–A3 value is <strong>73.2 kg CO₂-eq per 1 m²</strong>. The source supplies <strong>433.9 kg/m²</strong>, not density in kg/m³; the RAW density field is therefore absent. Typed LCIA method remains unknown.</p>
+<p>The linked <strong>MD-20015-DA_rev1</strong> EPD confirms these product dimensions, openings and area mass (pages 2 and 4), and identifies EN 15804+A1. Its stated validity ended 20 July 2025; this historical source is not a current product approval. No EPD metadata is imported or silently substituted here. <a href="https://www.epddanmark.dk/media/oq0dzm1j/md-20015-da_rev1-betonelement-foreningen.pdf">Original EPD</a>.</p>
+<h3>Proposed strategies — not implemented</h3>
+<ul>
+<li>Prefer a separately identified declared reference surface for the matching panel.</li>
+<li>For a matching homogeneous prism, <code>A = V / t</code> is mathematical, but an opening/void convention must be established first.</li>
+<li>If <code>V</code> excludes openings and the verified declared area includes them, a candidate relation is <code>A_reference = V / [t × (1 − opening_fraction)]</code>. This is a conditional model, not a general automatic rule.</li>
+<li>Product-specific area mass could support <code>A_reference = matching mass / area mass</code>, provided the reference product and reinforcement match.</li>
+<li>Do not use total Brep surface area, assume density, scale a fixed-area factor by arbitrary thickness, or automatically apply an opening percentage to another panel.</li>
+</ul>
+<p>The detailed original row and source checks are retained privately. Only this bounded cited example is published; no Danish record bulk export is included.</p>
+<h2>Evidence needed in V2</h2>
+<p>Recover explicit reference geometry, net/gross conventions, applicable thickness, area/length/item mass and product state. Distinguish source evidence from user-derived assumptions. Validate multi-module metadata consistency. Develop adapters separately from category display work. Unsupported quantity paths and incomplete methods must remain visible rather than becoming zero-valued results.</p>
+<p><a href="../materials/index.html">Material Explorer</a> · <a href="raw-material-catalogue-audit.html">Dataset audit</a></p>
+<p><a href="raw-material-reference-quantity-study.md">Markdown source</a></p></main><footer>Read-only audit · no material or calculator changes · 18 October 2026</footer></body></html>

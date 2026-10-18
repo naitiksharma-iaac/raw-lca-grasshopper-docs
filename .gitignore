@@ -26,3 +26,14 @@ Thumbs.db
 *.3dmbak
 *.ghbak
 
+
+# Licensed Material Catalogue V1 only; other data/private exclusions remain.
+!docs/materials/data/
+docs/materials/data/*
+!docs/materials/data/catalogue-v1.json
+!docs/materials/data/audit-v1.json
+!docs/materials/data/provenance-v1.json
+!docs/materials/data/schema-v1.json
+!docs/materials/data/records/
+docs/materials/data/records/*
+!docs/materials/data/records/*.json
