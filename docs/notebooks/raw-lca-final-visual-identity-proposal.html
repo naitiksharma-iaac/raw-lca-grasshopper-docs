@@ -1,0 +1,1032 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW LCA — final visual identity proposal · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-lca-final-visual-identity-proposal.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#1-identity-statement">1. Identity statement</a><a href="#2-research-synthesis-and-source-boundaries">2. Research synthesis and source boundaries</a><a href="#3-critical-comparison-of-the-identity-narratives">3. Critical comparison of the identity narratives</a><a href="#4-evaluation-method">4. Evaluation method</a><a href="#5-main-logo-development-and-selection">5. Main logo development and selection</a><a href="#6-graphic-system-specification">6. Graphic system specification</a><a href="#7-every-visible-component-function-alternatives-and-decision">7. Every visible component: function, alternatives and decision</a><a href="#8-machine-process-family">8. Machine-process family</a><a href="#9-earlier-dataset-selector-decision--superseded-by-focused-refinement">9. Earlier dataset-selector decision — superseded by focused refinement</a><a href="#10-iteration-and-small-size-quality-review">10. Iteration and small-size quality review</a><a href="#11-native-grasshopper-implementation-feasibility">11. Native Grasshopper implementation feasibility</a><a href="#12-rejected-alternatives-and-remaining-limitations">12. Rejected alternatives and remaining limitations</a><a href="#13-exact-decision-proposed-for-approval">13. Exact decision proposed for approval</a><a href="#14-review-package">14. Review package</a><a href="#15-source-catalogue">15. Source catalogue</a></div></details><h1 id="raw-lca--final-visual-identity-proposal">RAW LCA — final visual identity proposal</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<blockquote>
+<p><strong>Historical, unapproved recommendation:</strong> the user rejected Measured Tectonics as identity and did not approve BR18 / ÖKO. The current corrective review keeps RAW LCA, uses the inspected original RAW logo, and recommends open RAW-derived DK / ÖB. See <a href="../reviews/component-family/index.html">the corrective review</a> and feedback audit (supporting internal reference retained privately). The earlier study below is preserved as evidence, not current approval.</p>
+</blockquote>
+<blockquote>
+<p><strong>Selector recommendation updated after user feedback:</strong> use refined <strong>BR18 / ÖKO with minimal baselines (B)</strong>. See <a href="raw-selector-icon-refinement.html">selector refinement</a> and its <a href="../reviews/history/index.html">focused visual review</a>. The earlier enclosing DK/ÖB register drawings, scoring and source-selector sheets below are retained as historical comparison, not the current recommendation. S2 identifiers and S3 table/facade directions remain valid; the user rejected the enclosing boundary, not architectural notation.</p>
+</blockquote>
+<p><strong>Recommendation for approval, not production implementation.</strong> 18 October 2026 · <code>feat/core-plugin-foundation</code>.</p>
+<p>Adopt <strong>Measured Tectonics</strong> as the drawing language, <strong>Section Gate</strong> as the RAW LCA brand mark, and the neutral 17-component family in this package, with the two selectors revised by the linked refinement. Keep a general machine-process icon in the palette and prepare six operation-specific instance icons for a later cache-aware implementation. Use <strong>BR18 / ÖKO with minimal baselines</strong> for the two source-selector symbols, with the full library identity retained in the component name and metadata.</p>
+<p>The public name remains <strong>RAW LCA</strong>. Measured Tectonics and Section Gate are internal design descriptions, not new product names. This recommendation supersedes the earlier proposal&#39;s request to choose among entire styles. It does not imply approval, deployment, scientific verification or a completed native Grasshopper test.</p>
+<h2 id="1-identity-statement">1. Identity statement</h2>
+<p>RAW LCA makes the relationship between a particular material, a constructed quantity, a fabrication operation and an environmental boundary inspectable. The identity should look like a piece of architectural reasoning: cut sections, interfaces, measured gaps and a receiving condition. It should not promise that every resource loops back, every calculation is complete, or every recovered material produces an environmental benefit.</p>
+<p>The main mark has a strong sectional silhouette for recognition. Components use lighter open linework to explain operations. They share cut angles, negative-space discipline and neutral ink, rather than carrying the same miniature brand badge. No animal, leaf, globe, recycling ring, gear, calculator or approval tick is used as the overall identity.</p>
+<h2 id="2-research-synthesis-and-source-boundaries">2. Research synthesis and source boundaries</h2>
+<p>The six requested documents were read alongside both previous review packages, their reference manifests, visual boards, original concepts and small-size tests. Current component contracts were then checked against source. The older product-structure document describes an earlier palette; <code>RawPalette.cs</code> is authoritative for the <strong>current 17 visible components</strong>.</p>
+<p>Evidence reused rather than unnecessarily downloaded again:</p>
+<ul>
+<li><strong>Documented RAW programme:</strong> CITA / Royal Danish Academy&#39;s RAW resource model and material montage (R01), and the RAW-CITA Timber Workshop account (R02). These support the sequence characterise → match → fabricate and the importance of variable material stock. They do not establish measured machine energy factors.</li>
+<li><strong>Related CITA precedent, not automatically a current RAW project:</strong> RawLam (R03). Wane-edged stock, CT characterisation, computational allocation, structural simulation and joint-location images support a particular-material identity. They do not justify a CT-scanner icon for the read-only Physical Properties component.</li>
+<li><strong>Architectural assembly:</strong> BAMB reversible-building connection guidance (R06), Rockwool&#39;s wall cutaway (R21), and the WoodWorks partition section (R26). They support interfaces and cut profiles instead of generic layer bars. R21 is a cutaway, not an exploded assembly; R03 structural simulation is not a joint photograph.</li>
+<li><strong>Fabrication operations:</strong> ICD/ITKE 2016–17 coreless winding (R04, related research rather than a RAW project), Sandvik milling definitions (R28), and NIST additive-manufacturing bead/layer diagrams (R27). Their physical mechanisms inform the mode icons. No source drawings were traced into the icons.</li>
+<li><strong>Environmental accounting:</strong> LCA.no&#39;s module overview (R07) and an actual Mapei/EPD Norway system-boundary diagram (R22). C-stage treatment/termination and D-stage transfer must remain different. These are visual/semantic references; no EPD factors were imported and the LCA.no explainer is not the normative standard.</li>
+<li><strong>Material information:</strong> BAMB/EPEA passports (R05) support recorded provenance. Source portals R14/R15 support source-specific labels, not borrowed official marks or inferred certification.</li>
+<li><strong>Computational-tool identity:</strong> original Grasshopper icons (R09), Galapagos (R10), Kangaroo (R25), Robots (R23) and Ladybug (R13). Their strengths are recognisable silhouettes and domain-specific mechanisms. RAW borrows that principle, not their artwork. Tanya&#39;s repository/explorer (R17/R16) contextualise separate impact contributions; their visuals are not proof of RAW plugin output parity.</li>
+</ul>
+<p>New inspection was targeted at <strong>implementation feasibility</strong>: the current custom selector attributes, machine attributes, <code>MachineProcessIcons</code>, <code>RawModeUi</code>, all 17 visible component roles, and the installed Rhino 8 Grasshopper XML API. The official McNeel icon guide was re-opened. A web request for <code>DestroyIconCache</code> returned a cache miss; the installed SDK XML explicitly documents it, so no web result was invented.</p>
+<p>The attributed reference library is separate from <code>masters/</code> and <code>png/</code>. It preserves original URLs, creators, source relationship, local-image hashes and access limitations. References are research reproductions, not assets licensed for product redistribution. Do not ship the reference folder with the plugin. Text-only or inaccessible evidence remains labelled as such.</p>
+<h2 id="3-critical-comparison-of-the-identity-narratives">3. Critical comparison of the identity narratives</h2>
+<p>Tectonic Notation is the strongest grammar at 24 px: profiles and connections remain readable. Its weakness is repetitive orthogonality. Material Signatures adds RAW-specific character but can overpromise scanning or collapse into grain noise. Lifecycle Traces explains boundaries well but is too abstract as a universal drawing language.</p>
+<p><strong>Measured Tectonics</strong> is a constrained synthesis: use tectonic geometry as the common grammar; permit one material irregularity where it carries meaning; reserve boundary traces for assessment scope and next-system transfer. Do not apply all three motifs to every icon. This keeps a single visual language while improving on the prior alternatives.</p>
+<p>The ten requested narrative tests are covered explicitly: RAW/research relationship and environmental relevance by Research; architectural relevance by Architecture; originality, distinctiveness and character by Distinctiveness; recognisability by Meaning and Small-size; consistency by Family; future extensibility by Versatility; Grasshopper suitability by Native feasibility. Scores below are judgements grounded in source relevance and raster inspection, not scientific observations or recognition-test percentages.</p>
+<h2 id="4-evaluation-method">4. Evaluation method</h2>
+<p>Use a 1–5 ordinal rating: 1 poor, 2 weak, 3 adequate, 4 strong, 5 exceptional for this brief. Weighted total = Σ(weight × rating / 5). Score competing candidates with the same weights. A high feasibility score means the art can be rasterised into the documented native slot, <strong>not that it passed native execution</strong>. Originality means independently drawn here; no trademark-clearance claim is made.</p>
+<p>Meaning and legibility carry 38% because an attractive but misleading or illegible component fails its task. Research and architecture carry 27% to prevent a generic software library. Distinctiveness receives 12%; consistency and versatility together 18% balance family identity against future extension. Feasibility is a 5% gate because all finalists already use simple transparent bitmap-compatible geometry.</p>
+<p>Evidence classes: <strong>F</strong> = source/API fact; <strong>V</strong> = direct visual/raster inspection; <strong>J</strong> = design judgement. Research relationships and component roles are F. Open gaps, alpha channels and raster dimensions are V or automated checks. Meaning, memorability, semantic resemblance and scores are J, informed by F/V. No claim of statistically measured recognisability is made.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th align="right">Weight</th>
+<th>What is assessed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Research relevance</td>
+<td align="right">15%</td>
+<td>Documented material/fabrication/LCA relationship, without capability inflation</td>
+</tr>
+<tr>
+<td>Architectural character</td>
+<td align="right">12%</td>
+<td>Section, connection and construction character</td>
+</tr>
+<tr>
+<td>Distinctiveness</td>
+<td align="right">12%</td>
+<td>Own silhouette; no borrowed branding or interchangeable UI badge</td>
+</tr>
+<tr>
+<td>Meaning</td>
+<td align="right">18%</td>
+<td>Matches the exact source contract and avoids misleading action cues</td>
+</tr>
+<tr>
+<td>Small-size legibility</td>
+<td align="right">20%</td>
+<td>Main mechanism and whitespace survive actual-size raster review</td>
+</tr>
+<tr>
+<td>Family consistency</td>
+<td align="right">8%</td>
+<td>Common geometry without identical silhouette</td>
+</tr>
+<tr>
+<td>Versatility</td>
+<td align="right">10%</td>
+<td>Works across materials, contexts, monochrome and future families</td>
+</tr>
+<tr>
+<td>Native feasibility</td>
+<td align="right">5%</td>
+<td>Transparent 24 × 24 contract; cache and attribute constraints understood</td>
+</tr>
+</tbody></table></div>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Narrative</th>
+<th>Ratings in criterion order</th>
+<th align="right">Total / 100</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tectonic Notation</td>
+<td>4, 5, 4, 4, 5, 5, 4, 5</td>
+<td align="right">89.0</td>
+</tr>
+<tr>
+<td>Material Signatures</td>
+<td>5, 4, 5, 4, 3, 4, 4, 5</td>
+<td align="right">82.4</td>
+</tr>
+<tr>
+<td>Lifecycle Traces</td>
+<td>5, 3, 4, 3, 3, 5, 5, 5</td>
+<td align="right">77.6</td>
+</tr>
+<tr>
+<td>Measured Tectonics — proposed synthesis</td>
+<td>5, 5, 4, 4, 5, 5, 5, 5</td>
+<td align="right">94.0</td>
+</tr>
+</tbody></table></div>
+<p>The synthesis scores 94; Tectonic Notation 89. This is a recommendation from design evidence, not an objective declaration that synthesis is universally better. Its advantage depends on disciplined use of material/boundary cues. If everything acquires a dashed boundary or wane edge, that advantage disappears.</p>
+<h2 id="5-main-logo-development-and-selection">5. Main logo development and selection</h2>
+<p>Five geometrically distinct concepts were developed: Section Gate, Registered Span, Resource Weave, Measured Field and Open Ledger. The two leading structures were refined as silhouettes. The finalist sheet contrasts an outline/hatching study with reduced forms; this is design development, not a historical native screenshot.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Strongest argument</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Section Gate</td>
+<td>5, 5, 4, 4, 5, 5, 5, 5</td>
+<td align="right">94.0</td>
+<td>Two separated cut sections frame one open counterform. A measurable gap remains visible.</td>
+<td>Can suggest an abstract letter R; it is not an environmental certification mark.</td>
+</tr>
+<tr>
+<td>Registered Span</td>
+<td>5, 5, 4, 4, 4, 5, 4, 5</td>
+<td align="right">88.0</td>
+<td>Stock keeps a particular edge across two supports. Strong connection to reclaimed members.</td>
+<td>More timber-specific; support/beam details compete at 16 px.</td>
+</tr>
+<tr>
+<td>Resource Weave</td>
+<td>4, 4, 3, 3, 5, 4, 4, 5</td>
+<td align="right">79.0</td>
+<td>An interlock gives an assembly logic and compact silhouette.</td>
+<td>Too close to familiar chain/link and construction monograms.</td>
+</tr>
+<tr>
+<td>Measured Field</td>
+<td>5, 3, 4, 3, 3, 4, 3, 5</td>
+<td align="right">72.0</td>
+<td>Variable stock and measurement bracket directly link to characterisation.</td>
+<td>Frame dominates at small size; looks like an inspection component rather than a brand.</td>
+</tr>
+<tr>
+<td>Open Ledger</td>
+<td>4, 3, 2, 4, 5, 3, 4, 5</td>
+<td align="right">76.2</td>
+<td>Accounting separates material and impact contributions.</td>
+<td>Too close to a dashboard or generic list; weak architectural identity.</td>
+</tr>
+</tbody></table></div>
+<p><strong>Recommend Section Gate (94), ahead of Registered Span (88).</strong> Two cut masses form an open architectural counterform: a long section and a detached receiving return. A clipped upper corner and an offset internal opening make the silhouette recognisable. The open gap matters more than a literal letter; some viewers may read an abstract R, but the wordmark establishes RAW LCA explicitly. There is no closed circular arrow claiming successful reuse. The logo is not an enlarged component: it is a compact spatial relationship from which the finer family grammar is derived.</p>
+<p>Registered Span has a direct connection to reclaimed timber and its irregular edge. It loses because the support/datum structure is more fragile at small size and suggests a timber-specific scope. Resource Weave is too close to link/interlock monograms; Measured Field reads as an inspector; Open Ledger reads as a software dashboard. Their strengths are retained in suitable component roles, not mixed into the brand.</p>
+<p>The six-point lead over Registered Span comes from small-size and versatility ratings. Reducing small-size weight by ten points and assigning those points to equal-rated research reduces the lead to four; the direction still leads under that sensitivity check. The result is not independent of judgement: if a future recognition test finds the counterform ambiguous, the ranking should be revisited.</p>
+<p>Deliverables include symbol, custom path wordmark, horizontal lockup, stacked symbol/wordmark, compact square lockup, neutral, black, warm, reversed and optional slate-accent symbols. All have transparent SVG/PNG assets. Wordmark letters are original path geometry; no font files or converted commercial font outlines are included. Small PNG lockup exports are provided for completeness, <strong>not recommended usage</strong>; use the symbol alone at 24 px.</p>
+<h2 id="6-graphic-system-specification">6. Graphic system specification</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Component grid</td>
+<td>24 × 24; approximately 2 px clear edge, typical active area x/y 3–21. No background tile.</td>
+</tr>
+<tr>
+<td>Main stroke</td>
+<td>1.30 px nominal. Machine, Physical Properties and Recovery use 1.40 for sparse mechanisms; mode family 1.35.</td>
+</tr>
+<tr>
+<td>Caps / joins</td>
+<td>Square caps, miter joins. No glossy rounding; diagonal corners are authored deliberately.</td>
+</tr>
+<tr>
+<td>Detail hierarchy</td>
+<td>One primary contour; secondary mechanism; optional tertiary marks only when they remain useful.</td>
+</tr>
+<tr>
+<td>Negative space</td>
+<td>Aim for at least 2 px open gaps at 24 px; protect interfaces before retaining hatching.</td>
+</tr>
+<tr>
+<td>Small-size masters</td>
+<td>18/16 variants remove tagged tertiary marks and hold main stroke near 1.02 output px. Do not simply downscale all geometry without review.</td>
+</tr>
+<tr>
+<td>Source letters</td>
+<td>Original path glyphs; DK/ÖB enlarged relative to longer alternatives. Umlaut is retained.</td>
+</tr>
+<tr>
+<td>Fill</td>
+<td>Most components unfilled. Limited neutral tonal fill for mapped geometry and legend swatches; brand uses purposeful solid cut sections.</td>
+</tr>
+<tr>
+<td>Core ink</td>
+<td>Charcoal <code>#303638</code>, recommended. Warm <code>#534A43</code> is a presentation alternative.</td>
+</tr>
+<tr>
+<td>Optional brand accent</td>
+<td>Slate <code>#536F77</code>, only the receiving return. No scientific/status semantics.</td>
+</tr>
+<tr>
+<td>Display tones</td>
+<td><code>#8B938B</code> and <code>#B4B9AE</code>, bounded by charcoal. They represent visual mapping, not favourable impact.</td>
+</tr>
+<tr>
+<td>Brand grid</td>
+<td>48 units; mark occupies approximately 5–43. Preserve open counterform and detached return.</td>
+</tr>
+<tr>
+<td>Wordmark</td>
+<td>Original angular monoline paths, restrained spacing, no decorative stencil breaks.</td>
+</tr>
+<tr>
+<td>Clear space</td>
+<td>Brand: at least the 6-unit inter-section gap around the complete mark; more space in presentations.</td>
+</tr>
+<tr>
+<td>Minimum use</td>
+<td>Component/toolbar 24 px; 18/16 supplied for optical review. Symbol-only for small brand use; wordmarks at presentation scale.</td>
+</tr>
+<tr>
+<td>Shadow / gradient</td>
+<td>None baked into resources. Grasshopper owns body/state styling.</td>
+</tr>
+</tbody></table></div>
+<h2 id="7-every-visible-component-function-alternatives-and-decision">7. Every visible component: function, alternatives and decision</h2>
+<p>The palette audit checks exact names/categories against current <code>RawPalette.cs</code>, including renamed Material Info and the read-only Physical Properties. Nothing hidden is proposed for un-hiding. Each entry below records the selected original metaphor, two rejected alternatives and criterion ratings in the order defined above. Component labels remain essential; icons are recognition aids, not a replacement for contracts or diagnostics.</p>
+<h3 id="raw-material-selector-danish--materials">RAW Material Selector Danish — Materials</h3>
+<p><strong>Contract / workflow:</strong> Library families and selection → pinned source Material. No input ports. Source: DanishMaterialSelectorComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R15 / R08; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Dataset register / DK. DK is legible at 16–24 px; full component name supplies BR18 / Table 7. BR18 is more specific but congests the aperture. Grid alone cannot name the source.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dataset register / DK</td>
+<td>4, 3, 4, 5, 5, 5, 4, 5</td>
+<td align="right">87.8</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>BR18 identifier</td>
+<td>5, 3, 4, 5, 2, 5, 3, 5</td>
+<td align="right">76.8</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Table grid</td>
+<td>4, 5, 3, 2, 5, 5, 4, 5</td>
+<td align="right">79.4</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-material-selector-german--ökobaudat--materials">RAW Material Selector German / ÖKOBAUDAT — Materials</h3>
+<p><strong>Contract / workflow:</strong> German catalogue selection → pinned source Material. No input ports. Source: GermanMaterialSelectorComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R14 / R08; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Dataset register / ÖB. ÖB retains the umlaut and is legible; RAW shorthand, not an official source mark. ÖKO is longer; facade grid could mean an element.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dataset register / ÖB</td>
+<td>4, 3, 4, 5, 5, 5, 4, 5</td>
+<td align="right">87.8</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>ÖKO identifier</td>
+<td>5, 3, 4, 5, 2, 5, 3, 5</td>
+<td align="right">76.8</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Facade grid</td>
+<td>4, 5, 3, 2, 5, 5, 4, 5</td>
+<td align="right">79.4</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-custom-material--materials">RAW Custom Material — Materials</h3>
+<p><strong>Contract / workflow:</strong> Name, unit, GWP, density, family and declared method context → self-declared Dataset and metadata. Source: AdvancedDecisionComponents.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R05 / R17; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Authored specification. A folded specification with unequal entries communicates a declared dataset. Pencil is generic editing; blank register is too close to selectors. This is deliberately the most conventional mark: it prioritises an authored declaration over a false fabrication metaphor, with lower architecture/distinctiveness scores.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Authored specification</td>
+<td>4, 2, 2, 5, 5, 5, 4, 5</td>
+<td align="right">80.6</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Specimen + pencil</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Blank register</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-material-info--materials">RAW Material Info — Materials</h3>
+<p><strong>Contract / workflow:</strong> Material → original/derived metadata, units, factors and method summaries; no calculation. Source: StudioInspectionComponents.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R05 / R15; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Specimen + readings. Detached readings describe the record without altering it. Magnifier resembles Physical Properties; letter i is generic software shorthand.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Specimen + readings</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Magnifier over cube</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Information letter</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-update-material--materials">RAW Update Material — Materials</h3>
+<p><strong>Contract / workflow:</strong> Material, optional name/density and evidence → derived Material; source and factors preserved. Source: UpdateMaterialComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R05 / R01; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Parent → derived specimen. Two separated specimens keep the parent visible. Pencil implies editing the original; replacement arrow contradicts immutable source records.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Parent → derived specimen</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Pencil over specimen</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Replace arrow</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-construct-element--elements">RAW Construct Element — Elements</h3>
+<p><strong>Contract / workflow:</strong> Geometry + Material + section/thickness by mode → Element, Geometry, Quantity, Unit, Mass, Volume. Source: SolidSurfaceElementComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R03 / R26; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Profile raised into geometry. A cut face extends into an architectural piece. This is the only volume-like construct icon; plus is generic; three tiny badges lose hierarchy.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Profile raised into geometry</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Cube + plus</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Three geometry badges</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-construct-section--elements">RAW Construct Section — Elements</h3>
+<p><strong>Contract / workflow:</strong> Mode-specific dimensions/profile → Section, Area, Width, Depth. Six section shapes. Source: ConstructSectionComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R26 / R03; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Cut profile. One I-shaped cut is a recognisable cross-section exemplar, not a mode promise. Caliper conflicts with inspection; six profiles become noise.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cut profile</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Caliper</td>
+<td>4, 4, 3, 2, 5, 5, 4, 5</td>
+<td align="right">77.0</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Six tiny profiles</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-wall-assembly--elements">RAW Wall Assembly — Elements</h3>
+<p><strong>Contract / workflow:</strong> Reference geometry, materials and mode build-up inputs → wall Elements, quantities and display meshes. Source: WallAssemblyComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R21 / R26; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Continuous layered corner. Corner and continuous skins communicate construction. Reveal loses gaps at 16 px; plain bars could be a chart. Corner does not imply automatic junction modelling.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Continuous layered corner</td>
+<td>5, 5, 4, 5, 4, 5, 4, 5</td>
+<td align="right">91.6</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Exploded reveal</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Three layer bars</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-physical-properties--elements">RAW Physical Properties — Elements</h3>
+<p><strong>Contract / workflow:</strong> Elements → Geometry, Length, Area, Volume, Mass, Density, Material Name, Summary. Read-only. Source: PhysicalPropertiesInspectorComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R02 / R03 / R29; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Opposed probes. Probes observe an existing specimen. CT implies absent scanning capability; balance overemphasises mass and resembles legal scales. No edit cue.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Opposed probes</td>
+<td>5, 5, 4, 5, 4, 5, 4, 5</td>
+<td align="right">91.6</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>CT section slices</td>
+<td>5, 4, 5, 2, 3, 4, 3, 5</td>
+<td align="right">73.2</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Mass balance</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-element-gwp--impact">RAW Element GWP — Impact</h3>
+<p><strong>Contract / workflow:</strong> Elements → Result, Element GWP/Mass/Volume, GWP Unit, Module Scope. Source: ElementGwpComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R07 / R22; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Bounded characterisation. Quantity × factor inside scope brackets states bounded arithmetic. Cloud hides lifecycle scope; chart conflicts with visualisation. Label is still necessary to identify GWP.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bounded characterisation</td>
+<td>5, 4, 4, 4, 4, 5, 4, 5</td>
+<td align="right">85.6</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Emissions cloud</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Impact chart</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-construct-machine-process--impact">RAW Construct Machine Process — Impact</h3>
+<p><strong>Contract / workflow:</strong> Measured energy or power/time/throughput plus factor → evaluated Process, time, energy, GWP, intensity, Impact Data, Status. Source: ConstructMachineProcessComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R01 / R03 / R28; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Working gap. Two tool edges distinguish an operation from an accounting boundary. Specific cuts bias the general icon; swept paths could imply energy derived from paths.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Working gap</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Contact cut</td>
+<td>5, 5, 4, 4, 5, 5, 2, 5</td>
+<td align="right">88.0</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Swept toolpath</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-assign-process-impact--impact">RAW Assign Process Impact — Impact</h3>
+<p><strong>Contract / workflow:</strong> Elements + evaluated Process + module/EPD coverage/allocation/evidence → enriched Elements. Source: AssignProcessImpactComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R05 / R22; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Allocated connection. One event branches to unequal element allocations. No check mark or arithmetic plus: attachment may remain pending and shares are controlled.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Allocated connection</td>
+<td>5, 4, 4, 4, 4, 5, 4, 5</td>
+<td align="right">85.6</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Plus on element</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Check mark</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-process-impact-breakdown--impact">RAW Process Impact Breakdown — Impact</h3>
+<p><strong>Contract / workflow:</strong> RAW Impact Result → material/process/eligible combined GWP, pending/excluded records, scope, diagnostics. Source: ProcessImpactBreakdownComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R16 / R22; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Separated contribution ledger. A recorded strip separates into contributions. No axes or pie proportions imply a new evaluation. Different from assignment: source is a ledger, not an event.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Separated contribution ledger</td>
+<td>5, 4, 4, 4, 4, 5, 4, 5</td>
+<td align="right">85.6</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Bar chart</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Pie chart</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-end-of-life-scenario--impact">RAW End-of-Life Scenario — Impact</h3>
+<p><strong>Contract / workflow:</strong> Elements + C1–C4 factors, exact basis, waste route and evidence → scenario-enriched Elements. Source: LifecycleScenarioComponents.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R07 / R22 / R06; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Separated treatment fractions. Separated pieces enter a bounded receiving bed. Treatment is distinct from onward transfer and promises no recycling benefit. Released joint only suggests C1; strata only C4.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Separated treatment fractions</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Released joint</td>
+<td>5, 5, 4, 3, 4, 5, 2, 5</td>
+<td align="right">80.4</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Disposal strata</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-reuse--recovery-scenario--impact">RAW Reuse / Recovery Scenario — Impact</h3>
+<p><strong>Contract / workflow:</strong> Elements + net D factor/basis, rates, credit method and evidence → enriched Elements; no inferred credit. Source: LifecycleScenarioComponents.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R01 / R06 / R07; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Second-system span. Retained member crosses an explicit boundary toward a receiving system. No green or minus sign: D may be burden or benefit. Reuse exemplar cannot depict every recovery route.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Second-system span</td>
+<td>5, 5, 4, 5, 4, 5, 4, 5</td>
+<td align="right">91.6</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Recycling loop</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Counterfactual pair</td>
+<td>5, 4, 4, 4, 3, 5, 4, 5</td>
+<td align="right">81.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-gwp-colour-preview--visualisation">RAW GWP Colour Preview — Visualisation</h3>
+<p><strong>Contract / workflow:</strong> Result + aligned Geometry; optional Values/bounds/mode → display geometry/colours, labels and warnings. Source: GwpColourPreviewComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R13 / R16; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Mapped facade. Tones occupy actual geometric faces. Paint bucket implies editing; flat grid resembles a source selector. Neutral tones signify mapping, not low impact.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mapped facade</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Paint bucket</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Heatmap grid</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<h3 id="raw-gwp-legend--visualisation">RAW GWP Legend — Visualisation</h3>
+<p><strong>Contract / workflow:</strong> Legend Values/Labels/Colours and layout → swatch geometry, text, points, colours. Source: GwpLegendComponent.cs (supporting internal reference retained privately).</p>
+<p><strong>Evidence:</strong> R13 / R16; exact component role is F, semantic interpretation and scores J, small-size inspection V.</p>
+<p><strong>Selected:</strong> Calibrated swatches. Three swatches and reading ticks form a reference scale. Gradient alone lacks labels; ruler suggests dimensional measurement.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Calibrated swatches</td>
+<td>5, 4, 4, 5, 5, 5, 4, 5</td>
+<td align="right">93.2</td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>Gradient rectangle</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+<td>Rejected; reason above</td>
+</tr>
+<tr>
+<td>Ruler</td>
+<td>3, 3, 2, 3, 4, 3, 3, 5</td>
+<td align="right">63.6</td>
+<td>Rejected; reason above</td>
+</tr>
+</tbody></table></div>
+<p>The two most abstract selections are Element GWP (bounded factor arithmetic) and Assign Process Impact (allocation). Their meaning/legibility ratings are lower than simple geometric profiles. An environmental cloud or check mark would look more familiar but would convey less accurate scope or false approval. Familiarity alone is not sufficient.</p>
+<p>Material Info and Physical Properties are both readers, but read different things: specimen-plus-record lines versus opposing measurement probes. Update Material keeps two specimens to preserve parent/derived distinction. Construct Element is a raised architectural piece; Colour Preview was revised to a planar mapped facade so they no longer share a cube-like silhouette. Assignment uses a connected event and receiving elements; Breakdown uses a detached ledger and contribution slots. End-of-Life was revised away from a branching node graph to collected fractions; D retains a material crossing into a second system.</p>
+<h2 id="8-machine-process-family">8. Machine-process family</h2>
+<p>The shared visual rules do not force a generic machine silhouette onto every mode. Each icon depicts an observable physical mechanism. The current calculations remain measured energy or the existing power/time/throughput evaluator; the icons do not claim energy from toolpaths, fibre routes or infill. Specialist material-flow and auxiliary requirements remain data/model questions.</p>
+<h3 id="general-machine">General Machine</h3>
+<p>Working gap: irregular input and regular output meet opposed tools. Evidence: R01 / R03 / R28. A spindle describes only subtraction; a factory/gear describes an object rather than a material event.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Working gap</td>
+<td>5, 5, 4, 4, 4, 5, 4, 5</td>
+<td align="right">88.0</td>
+</tr>
+<tr>
+<td>Milling spindle</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+</tr>
+<tr>
+<td>Factory / gear</td>
+<td>3, 3, 3, 3, 3, 3, 3, 5</td>
+<td align="right">62.0</td>
+</tr>
+</tbody></table></div>
+<h3 id="cnc--milling">CNC / Milling</h3>
+<p>Cutting tool meets a stepped workpiece; separated chip direction. Evidence: R28 / R03. Cutting engagement is physical. Path-only marks imply an energy estimator; enclosure detail disappears at 24 px.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cutting tool meets a stepped workpiece</td>
+<td>5, 5, 4, 4, 4, 5, 4, 5</td>
+<td align="right">88.0</td>
+</tr>
+<tr>
+<td>Toolpath loop</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+</tr>
+<tr>
+<td>CNC enclosure</td>
+<td>3, 3, 3, 3, 3, 3, 3, 5</td>
+<td align="right">62.0</td>
+</tr>
+</tbody></table></div>
+<h3 id="robotic-process">Robotic Process</h3>
+<p>Articulated links connect a base to a tool and workpiece. Evidence: R04 / R23. A tool interaction is more relevant than humanoid identity; reach envelopes obscure the material operation.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Articulated links connect a base to a tool and workpiece.</td>
+<td>5, 5, 4, 4, 4, 5, 4, 5</td>
+<td align="right">88.0</td>
+</tr>
+<tr>
+<td>Robot face</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+</tr>
+<tr>
+<td>Reach hemisphere</td>
+<td>3, 3, 3, 3, 3, 3, 3, 5</td>
+<td align="right">62.0</td>
+</tr>
+</tbody></table></div>
+<h3 id="3d-printing">3D Printing</h3>
+<p>A nozzle deposits connected horizontal layers. Evidence: R27. The deposited trace is the operation; printer boxes are generic and infill grids lose legibility.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A nozzle deposits connected horizontal layers.</td>
+<td>5, 5, 4, 4, 4, 5, 4, 5</td>
+<td align="right">88.0</td>
+</tr>
+<tr>
+<td>Printer box</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+</tr>
+<tr>
+<td>Infill mesh</td>
+<td>3, 3, 3, 3, 3, 3, 3, 5</td>
+<td align="right">62.0</td>
+</tr>
+</tbody></table></div>
+<h3 id="coreless-winding--fibre-placement">Coreless Winding / Fibre Placement</h3>
+<p>A few strands span open anchor lines; no solid core. Evidence: R04. Spool implies supply rather than placement; dense crossing lines collapse. This is not a particular pavilion topology.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A few strands span open anchor lines</td>
+<td>5, 5, 4, 4, 4, 5, 4, 5</td>
+<td align="right">88.0</td>
+</tr>
+<tr>
+<td>Fibre spool</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+</tr>
+<tr>
+<td>Dense woven mesh</td>
+<td>3, 3, 3, 3, 3, 3, 3, 5</td>
+<td align="right">62.0</td>
+</tr>
+</tbody></table></div>
+<h3 id="reclaimed-timber-preparation">Reclaimed Timber Preparation</h3>
+<p>A plane meets a wane-edged member; a separated lower strip signals offcut. Evidence: R02 / R03. A tree implies forestry; a regular plank loses reclaimed-stock character. No embodied benefit is promised.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Ratings</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A plane meets a wane-edged member</td>
+<td>5, 5, 4, 4, 4, 5, 4, 5</td>
+<td align="right">88.0</td>
+</tr>
+<tr>
+<td>Tree / saw</td>
+<td>4, 3, 3, 3, 3, 4, 3, 5</td>
+<td align="right">66.6</td>
+</tr>
+<tr>
+<td>Regular plank</td>
+<td>3, 3, 3, 3, 3, 3, 3, 5</td>
+<td align="right">62.0</td>
+</tr>
+</tbody></table></div>
+<p><strong>Implementation recommendation:</strong> palette proxy uses General Machine consistently; the placed instance should update to its active mode. This helps identify mixed fabrication chains without inspecting every footer. Keep the footer as the authoritative text. Do not add a second header icon or tiny mode badge. Implement only after approval using cached 24 px mode bitmaps and explicit GH icon-cache invalidation after a safe mode change/read restoration. Do not alter parameter migration, undo or calculation paths just to refresh artwork.</p>
+<h2 id="9-earlier-dataset-selector-decision--superseded-by-focused-refinement">9. Earlier dataset-selector decision — superseded by focused refinement</h2>
+<p>Recommend <strong>DK / ÖB</strong>. The paired open register and enlarged two-character path lettering survive small raster sizes better than BR18 / ÖKO. The full source name remains visible elsewhere. DK is country-level, not a unique database ID; ÖB is proposed RAW shorthand, not an official abbreviation. Those are explicit trade-offs, not claims of official affiliation.</p>
+<p>BR18 / ÖKO is more source-specific but loses letter spacing at 24 and especially 16 px. Table/facade graphics have architectural appeal but cannot identify the source reliably without labels. Neither flags nor official ministry marks are appropriate for these small functional symbols. ÖKOBAUDAT&#39;s long wordmark and the Danish authority&#39;s page identity are studied, not copied.</p>
+<p>ICE, EC3 and KBOB are <strong>future candidates only</strong>. The study provides family-compatible initials, with KBOB split across two rows. They are neither implemented selectors nor approved source marks. Their data access, naming and source rights require separate confirmation. Do not pretend a generic regional symbol uniquely identifies every future pack.</p>
+<h2 id="10-iteration-and-small-size-quality-review">10. Iteration and small-size quality review</h2>
+<p>The package contains concept alternatives, refined vectors, raster comparisons and actual-pixel samples. Visible refinements include:</p>
+<ol>
+<li>Brand outline/hatching studies → two reduced sectional silhouettes. The recommended mark drops texture and strengthens the counterform rather than becoming a large component badge.</li>
+<li>Source lettering enlarged for DK / ÖB; longer source names remain comparison options.</li>
+<li>Colour Preview changed from a volume-like object to a mapped facade, separating it from Construct Element.</li>
+<li>End-of-Life changed from a branching graph to separated fractions in a receiving bed, separating it from allocation.</li>
+<li>18/16 px exports remove tertiary section/grain marks and raise optical stroke width; the 24 px assets retain architectural detail only where space permits.</li>
+</ol>
+<p>Actual-size review covers 17 icons on orange, neutral grey, a selection approximation and an error approximation at 24/18/16. HTML samples specify pixel dimensions independent of sheet scaling. Browser/OS zoom still affects physical viewing size. Additional 64/32 assets support inspection and future high-DPI resource discussion. High-DPI bitmap selection is not automatically handled by supplying these PNG files.</p>
+<p>Known limits: the layered wall has tightly spaced nested contours at 16 px; robot joints and winding crossings remain denser than the general machine mark. GWP arithmetic requires the component label to establish the indicator. Source letters require familiarity. No unaided user-recognition trial was conducted. A recognition test could change these choices; the recommendation is ready for review, not a claim that every design ambiguity is solved.</p>
+<h2 id="11-native-grasshopper-implementation-feasibility">11. Native Grasshopper implementation feasibility</h2>
+<p>Facts were checked in installed <code>C:/Program Files/Rhino 8/Plug-ins/Grasshopper/Grasshopper.xml</code> and current RAW source:</p>
+<ul>
+<li><code>GH_DocumentObject.Icon</code> supplies a cached <strong>24 × 24</strong> bitmap. <code>DestroyIconCache</code> must be called when the display icon changes. <code>Icon_24x24_Locked</code> provides the greyscale representation. The web icon guide agrees on 24 px and describes an approximately 2 px border. Shadows are optional design convention; this proposal does not bake them in.</li>
+<li><code>RawComponent.Icon</code> returns null. Most visible components need a future provider/override. <code>MachineProcessIcons</code> already caches one transparent 24 px bitmap, and <code>ForMode</code> currently returns it for every mode. Extend that provider instead of drawing bitmaps during every canvas render.</li>
+<li>Current machine attributes preserve the standard centre icon, socket layout and native body rendering while drawing headers/dashboard. A new bitmap does not require recreating this UI.</li>
+<li>Current Danish/German selectors override Icon as null and call <code>RenderComponentCapsule(... true, false, false, true, true, false)</code>. The second boolean suppresses the nickname/icon region. Adding palette icons is straightforward; <strong>displaying them in those custom selector bodies requires an explicit future layout change</strong>. No such change is included or implied by the mockup.</li>
+<li>Native state styling remains outside the art: selected, locked/greyscale, warning/error capsule, runtime balloons and profiler. Neutral ink avoids relying on hue for meaning. The state colours on sheets are approximations, not sampled guarantees of the host theme.</li>
+<li>Proposed mode switching should select cached bitmaps, invalidate the display cache, and redraw after the already-safe mode transition. Restore the mode before resolving the icon during file load. Palette proxies should remain general. No current mode-switching source was modified.</li>
+<li>At Windows 100/150/200% scaling, check native canvas at representative zooms, icon and name display modes, selected/unselected/locked and warning/error states. Check save/reopen, undo/redo and switching every mode. 16/18 optical assets are design references; zooming a native 24 px bitmap does not automatically use them. Native scaling artefacts must be assessed after approval.</li>
+</ul>
+<p>The proposed marks need no independent UI framework. Core bitmap rendering is native; optional selector-body placement and automatic mode-cache refresh need small, separately reviewed source changes. The brand lockups are presentation assets, not centre icons.</p>
+<p><strong>Native Rhino/Grasshopper tests were not run.</strong> Canvas/palette sheets are explicitly labelled design mockups. They must not be cited as proof of rendering, saved-definition compatibility or crash-free mode switching. No Release build or calculation tests were run because this task changes only design/research artifacts and one proposal document. Existing workspace changes were preserved; source/test hashes are compared against a task-start baseline.</p>
+<h2 id="12-rejected-alternatives-and-remaining-limitations">12. Rejected alternatives and remaining limitations</h2>
+<p>Reject a universal cube-with-action-badge system because it hides distinct contracts. Reject the CT metaphor for the visible reader, the pencil for source-preserving Update Material, the check mark for process assignment, the recycling loop for C/D, and a universal gear for fabrication. Retain exact material and lifecycle labels in UI and documentation; icon art must not carry compatibility status, completeness, sign of D, or verification by itself.</p>
+<p>Original artwork was authored in this package and not traced from third-party icons. This is not a legal clearance search against all existing trademarks. Before broad public release, perform brand-name/mark clearance and review reference reproduction permissions. The copied reference images are local research context, not production deliverables.</p>
+<h2 id="13-exact-decision-proposed-for-approval">13. Exact decision proposed for approval</h2>
+<p>Approve the package as a <strong>single design recommendation</strong>: Measured Tectonics; Section Gate with neutral primary treatment and original RAW LCA wordmark; 17 component icons with the <strong>revised BR18/ÖKO baseline source pair from the focused selector review</strong>; six machine-mode silhouettes with a stable general palette icon. Keep the optional slate brand return limited to presentation use, with neutral components.</p>
+<p>Approval should authorise a separate implementation task to wire cached resources and run native verification. It does not authorise replacing source-selector layouts, changing component behaviour, adding future selectors, or altering environmental status. Remaining implementation gates are native state/high-DPI/cache tests and a brief label-free recognition check with users. No production icon changes, commits or pushes are part of this task.</p>
+<h2 id="14-review-package">14. Review package</h2>
+<p><a href="../reviews/history/index.html">Open the navigable review</a>. Machine-readable decisions: component matrix (supporting internal reference retained privately), brand/narrative matrix (supporting internal reference retained privately), mode matrix (supporting internal reference retained privately).</p>
+<ul>
+<li>01 research-synthesis (supporting internal reference retained privately)</li>
+<li>02 main-logo-exploration (supporting internal reference retained privately)</li>
+<li>03 main-logo-finalists (supporting internal reference retained privately)</li>
+<li>04 recommended-brand-system (supporting internal reference retained privately)</li>
+<li><a href="../reviews/history/raw-lca-final-identity/05_component-icons-materials.png">05 component-icons-materials</a></li>
+<li><a href="../reviews/history/raw-lca-final-identity/06_component-icons-elements.png">06 component-icons-elements</a></li>
+<li><a href="../reviews/history/raw-lca-final-identity/07_component-icons-impact.png">07 component-icons-impact</a></li>
+<li><a href="../reviews/history/raw-lca-final-identity/08_component-icons-visualisation.png">08 component-icons-visualisation</a></li>
+<li><a href="../reviews/history/raw-lca-final-identity/09_machine-process-modes.png">09 machine-process-modes</a></li>
+<li><a href="../reviews/history/raw-lca-final-identity/10_selector-source-identities.png">10 selector-source-identities</a></li>
+<li><a href="../reviews/history/raw-lca-final-identity/11_complete-icon-family.png">11 complete-icon-family</a></li>
+<li><a href="../reviews/history/raw-lca-final-identity/12_actual-size-readability.png">12 actual-size-readability</a></li>
+<li>13 grasshopper-canvas-mockups (supporting internal reference retained privately)</li>
+<li>14 toolbar-and-palette-preview (supporting internal reference retained privately)</li>
+<li>15 decision-matrix (supporting internal reference retained privately)</li>
+</ul>
+<p>Editable masters: <code>../artifacts/design-review/raw-lca-final-identity/masters/</code>; transparent PNGs: <code>../artifacts/design-review/raw-lca-final-identity/png/</code>; references: manifest (supporting internal reference retained privately); audit: palette (supporting internal reference retained privately); verification: results (supporting internal reference retained privately).</p>
+<h2 id="15-source-catalogue">15. Source catalogue</h2>
+<ul>
+<li><strong>R01 — RAW research programme</strong>, CITA / Royal Danish Academy. <a href="https://royaldanishacademy.com/en/case/raw">Documented RAW programme</a>. Material variability, characterisation and transformation precede assembly; recoverability returns resources to another use. Limit: Individual image artists are not named on the project page.</li>
+<li><strong>R02 — RAW-CITA Timber Workshop</strong>, CITA / Royal Danish Academy. <a href="https://adk.elsevierpure.com/en/activities/the-raw-cita-timber-workshop-2/">Documented RAW activity</a>. Measurement and fabrication are linked by the identity of actual stock. Limit: Text reference only; no workshop photograph was collected.</li>
+<li><strong>R03 — RawLam</strong>, CITA / Royal Danish Academy; Martin Tamke, Tom Svilans, Mette Ramsgaard Thomsen, Sebastian Gatz. <a href="https://royaldanishacademy.com/en/case/rawlam">Related CITA precedent; not asserted to be the current RAW grant project</a>. Preserve a material signature through sensing, matching and joining. Limit: Project-team attribution; individual image authors are not separately identified. File names joint/layers are legacy download names, not depictions.</li>
+<li><strong>R04 — ICD/ITKE Research Pavilion 2016–17</strong>, ICD/ITKE, University of Stuttgart. <a href="https://www.icd.uni-stuttgart.de/projects/icditke-research-pavilion-2016-17/">Related research example; not RAW</a>. Use contact, span and trajectory as fabrication cues; avoid a generic factory. Limit: Page fetch had a TLS failure in the script. The browser loaded the official page; two credited original images were downloaded there.</li>
+<li><strong>R05 — BAMB Material Passports</strong>, BAMB / EPEA. <a href="https://www.bamb2020.eu/topics/materials-passports/">External circular-construction reference</a>. Provenance belongs to a material and an actor; it is not an approval badge. Limit: The image bears EPEA copyright; studied only, not licensed for RAW production artwork.</li>
+<li><strong>R06 — Reversible Building Design</strong>, BAMB; Elma Durmisevic / University of Twente. <a href="https://www.bamb2020.eu/topics/reversible-building-design/">External construction/disassembly reference</a>. A connection can retain or destroy recoverability. A deliberate gap can distinguish assembly from release. Limit: Selected guideline PDF page 18 studied, not a full engineering review of the guide.</li>
+<li><strong>R07 — LCA stages and assessment phases</strong>, LCA.no. <a href="https://lca.no/en/kunnskapsbank/topics/what-is-lca/">Technical explanatory reference</a>. Separate C operations from D beyond the boundary; distinguish lifecycle modules from assessment phases. Limit: This is an explanatory illustration, not the normative standard itself.</li>
+<li><strong>R08 — Grasshopper icon design guide</strong>, David Rutten / McNeel. <a href="https://developer.rhino3d.com/guides/grasshopper/grasshopper-icons/">Native host design guidance</a>. Small-scale clarity needs optical judgement, not uniform reduction of a large drawing. Limit: Text guide studied; no independent illustrative image collected from this page.</li>
+<li><strong>R09 — Original Grasshopper icon collection</strong>, Original artwork David Rutten / McNeel; recovery collection Aidan Newsome. <a href="https://github.com/aidannewsome/grasshopper-icons">Existing host artwork, not RAW concepts</a>. Distinct geometric events can remain identifiable with economical colour accents. Limit: Only three examples collected. Recovery repository is not a blanket licence to reuse the artwork.</li>
+<li><strong>R10 — Galapagos creator/community page</strong>, David Rutten. <a href="https://www.grasshopper3d.com/group/galapagos">Distinctive Grasshopper research-tool identity</a>. An unusual paired silhouette is memorable without spelling out each command. Limit: Study only. Do not trace the contours, colour relationship or brand mark.</li>
+<li><strong>R13 — Ladybug Tools</strong>, Ladybug Tools; Mostapha Sadeghipour Roudsari and Chris Mackey. <a href="https://www.ladybug.tools/ladybug.html">Environmental-analysis plugin reference</a>. A distinctive family emblem and domain-specific diagrams can coexist. Limit: Do not reuse the ladybird, palette or sun-path artwork as RAW icons.</li>
+<li><strong>R14 — ÖKOBAUDAT official portal</strong>, German Federal Ministry for Housing, Urban Development and Building / ÖKOBAUDAT. <a href="https://www.oekobaudat.de/en.html">Official material-source identity</a>. Source identity may come from concise naming and architectural data context, not a flag. Limit: The downloaded header GIF is the ministry mark, not the ÖKOBAUDAT logo. No official artwork is proposed for production.</li>
+<li><strong>R15 — Danish BR18 / Table 7</strong>, Social- og Boligstyrelsen / Bygningsreglementet. <a href="https://www.bygningsreglementet.dk/Bilag/B2/Bilag_2?Layout=ShowAll">Official material-source terminology</a>. A table/register is a source cue. BR18 is more specific than the country abbreviation DK. Limit: Captured current page is the identity reference. The separately downloaded PDF is not asserted to be the current data version.</li>
+<li><strong>R16 — RAW Impact Explorer</strong>, Tanya Tsui. <a href="https://tanyatsui.github.io/raw_impact_explorer/">RAW research interface</a>. Study data hierarchy and burden distinctions; avoid giving operational metrics carbon-storage meanings. Limit: Captured 18 Oct 2026; page displayed a 16 Oct 2026 sheet snapshot. This differs from older local audit descriptions. No calculation parity or factor validation is claimed.</li>
+<li><strong>R17 — LCA circular biobased repository</strong>, Tanya Tsui. <a href="https://github.com/TanyaTsui/lca_circular_biobased">RAW research code reference</a>. Material, process and scenario assumptions need distinct meanings. Limit: Text/code context only in this study; no new audit of notebook numerical correctness.</li>
+<li><strong>R21 — Midrise wood construction guide</strong>, ROCKWOOL Group. <a href="https://www.rockwool.com/siteassets/o2-rockwool/documentation/technical-guides/commercial/midrise_wood_construction_comfortboard_builders_guide_technicalguide.pdf">External architectural construction reference</a>. Assembly is a relationship between distinct roles and interfaces. Limit: PDF page 4 (printed page 2) inspected. This is a cutaway, not an exploded assembly.</li>
+<li><strong>R22 — DS environmental product declaration</strong>, Mapei; EPD-Global programme. <a href="https://cdnmedia.mapei.com/docs/librariesprovider56/products-documents/7_epd-ds_8c38470a92e04e72b6c77e4ca04f9835.pdf?sfvrsn=b775f65b_0">Actual EPD boundary reference</a>. Boundary and availability are explicit; C3 treatment and C4 disposal are separate routes. Limit: NEPD-9049-9049-1, issued 26 Feb 2026. The document illustrates boundary notation; factors are neither imported nor verified for RAW.</li>
+<li><strong>R23 — Robots repository and mark</strong>, Vicente Soler / Robots contributors. <a href="https://github.com/visose/Robots">Architectural fabrication plugin</a>. A strong silhouette expresses a specialised tool; RAW Machine Process needs broader scope than a robot alone. Limit: Original SVG plus a raster preview retained as reference only.</li>
+<li><strong>R25 — Kangaroo creator/community page</strong>, Daniel Piker. <a href="https://www.grasshopper3d.com/group/kangaroo">Distinctive Grasshopper plugin identity</a>. Posture and negative space carry recognition before text. Limit: Do not copy the animal, silhouette or colour treatment.</li>
+<li><strong>R26 — 1-hour interior partition detail</strong>, WoodWorks / Wood Products Council. <a href="https://www.woodworks.org/cad-revit-details/light-frame/1-hour-interior-partition/">Architectural technical-drawing reference</a>. Borrow the logic of section/interface, not the literal detail. Limit: Technical diagram is a visual reference, not RAW design guidance or a tested assembly specification.</li>
+<li><strong>R27 — Additive manufacturing and polymer testing</strong>, NIST; Aaron M. Forster, NIST IR 8059. <a href="https://www.nist.gov/additive-manufacturing/research-areas/technologies">Scientific process/material testing reference</a>. A deposited trace or a sectional observation is more domain-specific than a gear. Limit: PDF page 25 / printed page 16 inspected. No precise machine energy or material properties inferred.</li>
+<li><strong>R28 — Milling formulas and definitions</strong>, Sandvik Coromant. <a href="https://www.sandvik.coromant.com/en-gb/knowledge/machining-formulas-definitions/milling-formulas-definitions?newsarchivetagfilter=Turning">Primary industrial technical reference</a>. The point of tool/material interaction can stand for an operation. Limit: Page text studied; dynamic diagram images were not accessible to the collection script.</li>
+<li><strong>R29 — CT lab / CT Wood</strong>, Luleå University of Technology. <a href="https://www.ltu.se/en/research/research-subjects/wood-science-and-engineering/ct-lab">Related wood-characterisation research</a>. Internal character and measured sections are valid research cues. Limit: Search/web text studied; local page/image fetch unavailable. R03 provides actual CT imagery; no claim that RAW performs CT scans.</li>
+</ul>
+<p>New API check: <a href="https://developer.rhino3d.com/guides/grasshopper/grasshopper-icons/">McNeel icon guide</a>; installed Rhino 8 XML members <code>GH_DocumentObject.Icon</code>, <code>DestroyIconCache</code>, <code>Icon_24x24_Locked</code>, and <code>GH_ComponentAttributes.RenderComponentCapsule</code>.</p>
+<p>Additional optical evidence: stroke/colour comparison (supporting internal reference retained privately). This compares 1.0/1.3/1.6 logical strokes in charcoal, warm neutral and slate at actual 24 px on orange. Final 1.40 variants are individual optical corrections between those comparison weights.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

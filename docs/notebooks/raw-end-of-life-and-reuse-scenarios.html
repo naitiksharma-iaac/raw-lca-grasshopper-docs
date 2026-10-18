@@ -1,0 +1,104 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW end-of-life and reuse scenarios · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-end-of-life-and-reuse-scenarios.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#why-c-and-d-first">Why C and D first</a><a href="#ports">Ports</a><a href="#factor-basis-and-context-contract">Factor basis and context contract</a><a href="#source-preservation-and-override-rules">Source preservation and override rules</a><a href="#c1c4-and-partial-c">C1–C4 and partial C</a><a href="#d-and-beyond-boundary-reporting">D and beyond-boundary reporting</a><a href="#whole-life-integration">Whole-life integration</a><a href="#physical-properties-review">Physical Properties review</a><a href="#structured-diagnostics">Structured diagnostics</a><a href="#deferred">Deferred</a></div></details><h1 id="raw-end-of-life-and-reuse-scenarios">RAW end-of-life and reuse scenarios</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p>Implemented: <strong>RAW Physical Properties</strong>, <strong>RAW End-of-Life Scenario</strong> and <strong>RAW Reuse / Recovery Scenario</strong>, under <strong>RAW LCA / Impact</strong>. RAW Element GWP keeps its single Elements input and existing six outputs. No source dataset or library factors are changed.</p>
+<h2 id="why-c-and-d-first">Why C and D first</h2>
+<p>The local audit found Danish BR18 records already contain A1–A3, C3, C4 and D, but no A4, A5, B, C1 or C2. German coverage varies by record. C/D assignments therefore address an existing gap while retaining supplied source modules. Transport, construction and replacement need separate scenario models and remain deferred.</p>
+<p>These components accept <strong>evidenced factors</strong>, not waste-route calculations or inferred recovery credits. They do not establish a verified whole-life assessment. Complete arithmetic is distinct from scientific verification.</p>
+<h2 id="ports">Ports</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Inputs in order</th>
+<th>Output</th>
+<th>Stable GUID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAW Physical Properties</td>
+<td>Elements; Density; Measured Mass; Source Note; Override Existing</td>
+<td>Elements</td>
+<td><code>637ec905-a9d6-4c91-a432-d518048f150a</code> (unchanged)</td>
+</tr>
+<tr>
+<td>RAW End-of-Life Scenario</td>
+<td>Elements; C1 Factor; C2 Factor; C3 Factor; C4 Factor; C Factor Unit / Basis; Waste Route; Source Note; Override Existing</td>
+<td>Elements</td>
+<td><code>41d928ae-9e8b-4405-8ba7-21cad3981f01</code></td>
+</tr>
+<tr>
+<td>RAW Reuse / Recovery Scenario</td>
+<td>Elements; D Factor; D Factor Unit / Basis; Reuse Rate; Recycling Rate; Recovery Rate; Credit Method; Source Note; Override Existing</td>
+<td>Elements</td>
+<td><code>5d19d720-1946-4c39-9a51-f2136ee5a36e</code></td>
+</tr>
+</tbody></table></div>
+<p>All additions are optional; Override Existing defaults to false. Factor inputs accept finite signed numbers, including explicitly supplied zero. Missing is never zero. All three components retain paths, empty branches and invalid item positions. Optional input trees accept one global value, one per matching branch or one value per element; mismatched branches receive diagnostics and no new assignments. They are not flattened. Invalid numeric GH items are rejected rather than converted to zero.</p>
+<h2 id="factor-basis-and-context-contract">Factor basis and context contract</h2>
+<ul>
+<li>Factors are in <strong>kg CO₂-eq per the exact original declared quantity</strong>. A blank basis selects that quantity; <code>1 m²</code>, <code>1 kg</code> or <code>1000 kg</code> make it explicit. Bare <code>kg</code> means 1 kg and is rejected for a source declared as 1000 kg.</li>
+<li>Supported bases: kg, t, m², m³ and item. Other units, different declared/reference quantities, and different factor bases are rejected. This first version does not convert scenario factors between units or infer quantities.</li>
+<li>A kg factor still needs mass. Use RAW Physical Properties for evidenced density + volume or measured mass. Surface geometry may also need thickness. An m² factor is scaled by area, not thickness.</li>
+<li><strong>Source Note is mandatory for explicit C/D factors.</strong> It identifies evidence and the user&#39;s declaration that factor method, indicator, standard, module vocabulary and quantity basis match the selected material. Waste Route and Credit Method retain descriptive evidence only.</li>
+<li>The selected material&#39;s method ID, version and characterisation basis must be resolved, with a supported unambiguous GWP indicator and module vocabulary. Context is pinned to the source dataset revision and standards. The note is not parsed to invent method metadata and does not establish compatibility by itself.</li>
+<li>With unresolved context, a valid explicit factor is stored as <strong>pending enrichment</strong>, with <code>ContextResolved = false</code>. Any selected scope needing it is unavailable. Original source-only arithmetic keeps its existing unresolved-method warning and behavior.</li>
+<li>Consequently, adding user C1/C2 to an unresolved Danish record <strong>does not yet unlock combined C</strong>. The source context must first be resolved through an evidenced context workflow. Danish source D alone remains usable as supplied-factor arithmetic, with its warning.</li>
+<li>Adding factors on known context is a user declaration, not independent verification. Source evidence remains the user&#39;s responsibility. No cross-source reconciliation is performed.</li>
+</ul>
+<h2 id="source-preservation-and-override-rules">Source preservation and override rules</h2>
+<p><code>EnvironmentalElement.ScenarioFactors</code> stores effective per-module assignments. <code>ScenarioHistory</code> retains accepted assignments, including replaced user values and evidence. <code>ScenarioDiagnostics</code> holds current stage status; recomputing C status removes stale C diagnostics but retains D diagnostics and assignment history.</p>
+<p>Each assignment stores the module, signed factor, declared quantity and unit, pinned dataset reference, method/indicator/standards/vocabulary, Source Note, context status, whether it replaced an existing value, and route or recovery metadata. It is never inserted into <code>EnvironmentalDataset.Impacts</code>, source observations or the material library. Results retain the enriched original element, so provenance remains accessible. Source quantity references continue to refer only to actual source observations.</p>
+<p>Existing numeric source factors and prior element assignments are protected unless Override Existing is true. Overriding replaces only their use on that element, not the source record. Missing source observations can be filled. Source C aggregates retain existing aggregate precedence: this first version rejects leaf assignments against an aggregate, even with Override Existing, because aggregate decomposition would require a separate contract. Aggregates and leaves are never added twice.</p>
+<p>Only single-material elements accept new factors. Multi-material assemblies need explicit per-material allocation; a single factor is not spread across layers. Apply appropriate data at the material contribution level when a supported assembly enrichment contract becomes available. Reconnect the pre-enrichment element to discard all scenario assignments.</p>
+<h2 id="c1c4-and-partial-c">C1–C4 and partial C</h2>
+<p><code>RAW Element → RAW End-of-Life Scenario → RAW Element GWP (C)</code></p>
+<p>Complete C requires compatible C1, C2, C3 and C4, or an existing valid complete C aggregate. Existing C3/C4 can be combined with evidenced C1/C2 on a resolved matching context. C1/C2 are not derived from a waste route. A partial set remains inspectable on the element and in Result module availability, but the combined C GWP is <strong>null</strong>, never a partial number presented as complete C. No partial-C numeric output is added.</p>
+<h2 id="d-and-beyond-boundary-reporting">D and beyond-boundary reporting</h2>
+<p><code>RAW Element → RAW Reuse / Recovery Scenario → RAW Element GWP (D)</code></p>
+<p>D is an explicit <strong>net benefit/load factor</strong>, can be negative, and is never clamped. The optional rates are fractions from 0 to 1; their sum must not exceed 1. Invalid rates reject the proposed assignment. Rates and Credit Method are stored alongside an accepted factor but are <strong>not multipliers</strong> and do not generate a D credit. With no factor, rates alone do nothing and produce a diagnostic; they are not represented as a calculated scenario.</p>
+<p>The element marks D as beyond the system boundary. D and A1–D Result diagnostics retain: <strong>“D is beyond the system boundary and should also be reported separately.”</strong> Run a separate D scope branch when reporting A1–D. No new calculator outputs are added.</p>
+<h2 id="whole-life-integration">Whole-life integration</h2>
+<p><code>RAW Element → RAW Physical Properties (if needed) → RAW End-of-Life Scenario → RAW Reuse / Recovery Scenario → RAW Element GWP</code></p>
+<ul>
+<li>A1–A3 follows the existing arithmetic and factor precedence unchanged.</li>
+<li>C/D scopes combine source and effective element assignments only when quantities and context permit.</li>
+<li>A1–C additionally requires complete A1–A3, A4, A5 and B1–B7. C enrichment alone does not complete it.</li>
+<li>A1–D requires the same plus D, and keeps its beyond-boundary notice.</li>
+<li>Missing, ambiguous, unsupported or incompatible stages withhold the selected GWP. Quantities remain available independently.</li>
+<li>Existing strict cross-dataset compatibility checks remain active. Unresolved method warnings are retained.</li>
+</ul>
+<h2 id="physical-properties-review">Physical Properties review</h2>
+<p><code>RAW Element → RAW Physical Properties → RAW Element GWP</code></p>
+<p>The kg-based Clay powder case uses volume 0.00756 m³ but lacks source density. Before enrichment its mass and kg-based GWP are unavailable. With evidenced density ρ, mass is <code>0.00756 × ρ</code>; with measured mass M, mass is M and needs no density. GWP uses the original declared mass quantity and source factor.</p>
+<p>Measured mass takes precedence; source density is preserved and effective density replacement requires Override Existing. Zero, negative or nonfinite overrides are rejected independently. Source Note remains provenance only and its absence is warning-only for physical properties. Source density continues to show “Not supplied” in the material summary. Quantity summaries now also withhold overflowed mass rather than returning infinity. See RAW Physical Properties (supporting internal reference retained privately).</p>
+<h2 id="structured-diagnostics">Structured diagnostics</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Codes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Physical</td>
+<td><code>physical.density_override_added</code>, <code>physical.mass_override_added</code>, <code>physical.override_blocked_existing_density</code>, <code>physical.measured_mass_precedence</code>, <code>physical.source_note_missing</code>, <code>physical.invalid_density</code>, <code>physical.invalid_measured_mass</code>; existing no-override, allocation and alignment notices remain</td>
+</tr>
+<tr>
+<td>C</td>
+<td><code>scenario.c_added</code>, <code>scenario.c_partial</code>, <code>scenario.c_missing_modules</code>, <code>scenario.c_override_blocked</code>, <code>scenario.c_source_note_missing</code>, <code>scenario.c_unit_unsupported</code>, <code>scenario.c_context_unresolved</code></td>
+</tr>
+<tr>
+<td>D</td>
+<td><code>scenario.d_added</code>, <code>scenario.d_negative_value</code>, <code>scenario.d_missing</code>, <code>scenario.d_beyond_boundary</code>, <code>scenario.d_override_blocked</code>, <code>scenario.d_source_note_missing</code>, <code>scenario.d_context_unresolved</code></td>
+</tr>
+<tr>
+<td>Defensive validation</td>
+<td><code>scenario.c_invalid_factor</code>, <code>scenario.d_invalid_factor</code>, <code>scenario.d_invalid_rates</code>, <code>scenario.d_unit_unsupported</code>, <code>scenario.d_factor_required</code>, <code>scenario.c_allocation_required</code>, <code>scenario.d_allocation_required</code>, <code>scenario.input_alignment</code></td>
+</tr>
+</tbody></table></div>
+<p>Result carries diagnostics and element provenance for future RAW Inspector. Guidance distinguishes missing quantity, missing module, unsupported basis, protected factor and unresolved context. No Inspector or report component is added or unhidden.</p>
+<h2 id="deferred">Deferred</h2>
+<p>Transport, Construction, Replacement, Module Factor Override, Inspector, graphs and new selectors are not implemented. Also deferred: automatic waste routes, recovery-credit calculations, differing factor bases, multi-material allocation, partial-C numeric reporting and source-aggregate replacement.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

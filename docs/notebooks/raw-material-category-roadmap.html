@@ -1,0 +1,292 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW material category roadmap · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-material-category-roadmap.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#current-library-and-classification">Current library and classification</a><a href="#recommended-material-category-structure">Recommended material category structure</a><a href="#concrete-mapping-review-examples">Concrete mapping review examples</a><a href="#mapping-and-migration-strategy">Mapping and migration strategy</a><a href="#acceptance-criteria-for-the-next-phase">Acceptance criteria for the next phase</a></div></details><h1 id="raw-material-category-roadmap">RAW material category roadmap</h1>
+<blockquote>
+<p><strong>Public reading edition · 13 October 2026.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p><strong>13 October 2026 — proposal only.</strong> No records, source categories, factors, units or selector state were changed. <a href="raw-project-fabrication-research.html">Research evidence</a> establishes the project context; the <a href="raw-data-enrichment-audit-and-roadmap.html">dataset audit</a> supplies coverage counts.</p>
+<h2 id="current-library-and-classification">Current library and classification</h2>
+<p>Read-only SQLite queries against <code>internal implementation reference</code> confirmed 441 Danish and 5,079 ÖKOBAUDAT records. Its SHA-256 remains <code>659078480a6ce4a4a7669114b60f2abc5f3aabc3916188fdff84b8340b2b1e00</code>, matching the audit evidence (supporting internal reference retained privately). No ICE, EC3 or KBOB pack is in this database. Tanya&#39;s browser catalogue is a separate research source, not an imported pack or permission to redistribute its factors.</p>
+<p>Queries used:</p>
+<pre><code class="language-sql">SELECT source_key, COUNT(*) FROM material_datasets GROUP BY source_key;
+SELECT source_key, unit, COUNT(*) FROM material_datasets GROUP BY source_key, unit;
+SELECT name, category, unit FROM material_datasets
+WHERE source_key LIKE &#39;okobaudat:%&#39; AND unit IN (&#39;m&#39;,&#39;MJ&#39;,&#39;kgkm&#39;);
+</code></pre>
+<p>The source key includes a pack fingerprint/version, so exact equality to <code>okobaudat</code> would incorrectly return no records. Payloads and cache content were not rewritten.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Declared unit</th>
+<th align="right">Danish</th>
+<th align="right">ÖKOBAUDAT</th>
+<th>Meaning for organisation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>kg</td>
+<td align="right">132</td>
+<td align="right">915</td>
+<td>Physical mass route; do not assume supplied density</td>
+</tr>
+<tr>
+<td>t</td>
+<td align="right">27</td>
+<td align="right">0</td>
+<td>Explicit mass scale; retain declared amount</td>
+</tr>
+<tr>
+<td>m²</td>
+<td align="right">124</td>
+<td align="right">1,478</td>
+<td>Product/reference area, often specification-dependent</td>
+</tr>
+<tr>
+<td>m³</td>
+<td align="right">74</td>
+<td align="right">692</td>
+<td>Volume route</td>
+</tr>
+<tr>
+<td>item</td>
+<td align="right">65</td>
+<td align="right">1,834</td>
+<td>Count does not equal arbitrary geometry-object count</td>
+</tr>
+<tr>
+<td>m</td>
+<td align="right">19</td>
+<td align="right">102</td>
+<td>Linear product; current direct metre-factor calculation unsupported</td>
+</tr>
+<tr>
+<td>MJ</td>
+<td align="right">0</td>
+<td align="right">49</td>
+<td>Energy-service records, not material solids</td>
+</tr>
+<tr>
+<td>kg·km</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td>Transport service, not mass-only material</td>
+</tr>
+</tbody></table></div>
+<p>The existing audit records 21 Danish browse families and 14 German browse families. Danish source categories are absent in inspected records and explicitly stored as unclassified; English display-name rules provide the browse family. German records retain 266 source leaf categories, but the common family function collapses many of them by first-match name/category keywords. It is not a scientific material ontology.</p>
+<p>Code inspected: DanishMaterialCatalog (supporting internal reference retained privately), GermanMaterialCatalog (supporting internal reference retained privately), MaterialSelectorUx (supporting internal reference retained privately). Broad <code>electric...</code> matching can classify electricity-service records as Services / MEP. Form words such as board, panel or roof can also hide composition. The same material can therefore appear differently between source selectors.</p>
+<h2 id="recommended-material-category-structure">Recommended material category structure</h2>
+<p>Use <strong>browse categories plus independent facets</strong>, not one category that controls all calculations. Keep the Danish and German selector source boundaries. A mapping is a versioned RAW presentation overlay, not a rewrite of the source record.</p>
+<p>Common required metadata: source/provider, dataset ID and revision, original name/category, region and validity/version, declared quantity <strong>amount and unit</strong>, reference quantity, GWP indicator/unit/method/context, module availability/boundary, provenance and permission status. Missing metadata stays unknown. Density additionally needs units, condition and evidence. Category confidence and mapping rule version belong to the overlay.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Proposed browse category</th>
+<th>Intended types</th>
+<th>Likely units / geometry</th>
+<th>Common gaps and additional metadata</th>
+<th>Components using it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Timber and wood products</td>
+<td>Sawn wood, glulam, plywood, wood products</td>
+<td>kg, m³, m, m²; solid/linear/panel</td>
+<td>Species, moisture, density, profile, adhesive/binder content, biogenic boundary</td>
+<td>Element, Section, Wall Assembly, Physical Properties</td>
+</tr>
+<tr>
+<td>Reclaimed timber — saved facet view</td>
+<td>Reused stock, recovered members, reused panels</td>
+<td>kg, m³, m, item; stock/linear/solid</td>
+<td>Source stock ID, prior use, condition/grade, defects, measured dimensions, allocation method</td>
+<td>Physical Properties; future Timber Preparation</td>
+</tr>
+<tr>
+<td>Boards and panels</td>
+<td>Acoustic, sandwich, sheathing, composite panels</td>
+<td>m²/m³/kg; surface or layered assembly</td>
+<td>Declared thickness, areal mass, layers/coatings, product-specific scaling permission</td>
+<td>Element Surface, Wall Assembly</td>
+</tr>
+<tr>
+<td>Mineral materials</td>
+<td>Stone, aggregates, mineral fill</td>
+<td>kg/t/m³; solid or bulk</td>
+<td>Bulk versus true density, moisture, voids, compacted condition</td>
+<td>Element Volume, Physical Properties</td>
+</tr>
+<tr>
+<td>Clay / earth / ceramics</td>
+<td>Clay powder, earth products, fired ceramics</td>
+<td>kg/m³/m²/item</td>
+<td>Loose versus finished state, moisture, firing included or excluded</td>
+<td>Element, Physical Properties; process evidence later</td>
+</tr>
+<tr>
+<td>Concrete / cementitious</td>
+<td>Concrete, mortar, cement, grout</td>
+<td>kg/t/m³/m²</td>
+<td>Reinforcement included?, mix specification, density, curing boundary</td>
+<td>Element Volume, Wall Assembly</td>
+</tr>
+<tr>
+<td>Metals</td>
+<td>Steel, aluminium, other metals, profiles, sheet</td>
+<td>kg/t/m³/m²/m/item</td>
+<td>Alloy, section, recycled content, finish, forming/cutting boundary</td>
+<td>Element, Section; future CNC/waste</td>
+</tr>
+<tr>
+<td>Glass</td>
+<td>Sheet glass, glazing units, blocks</td>
+<td>m²/m³/kg/item</td>
+<td>Product thickness, coating, glazing build-up, density</td>
+<td>Element Surface/Volume, Wall Assembly</td>
+</tr>
+<tr>
+<td>Insulation</td>
+<td>Mineral, polymer, cellulose and biobased insulation</td>
+<td>m²/m³/kg</td>
+<td>Declared thickness/performance, installed versus loose density</td>
+<td>Wall Assembly, Physical Properties</td>
+</tr>
+<tr>
+<td>Membranes / foils</td>
+<td>Roofing, vapour barriers, polymer/metal foils</td>
+<td>m²/kg</td>
+<td>Layer specification, areal mass, overlaps, coating</td>
+<td>Element Surface, Wall Assembly</td>
+</tr>
+<tr>
+<td>Plastics / polymers</td>
+<td>Resin products, profiles, polymer feedstock</td>
+<td>kg/m³/m/item</td>
+<td>Grade, fillers, density, feed versus finished product</td>
+<td>Element; future Printing Process</td>
+</tr>
+<tr>
+<td>Bio-based composites</td>
+<td>Fibre/binder mixtures, biopolymer products</td>
+<td>kg/m³/m²/item</td>
+<td>Explicit composition, wet/dry basis, binder identity, curing, allocation</td>
+<td>Custom Material/context, Wall Assembly where appropriate; future BOM/process</td>
+</tr>
+<tr>
+<td>Fibres / textiles</td>
+<td>Hemp, cotton, cellulose, glass fibre, yarn/fabric</td>
+<td>kg/m²/m</td>
+<td>Areal/linear mass, dry basis, sizing/binder, textile structure</td>
+<td>Surface/Linear quantity routes; future textile/winding process</td>
+</tr>
+<tr>
+<td>Binders / coatings / adhesives</td>
+<td>Pea binder, epoxy, wood glue, paint, sealant</td>
+<td>kg/m²</td>
+<td>Solids content, mixing ratio, application yield, cure/drying included?</td>
+<td>Assembly layers, future process consumables</td>
+</tr>
+<tr>
+<td>Building products / services</td>
+<td>Windows, doors, equipment, PV and MEP assemblies</td>
+<td>item/m²/m/kg</td>
+<td>Product capacity/specification, included subparts, lifetime and installed count</td>
+<td>Unit/count or Surface; later replacement</td>
+</tr>
+<tr>
+<td>Process energy / fabrication — factor role</td>
+<td>Electricity, heat, machining service</td>
+<td>kWh/MJ/process unit</td>
+<td>Carrier, grid/geography, year, equipment/service boundary, allocation</td>
+<td>Future Machine Energy/process adapter; not ordinary solid conversion</td>
+</tr>
+<tr>
+<td>Transport / logistics — factor role</td>
+<td>Road/freight transport services</td>
+<td>kg·km/t·km/service unit</td>
+<td>Mode, load basis, distance, empty return included?, geography</td>
+<td>Future Transport Scenario</td>
+</tr>
+<tr>
+<td>Custom / user-defined — origin facet</td>
+<td>Evidenced manually authored materials</td>
+<td>Any explicitly supported basis</td>
+<td>Complete method/context and evidence; distinguish TEST ONLY fixtures</td>
+<td>Custom Material, Dataset Info</td>
+</tr>
+</tbody></table></div>
+<p>“Reclaimed” and “custom” are useful discoverable views but are acquisition/origin facets, not competing chemical families. Process energy and transport are factor roles and should be filtered into the relevant future enrichment picker. Building services remain searchable because current packs contain many equipment records; their presence does not make MEP a first fabrication priority.</p>
+<p>Independent facets: composition; product form; application; acquisition (virgin/reused/recycled/co-product/unknown); factor role; declared unit; module coverage; source region/version; quantity readiness; context status. Product category can <strong>suggest</strong> a workflow; only typed quantity and factor metadata can permit arithmetic.</p>
+<h2 id="concrete-mapping-review-examples">Concrete mapping review examples</h2>
+<p>These are observed library names plus proposed overlay mappings. No record has been reclassified.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Record / observation</th>
+<th>Current browse-rule issue</th>
+<th>Proposed mapping</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Ler pulver</code> / Clay powder, kg</td>
+<td>Clay family is useful, but cannot convey missing density</td>
+<td>Clay/earth; powder/bulk form; mass route; explicit density-needed status</td>
+</tr>
+<tr>
+<td><code>Glas 4 mm</code>, m²</td>
+<td>Glass label hides product-specific thickness</td>
+<td>Glass + sheet + 4 mm product specification; Surface; never rescale its factor by a thickness slider</td>
+</tr>
+<tr>
+<td><code>Aluminiumsplade</code>, kg</td>
+<td>Aluminium alone does not show sheet form</td>
+<td>Metals/aluminium + sheet; Surface + thickness + density or measured mass</td>
+</tr>
+<tr>
+<td><code>Akustikpanel, ålegræs</code>, m²</td>
+<td>Acoustic-panel rule wins over biological composition</td>
+<td>Boards/panels + acoustic + seagrass fibre; composition/binder only where source supports it</td>
+</tr>
+<tr>
+<td><code>Akustikpanel, strå</code>, m³</td>
+<td>Same family as m² panels but different quantity path</td>
+<td>Boards/panels + straw; retain m³ and required volume</td>
+</tr>
+<tr>
+<td><code>Akustikpanel, glasuld, tekstil, 20 mm</code>, m²</td>
+<td>Mixed glass-wool/textile product cannot be one pure material</td>
+<td>Boards/panels + acoustic + insulation/textile facets; do not split factor into invented constituents</td>
+</tr>
+<tr>
+<td><code>Electricity grid mix 2023</code>, MJ</td>
+<td><code>electric...</code> family rule implies MEP despite energy-carrier source category</td>
+<td>Process energy/electricity; retain MJ, geographic/time metadata and method context</td>
+</tr>
+<tr>
+<td><code>District heating mix Germany</code>, MJ</td>
+<td>May fall under Other rather than an energy-service role</td>
+<td>Process energy/heat; never reuse as electricity factor</td>
+</tr>
+<tr>
+<td><code>Mechanical fastener (screws, nails, brackets)</code> in Tanya catalogue</td>
+<td>Research catalogue is not the local product pack</td>
+<td>Candidate metals/fastener mapping only if a licensed source is later imported; do not fabricate an item mass</td>
+</tr>
+</tbody></table></div>
+<p>The first two energy classifications can be inferred directly from current rules and source category/name; this review did not execute a native selector UI. Source leaf categories should generally outrank ambiguous English-name substrings. Danish records need a curated overlay because original categories are missing.</p>
+<h2 id="mapping-and-migration-strategy">Mapping and migration strategy</h2>
+<ol>
+<li>Freeze record identity and raw fields; create a separate mapping specification keyed by dataset reference/revision. Preserve original categories verbatim in Dataset Info.</li>
+<li>Define stable category IDs independent of translated labels. Add curated mappings, source-category mappings, then cautious keyword fallback with confidence; conflicting candidates remain multi-tagged or require review.</li>
+<li>Use explicit factor-role detection before ordinary material-family rules. Verify quantity kind and source category; an <code>MJ</code> unit alone does not establish an electricity carrier.</li>
+<li>Keep mixed products as products. Neither family nor name parsing creates constituent quantities, densities, renewable content or thickness-scaling permission.</li>
+<li>Provide filters for “matching quantity available”, “physical enrichment needed”, “unsupported direct unit” and “context unresolved”. Readiness depends on an element and selected scope, not just a global material badge.</li>
+<li>Reuse the current source index for fast search. Avoid decoding every full material record on opening the selector. Index overlay facets and load full evidence on selection.</li>
+<li>Test mapping examples in both languages; test that canonical object IDs, factors, density, declared quantities and source module lists remain unchanged. Preserve saved family filters with aliases/migration only after approval.</li>
+</ol>
+<h2 id="acceptance-criteria-for-the-next-phase">Acceptance criteria for the next phase</h2>
+<ul>
+<li>Review a small set covering timber stock, glazing, clay, acoustic panels, textile composites, energy and transport before bulk mapping.</li>
+<li>Account for every record, including Other/unknown; report conflicts and confidence instead of forcing a category.</li>
+<li>Keep all source versions separate, and make unknown region/method explicit.</li>
+<li>Demonstrate category changes do not change GWP, quantity compatibility or module availability.</li>
+<li>ICE/EC3/KBOB and Tanya factors remain documentation-only unless data access and reuse permissions are established.</li>
+</ul>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

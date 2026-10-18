@@ -1,0 +1,703 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW data-enrichment audit and roadmap · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-data-enrichment-audit-and-roadmap.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#1-findings-and-audit-method">1. Findings and audit method</a><a href="#2-module-availability-and-what-complete-means">2. Module availability and what “complete” means</a><a href="#3-calculation-gap-taxonomy">3. Calculation-gap taxonomy</a><a href="#4-complete-calculation-loops">4. Complete calculation loops</a><a href="#5-calculation-loop-table">5. Calculation-loop table</a><a href="#6-shared-enrichment-architecture-proposed-not-implemented">6. Shared enrichment architecture (proposed, not implemented)</a><a href="#7-component-contracts">7. Component contracts</a><a href="#8-implementation-order-and-decision-gates">8. Implementation order and decision gates</a><a href="#9-diagnostics-for-future-raw-inspector">9. Diagnostics for future RAW Inspector</a><a href="#10-risks-and-boundaries">10. Risks and boundaries</a><a href="#11-verification-and-change-scope">11. Verification and change scope</a></div></details><h1 id="raw-data-enrichment-audit-and-roadmap">RAW data-enrichment audit and roadmap</h1>
+<blockquote>
+<p><strong>Public reading edition · 13 October 2026.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p>Audit date: 13 October 2026. Scope: the current local library and current checkout, not the latest online databases or a regulatory building assessment. Status: audit and design only; no new components, factors, material edits or palette changes.</p>
+<h2 id="1-findings-and-audit-method">1. Findings and audit method</h2>
+<p>RAW already has the right separation: Materials → Elements → Impact → Visualisation. Keep <strong>RAW Element GWP</strong> as a one-input calculator (<code>Elements</code>). Physical properties and future scenarios belong on the elements upstream. A missing factor, a missing quantity and an unresolved method are different problems and require different remedies.</p>
+<p>The current library contains <strong>441 Danish BR18 / Table 7 records and 5,079 ÖKOBAUDAT records</strong>. Danish records all supply A1–A3, C3, C4 and D; none supply A4, A5, B, C1 or C2. ÖKOBAUDAT contains factors across all requested stages, but coverage differs substantially by record. A module name appearing in metadata is not evidence of a usable numeric factor.</p>
+<p><strong>RAW Physical Properties is already implemented.</strong> It repairs the demonstrated missing-density/mass gap without changing the material. Thickness is already an input to RAW Element in Surface mode. There is no need to introduce a duplicate thickness component merely to support that workflow. Lifecycle scenario enrichment is not yet implemented in the current element contract.</p>
+<h3 id="evidence-and-reproducibility">Evidence and reproducibility</h3>
+<p>The audit opened <code>internal implementation reference</code> read-only and examined all 5,520 pinned dataset revisions. The database is 76,484,608 bytes. Its SHA-256 and the complete region/category/family counts are in the audit evidence (supporting internal reference retained privately). Counts are dataset revisions, not unique manufacturers or scientifically interchangeable products.</p>
+<p>Inventory queries used:</p>
+<pre><code class="language-sql">SELECT * FROM pack_sources;
+SELECT pack, COUNT(*) FROM material_datasets GROUP BY pack;
+SELECT summary FROM material_datasets;
+</code></pre>
+<p>The JSON summaries were counted by source pack, declared unit, source category, region, density flag and numeric module availability. A separate temporary audit executable hydrated every manifest through <code>CompactMaterialLibrary.ReadManifest</code> and <code>StorageCodec.Hydrate</code>, then called the existing <code>ImpactCalculator.Calculate</code> for every scope. It did not write to the library. For dimensional readiness it supplied one reference m² for m² records, one count for item records, or one m³ for the remaining records. These are calculation probes, <strong>not source data or assumed project geometry</strong>. No density or factor was supplied by the probe.</p>
+<p>The engine audit distinguishes:</p>
+<ul>
+<li><strong>Factor-ready:</strong> the current reader accepts complete factors for the requested scope, independently of quantity conversion.</li>
+<li><strong>Direct arithmetic:</strong> a compatible element quantity, existing density where necessary, and those factors produce a finite per-element GWP. This does not establish methodological verification or suitability for a particular building.</li>
+<li><strong>Context-resolved:</strong> source-backed LCIA identity sufficient for compatibility checks. This is a separate test; all stored records currently have unresolved typed method metadata.</li>
+</ul>
+<p>Source material inspected: <code>data/sources/denmark/denmark-br18.xlsx</code>, the duplicate <code>tabel-7-2025.xlsx</code>, <code>data/sources/okobaudat/okobaudat.csv</code>, their download sidecars, and the current compact library/source-index/manifest access layer. The legacy-v0 SQLite and older staging exports are earlier representations, not additional source packs; they were not added to counts. Test fixtures, custom test factors and frozen Vertikal artifacts were excluded.</p>
+<p>No ICE, EC3 or KBOB source pack was registered or found under the local source directories. They remain documentation-only proposals. This audit does not establish redistribution rights: local records state redistribution is unknown.</p>
+<h3 id="source-inventory">Source inventory</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Local version evidence</th>
+<th>Regions</th>
+<th align="right">Records</th>
+<th align="right">Density supplied / missing</th>
+<th align="right">Typed LCIA method unresolved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Danish BR18 / Table 7</td>
+<td>Download sidecar: <code>tabel-7-2025.xlsx</code>, retrieved 2026-09-14</td>
+<td>DK: 441; pack geography is not necessarily manufacturing origin</td>
+<td align="right">441</td>
+<td align="right">155 / 286</td>
+<td align="right">441</td>
+</tr>
+<tr>
+<td>ÖKOBAUDAT</td>
+<td>Download sidecar label: <code>2024-II</code>, retrieved 2026-09-14</td>
+<td>Multiple geographies; DE 1,737, EU 1,339, RER 990, GLO 200, AT 138, EU-27 110, GB 88; complete inventory in evidence</td>
+<td align="right">5,079</td>
+<td align="right">1,934 / 3,145</td>
+<td align="right">5,079</td>
+</tr>
+</tbody></table></div>
+<p>Both pack metadata records have <code>SourceRelease = null</code>, despite the download labels above. Preserve that distinction. The export label is not a claim that this is the newest online release, nor that every record has the same publication date/version.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Original declared unit</th>
+<th align="right">Danish</th>
+<th align="right">ÖKOBAUDAT</th>
+<th>Current direct quantity route</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>kg</td>
+<td align="right">132</td>
+<td align="right">915</td>
+<td>Mass, or volume × supplied density; measured mass can enrich</td>
+</tr>
+<tr>
+<td>t</td>
+<td align="right">27</td>
+<td align="right">0</td>
+<td>Mass in kg with explicit tonne conversion during arithmetic</td>
+</tr>
+<tr>
+<td>m²</td>
+<td align="right">124</td>
+<td align="right">1,478</td>
+<td>Reference surface area</td>
+</tr>
+<tr>
+<td>m³</td>
+<td align="right">74</td>
+<td align="right">692</td>
+<td>Closed-solid volume, surface × thickness, or length × section area</td>
+</tr>
+<tr>
+<td>item</td>
+<td align="right">65</td>
+<td align="right">1,834</td>
+<td>Explicit count; do not substitute area or volume</td>
+</tr>
+<tr>
+<td>m</td>
+<td align="right">19</td>
+<td align="right">102</td>
+<td>Unsupported direct factor basis in the current calculator</td>
+</tr>
+<tr>
+<td>kgkm</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td>Transport activity, not a directly supported product geometry basis</td>
+</tr>
+<tr>
+<td>MJ</td>
+<td align="right">0</td>
+<td align="right">49</td>
+<td>Energy activity, not a directly supported product geometry basis</td>
+</tr>
+</tbody></table></div>
+<p>There are <strong>179 unsupported direct records</strong>: 19 Danish and 160 ÖKOBAUDAT. Their units are explicit, not blank; “unsupported” does not mean the source unit is invalid. RAW Linear currently measures length but calculates from length × section area as a volume basis. It does <strong>not</strong> make a per-metre factor usable. A future verified length-basis adapter is a separate quantity-engine enhancement, not a density override or unit relabelling.</p>
+<p>The source categories and browser families are different concepts. Danish records have no supplied source category (all 441 are explicitly unclassified in storage); the browser uses derived family labels. ÖKOBAUDAT source category roots are Building service engineering (1,742), Mineral building products (1,067), Plastics (598), Components for windows and curtain walls (567), Metals (343), Insulation materials (287), Wood (235), Coverings (101), Composites (64), Others (58), and End of Life (17). These include service/activity datasets, not only product EPDs. All source leaf categories and derived browser family counts are retained in the evidence file.</p>
+<h3 id="current-engine-readiness-all-records-tested">Current engine readiness (all records tested)</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Scope</th>
+<th align="right">Danish factor-ready</th>
+<th align="right">Danish direct arithmetic</th>
+<th align="right">German factor-ready</th>
+<th align="right">German direct arithmetic</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1–A3</td>
+<td align="right">441</td>
+<td align="right">337</td>
+<td align="right">4,196</td>
+<td align="right">3,934</td>
+</tr>
+<tr>
+<td>A4</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2,904</td>
+<td align="right">2,812</td>
+</tr>
+<tr>
+<td>A5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2,963</td>
+<td align="right">2,867</td>
+</tr>
+<tr>
+<td>B</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1,556</td>
+<td align="right">1,506</td>
+</tr>
+<tr>
+<td>C</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3,118</td>
+<td align="right">3,007</td>
+</tr>
+<tr>
+<td>D</td>
+<td align="right">441</td>
+<td align="right">337</td>
+<td align="right">4,337</td>
+<td align="right">4,123</td>
+</tr>
+<tr>
+<td>A1–C</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1,546</td>
+<td align="right">1,496</td>
+</tr>
+<tr>
+<td>A1–D</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1,537</td>
+<td align="right">1,496</td>
+</tr>
+</tbody></table></div>
+<p>Product aggregates and leaf modules overlap; do not add their raw counts. The engine accepts 4,196 German product stages (3,811 aggregates plus 385 additional complete leaf sets). These counts retain original declared amounts: not every factor is per one unit. German declared quantities include 1,000, 3.6 and other source amounts; Danish values include small source floating-point deviations around one. All declared/reference references matched; no blank/unresolved unit codes were found. No quantity was rewritten.</p>
+<p>The A1–A3 population partitions without double counting as follows:</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Readiness</th>
+<th align="right">Danish</th>
+<th align="right">German</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Direct with matching quantity and current density</td>
+<td align="right">337</td>
+<td align="right">3,934</td>
+<td align="right">4,271</td>
+</tr>
+<tr>
+<td>Product factors ready; kg/t density missing</td>
+<td align="right">85</td>
+<td align="right">166</td>
+<td align="right">251</td>
+</tr>
+<tr>
+<td>Product factors ready; direct unit unsupported</td>
+<td align="right">19</td>
+<td align="right">96</td>
+<td align="right">115</td>
+</tr>
+<tr>
+<td>Product factor set unavailable to current reader</td>
+<td align="right">0</td>
+<td align="right">883</td>
+<td align="right">883</td>
+</tr>
+<tr>
+<td>All records</td>
+<td align="right">441</td>
+<td align="right">5,079</td>
+<td align="right">5,520</td>
+</tr>
+</tbody></table></div>
+<p>Across all kg/t records, <strong>85 Danish and 188 German</strong> lack density. Of these, 251 already have usable product factors and can potentially be enabled by evidenced density plus volume or measured mass. The other 22 German mass-based records also lack a usable product factor set. Missing density on an m²/m³/item record need not block its matching-basis GWP; it still limits mass reporting/normalisation. Even a “direct” record needs the correct geometry/count and project applicability: these counts do not imply any record works with any Brep.</p>
+<p>A1–C/A1–D are therefore <strong>not universally unavailable</strong>: 1,546/1,537 German records respectively have complete accepted factor sets, and 1,496 have a ready quantity route for each scope without enrichment. None of the Danish records has complete whole-life factors. The German numbers prove selected-scope arithmetic availability, <strong>not</strong> resolved methodology, building-level compatibility or applicability of the source scenarios.</p>
+<p>Browser families available (derived labels, not a replacement for source taxonomy):</p>
+<ul>
+<li><strong>Danish:</strong> Adhesive / Sealant (16), Aluminium (4), Asphalt / Bitumen (6), Board / Panel (18), Brick / Ceramic (11), Cement / Mortar (15), Clay (7), Concrete (32), Door / Window (25), Flooring (18), Glass (10), Gypsum / Plaster (19), Insulation (19), Membrane / Roofing (23), Other (3), Paint / Coating (26), Plastic / Rubber (13), Services / MEP (112), Steel / Metal (16), Stone / Aggregate (26), Timber / Wood (22).</li>
+<li><strong>German:</strong> Aluminium (45), Board / Panel (96), Brick / Ceramic (327), Concrete (730), Door / Window (571), Flooring (360), Glass (8), Gypsum / Plaster (23), Insulation (318), Membrane / Roofing (126), Other (279), Services / MEP (1,851), Steel / Metal (264), Timber / Wood (81). There are 266 source leaf categories and 48 geographic labels; the evidence file preserves every label/count.</li>
+</ul>
+<h2 id="2-module-availability-and-what-complete-means">2. Module availability and what “complete” means</h2>
+<p>Counts below are records with a finite numeric GWP observation, including an explicit source zero. A dash means zero records. For ÖKOBAUDAT, the parenthesised count is records that list the module at all; it can exceed numeric coverage. Neither a listed module nor an empty cell is zero.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Module</th>
+<th align="right">Danish numeric</th>
+<th align="right">ÖKOBAUDAT numeric (listed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1–A3 aggregate</td>
+<td align="right">441</td>
+<td align="right">3,811 (3,811)</td>
+</tr>
+<tr>
+<td>A1 separately</td>
+<td align="right">—</td>
+<td align="right">466 (503)</td>
+</tr>
+<tr>
+<td>A2 separately</td>
+<td align="right">—</td>
+<td align="right">466 (503)</td>
+</tr>
+<tr>
+<td>A3 separately</td>
+<td align="right">—</td>
+<td align="right">466 (503)</td>
+</tr>
+<tr>
+<td>A4</td>
+<td align="right">—</td>
+<td align="right">2,904 (2,947)</td>
+</tr>
+<tr>
+<td>A5</td>
+<td align="right">—</td>
+<td align="right">2,963 (3,010)</td>
+</tr>
+<tr>
+<td>B1</td>
+<td align="right">—</td>
+<td align="right">2,153 (2,247)</td>
+</tr>
+<tr>
+<td>B2</td>
+<td align="right">—</td>
+<td align="right">1,992 (2,043)</td>
+</tr>
+<tr>
+<td>B3</td>
+<td align="right">—</td>
+<td align="right">1,724 (1,779)</td>
+</tr>
+<tr>
+<td>B4</td>
+<td align="right">—</td>
+<td align="right">1,675 (1,738)</td>
+</tr>
+<tr>
+<td>B5</td>
+<td align="right">—</td>
+<td align="right">1,679 (1,738)</td>
+</tr>
+<tr>
+<td>B6</td>
+<td align="right">—</td>
+<td align="right">2,018 (2,069)</td>
+</tr>
+<tr>
+<td>B7</td>
+<td align="right">—</td>
+<td align="right">1,800 (1,852)</td>
+</tr>
+<tr>
+<td>C1</td>
+<td align="right">—</td>
+<td align="right">3,579 (3,592)</td>
+</tr>
+<tr>
+<td>C2</td>
+<td align="right">—</td>
+<td align="right">4,021 (4,028)</td>
+</tr>
+<tr>
+<td>C3</td>
+<td align="right">441</td>
+<td align="right">4,143 (4,152)</td>
+</tr>
+<tr>
+<td>C4</td>
+<td align="right">441</td>
+<td align="right">3,819 (3,844)</td>
+</tr>
+<tr>
+<td>D</td>
+<td align="right">441</td>
+<td align="right">4,337 (4,353)</td>
+</tr>
+</tbody></table></div>
+<p>German records with any numeric B: <strong>2,539</strong>; all B1–B7: <strong>1,556</strong>. Any numeric C: <strong>4,567</strong>; all C1–C4: <strong>3,118</strong>. Danish records have partial C coverage only. D signs: Danish <strong>371 negative / 61 zero / 9 positive</strong>; ÖKOBAUDAT <strong>3,991 negative / 258 zero / 88 positive</strong>, plus 742 without numeric D. Preserve negative values.</p>
+<p>Current calculator rules, verified in <code>GwpModuleScope.cs</code> and <code>DatasetObservationReader.Modules.cs</code>:</p>
+<ol>
+<li>A1–A3 uses a valid supplied aggregate first, otherwise complete A1+A2+A3. An ambiguous/invalid aggregate is not bypassed by silently selecting leaves.</li>
+<li>B requires B1–B7; C requires C1–C4. An explicit aggregate must identify the complete leaf membership. The current B mode is broader than replacement alone.</li>
+<li>A1–C requires product + A4 + A5 + B1–B7 + C1–C4. A1–D additionally requires D.</li>
+<li>Any missing, ambiguous or invalid required module withholds the selected element GWP. Known physical quantities survive. The core output does not provide a partial total disguised as complete.</li>
+<li>Selected observations must have consistent indicator identity, impact unit and module vocabulary. An explicit zero may be used; an absent/not-declared/not-applicable-looking field must not be converted to zero without an evidenced policy.</li>
+<li>D remains signed and produces a beyond-boundary diagnostic. Result currently stores scope, availability, references and selected-scope contributions, but not a numeric contribution ledger for every module. Calculate D in a separate RAW Element GWP instance alongside A1–D to show its amount today. A future module ledger should make this direct without adding calculator inputs.</li>
+</ol>
+<h3 id="methodcontext-limitation">Method/context limitation</h3>
+<p>All <strong>5,520 original stored records</strong> have <code>KnowledgeStatus.Unknown</code> for LCIA method. The importer preserves source citations but does not automatically resolve them into method ID/version/characterisation basis. This is an ingestion/metadata-resolution gap, not evidence that every original EPD omitted its method.</p>
+<p>An individual pinned dataset can still produce supplied-factor arithmetic with <code>element.method</code>. Strict comparison rejects distinct unresolved datasets for a combined total; layered elements can also lose their combined GWP when their parts are incompatible. Per-element values may remain available while Result&#39;s combined total is withheld. Grasshopper Mass Addition does not check that compatibility and must not be presented as permission to aggregate incompatible values.</p>
+<p>There is existing, hidden <code>MaterialContextV2</code> code with a small, revision-pinned evidence catalogue. It can create a separate source-declared context overlay for specific reviewed records; it is <strong>not</strong> applied by the visible selectors and does not resolve the whole library. Reuse its evidence checks when planning metadata recovery, without unhiding legacy components or reassigning every record the same method.</p>
+<p>Do not infer equivalence from a country, source name, indicator label or common unit. ÖKOBAUDAT explicitly separates EN 15804+A1/A2 data and warns against joint comparison: <a href="https://oekobaudat.de/datenbank/suche.html">official database guidance</a>. Its <a href="https://www.oekobaudat.de/anleitungen/softwareentwickler.html">developer guidance</a> provides source compliance filters useful for a future evidence-led import review. This roadmap proposes recovering exact provider references; it does not change compatibility rules.</p>
+<h2 id="3-calculation-gap-taxonomy">3. Calculation-gap taxonomy</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Gap type</th>
+<th>Observed gap</th>
+<th>Correct remedy</th>
+<th>What does not repair it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Physical quantity</td>
+<td>kg/t factor, volume known, density missing</td>
+<td>Existing RAW Physical Properties: cited density or measured mass</td>
+<td>Typical-density guesses; replacing missing with zero</td>
+</tr>
+<tr>
+<td>Physical quantity</td>
+<td>Surface has area but a mass/volume factor needs volume</td>
+<td>Existing Surface Thickness input in metres; then density if mass-based</td>
+<td>Changing material unit; counting all solid faces as product area</td>
+</tr>
+<tr>
+<td>Physical quantity</td>
+<td>item material without count; linear/energy/activity unit mismatch</td>
+<td>Unit/count mode; later genuine length/activity adapters</td>
+<td>Treating geometry volume as count or relabelling m as m³</td>
+</tr>
+<tr>
+<td>Module scope</td>
+<td>Missing A4/A5/B; partial C; absent D</td>
+<td>Source factor recovery or a valid, explicit scenario for each missing module</td>
+<td>Density, thickness, changing a scope label, implicit zero</td>
+</tr>
+<tr>
+<td>Scenario assumption</td>
+<td>Factors are present but source transport, lifetime or waste assumptions do not match the project</td>
+<td>Review source scenario, preserve it, then explicitly replace with documented project scenario if supported</td>
+<td>Assuming factor presence establishes project applicability</td>
+</tr>
+<tr>
+<td>Compatibility/context</td>
+<td>Unresolved method; differing indicator/method/standard/version</td>
+<td>Pinned source evidence and explicit compatible context</td>
+<td>Source Note alone; averaging factors across packs</td>
+</tr>
+<tr>
+<td>Visualisation/reporting</td>
+<td>No geometry in core Result; no mass/volume/area for normalisation; no per-module numeric ledger</td>
+<td>Connect aligned geometry; repair relevant quantities; retain unavailable status and structured issues</td>
+<td>Grey-to-zero substitution; silently dropping unmatched items</td>
+</tr>
+<tr>
+<td>Workflow guidance</td>
+<td>Some guidance still names hidden Coverage Check/legacy components; summaries can overlook product-stage leaf sums</td>
+<td>Future message/display cleanup and Inspector consuming real diagnostics</td>
+<td>Exposing fake helper components or suppressing warnings</td>
+</tr>
+</tbody></table></div>
+<p>GWP Colour Preview and GWP Legend already exist. Preview accepts separate geometry because the core element/result contract does not carry Rhino geometry. Exact tree paths/order and counts must align. Normalised colours require a positive denominator even when absolute GWP is calculable. Result&#39;s scope/availability/context are available to the preview; some presentation warnings are strings rather than durable structured element diagnostics. That is future Inspector integration work, not missing GWP arithmetic.</p>
+<h2 id="4-complete-calculation-loops">4. Complete calculation loops</h2>
+<p>In the chains below, <strong>planned</strong> means no usable component exists yet. Every scope also requires a valid declared/reference basis and compatible GWP factor identity. Existing source scenario factors may be used only as the selected source scenario, not represented as verified project assumptions.</p>
+<h3 id="a-a1a3-product-stage">A. A1–A3 product stage</h3>
+<ul>
+<li>Dataset supplies product aggregate or valid A1+A2+A3, declared quantity, optional density and method evidence. RAW Element supplies area, volume, length-derived volume, or count according to mode; Surface needs thickness to derive volume.</li>
+<li>Current chain: Material Selector → RAW Element → RAW Element GWP. Insert existing RAW Physical Properties when kg/t needs mass. For area-only geometry, supply Surface Thickness first; measured mass can support kg/t without volume.</li>
+<li>Matching m²/m³/item quantities need no density for GWP. Missing density can leave mass unavailable while GWP still works. For the Clay powder case, volume is 0.00756 m³ and the source factor is 0.34765871 kg CO₂-eq/kg: with user-evidenced density ρ, mass = 0.00756ρ kg and GWP = 0.00756ρ × 0.34765871. No value of ρ is assumed here. A measured mass M instead gives GWP = M × 0.34765871.</li>
+<li>A thickness slider changes derived volume; it does not scale a fixed “Glass, 4 mm” per-m² product factor. Select data for the actual product or obtain a justified conversion; do not infer linear scaling by thickness.</li>
+<li>Elements alone suffice after quantities and material are present. On failure retain null and <code>element.density</code>, <code>element.thickness</code>, <code>element.volume_basis</code>, <code>element.quantity_basis</code>, <code>element.declared_basis</code>, <code>element.reference_basis</code>, <code>element.gwp_scope</code>/<code>element.gwp_missing</code>, or <code>element.gwp_indicator</code>, as applicable. Method warnings persist after physical enrichment.</li>
+</ul>
+<h3 id="b-a4-transport">B. A4 transport</h3>
+<ul>
+<li>Source A4 exists for some German records; none Danish. With compatible physical quantity, the current calculator can use an existing A4 factor directly from the element&#39;s material. No project distance input is necessary to reproduce that source scenario.</li>
+<li>Otherwise chain: RAW Element → RAW Physical Properties if mass needed → <strong>planned RAW Transport Scenario</strong> → RAW Element GWP (A4). Inputs must establish distance, mode, factor, factor&#39;s activity unit/declared amount, source and route/context. Load utilisation is optional only when the chosen factor&#39;s documented basis supports it; never apply it twice.</li>
+<li>Mass is required for kg·km or t·km factors; volume-based or per-trip factors need their own evidenced activity conversion. Missing mass calls for physical enrichment. The nine kgkm records in storage are potential activity-source candidates, not automatically project A4 factors: an activity dataset&#39;s production factor needs an explicit building-module assignment policy.</li>
+<li>Proposed diagnostics: <code>scenario.a4.distance_missing</code>, <code>.mode_missing</code>, <code>.factor_missing</code>, <code>.quantity_missing</code>, <code>.activity_unit_mismatch</code>, plus shared provenance/context/conflict codes. Withhold missing A4; do not invent a default mode, distance or factor.</li>
+</ul>
+<h3 id="c-a5-construction--installation">C. A5 construction / installation</h3>
+<ul>
+<li>Existing German A5 may be usable directly. Otherwise RAW Element → <strong>planned RAW Construction Scenario</strong> → RAW Element GWP (A5), with physical enrichment as its activity basis requires.</li>
+<li>Require documented installation/site-process factors and explicit waste definition, route and allocation policy. Activity may be kg, m³, m² or count. A waste percentage alone is not a GWP factor.</li>
+<li>Do not universally multiply A1–A3 by waste rate. If waste is defined as a fraction of purchased quantity, purchased quantity is installed/(1−w); an installed-quantity markup has a different meaning. Decide the applicable assessment/PCR allocation of added production, transport and waste treatment before implementation, and prevent double counting source A5. This is a design gate, not an implemented formula.</li>
+<li>Proposed diagnostics: <code>scenario.a5.factor_missing</code>, <code>.waste_basis_missing</code>, <code>.allocation_unresolved</code>, <code>.quantity_missing</code>, <code>.double_count_risk</code>; retain absent A5 as unavailable. The calculator must consume a resolved module contribution on Elements, not guess these policies.</li>
+</ul>
+<h3 id="d-b-use--replacement">D. B use / replacement</h3>
+<ul>
+<li>Some German records supply complete B1–B7, others only selected B modules. RAW Element provides installed quantities, not study period, service life, occupancy, energy or water demand.</li>
+<li><strong>Planned RAW Replacement Scenario should initially target B4</strong>, not claim to complete all of B. Require explicit replacement count or a disclosed service-life/study-period policy, boundary treatment at the end of the study period, and evidenced burdens for the replacement event. Do not infer cycles from material names.</li>
+<li>Repeating A1–A3 alone is not a complete universal B4 model. Replacement can require manufacture, delivery, installation and removal burdens under the applicable method. The <a href="https://susproc.jrc.ec.europa.eu/product-bureau/sites/default/files/2021-01/UM3_Indicator_1.2_v1.1_37pp.pdf">JRC Level(s) indicator 1.2 manual</a> distinguishes maintenance/repair/refurbishment and illustrates the wider replacement event. Use it as methodological context, not a default lifetime/factor source.</li>
+<li>Chain where B is incomplete: RAW Element → <strong>planned Replacement/B4</strong> plus evidenced missing B1, B2/B3, B5, B6/B7 assignments → RAW Element GWP (B). Future maintenance/repair and operational-energy/water contracts are also needed unless source factors already cover those modules. Replacement alone cannot finish B or whole life.</li>
+<li>Proposed diagnostics: <code>scenario.b4.service_life_missing</code>, <code>.study_period_missing</code>, <code>.count_policy_missing</code>, <code>.event_scope_incomplete</code>, <code>scenario.b.modules_uncovered</code>. Missing B modules withhold B GWP; availability remains visible in Result. Defer broad B automation until the module ledger and policies exist.</li>
+</ul>
+<h3 id="e-c-end-of-life">E. C end of life</h3>
+<ul>
+<li>All Danish records provide C3/C4; 3,118 German records have numeric C1–C4. RAW Element supplies installed quantities, not demolition methods or waste destinations.</li>
+<li>Where C is complete and quantities match, current Elements → GWP (C) works as source-scenario arithmetic. Otherwise chain: RAW Element → Physical Properties if needed → <strong>planned RAW End-of-Life Scenario</strong> → RAW Element GWP (C).</li>
+<li>Require separate module assignments: C1 demolition, C2 transport to processing/disposal, C3 processing, C4 disposal. Waste-route shares and activity/factor bases must be explicit. Mass is common but not universal; respect each supplied factor&#39;s unit. Preserve existing C3/C4 rather than recalculating them accidentally.</li>
+<li>Current combined C is withheld when any required module is absent. A future report may expose named partial C3+C4 contributions, clearly labelled partial; do not change the meaning of C mode. Proposed diagnostics: <code>scenario.c.route_missing</code>, <code>.route_balance_invalid</code>, <code>.factor_missing</code> with affected module, <code>.quantity_missing</code>, <code>.existing_module_conflict</code>; existing <code>element.gwp_missing</code> names missing C1/C2/etc.</li>
+</ul>
+<h3 id="f-d-beyond-system-boundary">F. D beyond system boundary</h3>
+<ul>
+<li>Source D is widespread and often negative. Existing D with matching quantity can calculate now, independently of whether C is complete. RAW Element does not supply substitution, recovery yields or credit policy.</li>
+<li>For missing/project-specific D: RAW Element → Physical Properties if needed → <strong>planned RAW Reuse / Recovery Scenario</strong> → RAW Element GWP (D). Require reuse/recycling/recovery fractions, route balance, documented net load/credit factors and credit/allocation method. Percentages alone cannot determine a credit. Do not compute “negative A1–A3 × recycling rate” as a default.</li>
+<li>Define quality/substitution assumptions, additional processing loads and links to C flows; check mutually exclusive routes and avoid duplicated source D. A selected method must establish treatment of secondary inputs and outputs.</li>
+<li>Keep signed D and <code>element.module_d</code>; proposed <code>scenario.d.credit_method_missing</code>, <code>.factor_missing</code>, <code>.route_balance_invalid</code>, <code>.c_flow_inconsistent</code>, <code>.existing_module_conflict</code>. Missing D is null, not zero. D included in A1–D must also be reported separately.</li>
+</ul>
+<h3 id="g-a1c-whole-life-excluding-d">G. A1–C whole life excluding D</h3>
+<ul>
+<li>A material may already contain the required numeric modules; geometry alone never establishes missing lifecycle assumptions. Current complete single-dataset arithmetic is distinguished from a verified project assessment in the readiness table.</li>
+<li>Chain as needed: RAW Element → Physical Properties → planned Transport → Construction → Replacement and other missing B assignments → End-of-Life → RAW Element GWP (A1–C). Do not replace valid source modules merely because an enrichment component is connected.</li>
+<li>Require all product/A4/A5/B1–B7/C1–C4 factors, quantities, scenario applicability, method compatibility and common study-period/context where relevant. Existing strict scope withholds incomplete total. Partial reporting can be added later under an explicitly different label, with a module coverage ledger.</li>
+<li>Store <code>element.gwp_missing</code>, <code>element.gwp_context</code>, per-module reasons and proposed <code>scenario.study_period_mismatch</code>, <code>scenario.module_conflict</code>, <code>scope.incomplete</code>. Source zero and an evidenced not-applicable determination must remain distinguishable; silence is neither.</li>
+</ul>
+<h3 id="h-a1d-whole-life-including-d">H. A1–D whole life including D</h3>
+<ul>
+<li>Same chain and requirements as A1–C plus planned Reuse / Recovery where source D is absent or an explicit project scenario replaces it. Missing D withholds A1–D even if A1–C works.</li>
+<li>D is not a missing-stage balancing item. Never derive it to make a desired total. A partial D scenario also remains unavailable unless all its declared routes/contributions are resolved.</li>
+<li>Retain the warning: <strong>“D is beyond the system boundary and should also be reported separately.”</strong> Keep D&#39;s signed contribution, provenance, scope and status separately in the proposed ledger; today use a second calculator set to D. Store <code>element.module_d</code>, <code>element.gwp_missing</code> and proposed <code>scenario.d.incomplete</code> alongside context diagnostics.</li>
+</ul>
+<h2 id="5-calculation-loop-table">5. Calculation-loop table</h2>
+<p>“Dataset only” means complete supplied factors for some records, still needing a quantity. “RAW Element only” means the element carries such a dataset and compatible quantities. <strong>Partial</strong> is population readiness, not permission to output an incomplete selected-scope sum. Exact source/engine counts appear above/in evidence.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Module scope</th>
+<th>Current dataset only?</th>
+<th>RAW Element only?</th>
+<th>Required enrichment if missing</th>
+<th>Required user inputs</th>
+<th>Required source factors</th>
+<th>Failure cases</th>
+<th>Recommended diagnostics</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1–A3</td>
+<td>Yes DK; Partial German</td>
+<td>Partial</td>
+<td>Existing Physical Properties; existing Surface Thickness</td>
+<td>Valid quantity; density or measured mass if needed; thickness for area→volume</td>
+<td>Product aggregate or A1+A2+A3</td>
+<td>Missing factor, mass, volume/count, unsupported unit, incompatible parts</td>
+<td><code>element.density</code>, <code>.quantity_basis</code>, <code>.gwp_missing</code>, <code>.gwp_context</code>; <code>physical.*</code></td>
+<td>1: existing workflow hardening</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>No DK; Partial German</td>
+<td>Partial</td>
+<td>Transport; Physical Properties if mass-based</td>
+<td>Distance, mode, activity quantity, source; load policy if applicable</td>
+<td>Compatible transport activity factor or supplied A4</td>
+<td>Missing distance/factor/activity; conflicting source A4</td>
+<td><code>scenario.a4.*</code>, <code>scenario.provenance_missing</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>No DK; Partial German</td>
+<td>Partial</td>
+<td>Construction; physical inputs as needed</td>
+<td>Installation activity, waste definition/rate, allocation, source</td>
+<td>Installation/process and waste-route burdens</td>
+<td>Undefined waste basis, missing factors, double counting</td>
+<td><code>scenario.a5.*</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>B</td>
+<td>No DK; Partial German</td>
+<td>Partial</td>
+<td>Replacement/B4; additional B assignments as needed</td>
+<td>Study period, service life/count policy, maintenance/use assumptions</td>
+<td>Compatible event and other B-stage factors</td>
+<td>B4 mistaken for all B; missing event modules/operational data</td>
+<td><code>scenario.b4.*</code>, <code>scenario.b.modules_uncovered</code></td>
+<td>3, after A4/A5; broader B later</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Partial DK (C3/C4); Partial German</td>
+<td>Partial (no complete DK C)</td>
+<td>End-of-Life; Physical Properties if required</td>
+<td>C1 activity, C2 route, C3/C4 processing/disposal shares, source</td>
+<td>Each missing C1/C2/C3/C4 factor</td>
+<td>Partial C; missing route/mass; conflicting source module</td>
+<td><code>element.gwp_missing</code>, <code>scenario.c.*</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Yes DK; Partial German</td>
+<td>Partial</td>
+<td>Reuse / Recovery; Physical Properties if needed</td>
+<td>Recovery fractions, credit method, sources, C-flow links</td>
+<td>Net load/credit factors with allocation context</td>
+<td>Missing/partial D, route conflicts, unsupported credit method</td>
+<td><code>element.module_d</code>, <code>scenario.d.*</code></td>
+<td>2; source D first</td>
+</tr>
+<tr>
+<td>A1–C</td>
+<td>No DK; Partial German</td>
+<td>Partial</td>
+<td>All missing-stage enrichments including B beyond replacement</td>
+<td>Union of above, aligned study period</td>
+<td>Complete required module set</td>
+<td>Any missing/incompatible module; unresolved cross-dataset context</td>
+<td><code>scope.incomplete</code>, <code>element.gwp_context</code>, per-stage codes</td>
+<td>Integrate after required stages</td>
+</tr>
+<tr>
+<td>A1–D</td>
+<td>No DK; Partial German</td>
+<td>Partial</td>
+<td>A1–C chain plus Reuse / Recovery</td>
+<td>Above plus evidenced D policy</td>
+<td>A1–C and D, separately traceable</td>
+<td>Missing D; D concealed inside total; incompatible context</td>
+<td>Above plus <code>element.module_d</code>, <code>scenario.d.incomplete</code></td>
+<td>Integrate last; retain separate D</td>
+</tr>
+</tbody></table></div>
+<h2 id="6-shared-enrichment-architecture-proposed-not-implemented">6. Shared enrichment architecture (proposed, not implemented)</h2>
+<p>Keep one primary output <code>Elements</code> for enrichment and one primary input <code>Elements</code> for RAW Element GWP. Preserve tree paths, element order, identity and failed slots. Components must return immutable enriched copies, not change source materials or silently flatten data.</p>
+<p>Before scenario components, introduce a reviewed <strong>element-level module contribution contract</strong>, conceptually containing:</p>
+<ul>
+<li>Element/part identity and scope leaf (A4, C2, etc.); source module assignments remain intact.</li>
+<li>Quantity/activity value, unit and declared amount; original factor value/unit/record revision; conversion formula and evidence.</li>
+<li>Origin (<code>SourceScenario</code>, <code>UserScenario</code>, <code>VerifiedManualFactor</code>), scenario ID/version, source note/citation, evidence status, study period where relevant.</li>
+<li>Exact indicator/method/version/standard/boundary context and module membership; a factor in an activity dataset retains its original source module even when assigned to a building scenario module.</li>
+<li>Completeness/status, missing inputs, structured diagnostics and derivation dependencies (including physical overrides).</li>
+<li>Explicit conflict policy. Default: preserve existing source assignment and reject overlaps. Intentional replacement creates an auditable superseding assignment; it must never add both complete source A4 and full calculated A4, or aggregate plus leaves.</li>
+</ul>
+<p>RAW Element GWP should resolve these assignments under strict compatibility, scale verified activities and select the requested scope. It must not infer distances, lifetimes, routes or factors. Enrichers must recompute when upstream quantity/provenance changes; serialisation must retain both original and superseding records. Context recovery is a separate evidence-led metadata task; scenario calculations must not mark an unknown source method “known” without evidence.</p>
+<p>Each phase needs tests for missing versus explicit zero, signed factors, exact tree alignment, save/reopen, physical override precedence, no source mutation, aggregate/leaf overlap, mixed contexts, scenario replacement, and independent per-module reconciliation. No contracts or components were implemented in this audit.</p>
+<h2 id="7-component-contracts">7. Component contracts</h2>
+<h3 id="component-raw-physical-properties">Component: RAW Physical Properties</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Status / implementation priority: Now — already implemented; verify and harden existing workflow.</strong></p>
+<p><strong>Purpose:</strong> Add element-level density or measured mass with provenance.</p>
+<p><strong>Inputs:</strong> Elements; optional Density (kg/m³); optional Measured Mass (kg/element); Source Note; Override Existing (false). <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> Missing mass for kg/t factors when volume+density or measured mass is available. <strong>Cannot fix:</strong> Missing volume without thickness, module factors, unsupported declared units, incompatible context or whole-life assumptions.</p>
+<p><strong>Data/provenance:</strong> Source dataset stays unchanged. A source density is protected unless Override Existing is true; measured mass takes precedence over density. A source note documents evidence but is not independently verified by RAW. Current blank-source-note behaviour is a warning, not a fabricated citation.</p>
+<p><strong>Failures:</strong> Nonfinite/zero/negative density or mass; misaligned input trees; multi-material assembly without allocation. Existing implementation restricts overrides to single-material elements.</p>
+<p><strong>Diagnostics:</strong> <code>physical.density_override_added</code>, <code>physical.mass_override_added</code>, <code>physical.override_blocked_existing_density</code>, <code>physical.measured_mass_precedence</code>, <code>physical.source_note_missing</code>, <code>physical.invalid_density</code>, <code>physical.invalid_measured_mass</code>, <code>physical.no_override</code>, <code>physical.assembly_allocation_required</code>, <code>physical.input_alignment</code>.</p>
+<p><strong>Example workflow:</strong> Clay powder → RAW Element (Surface + Thickness) → RAW Physical Properties (evidenced density) → RAW Element GWP (A1–A3). Preserve “Not supplied” on the original material summary.</p>
+<h3 id="component-raw-thickness--layer-helper">Component: RAW Thickness / Layer Helper</h3>
+<p><strong>Category:</strong> RAW LCA / Elements. <strong>Status / implementation priority: Documentation only; existing Surface Thickness and Wall Assembly already cover creation-time quantities.</strong></p>
+<p><strong>Purpose:</strong> If later justified, attach/validate thickness for an already-created single-material surface element without rebuilding the graph.</p>
+<p><strong>Inputs:</strong> Elements; Thickness (metres); Source Note; explicit replace policy if prior thickness exists. <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> Area→volume, and area→mass when density is also available. <strong>Cannot fix:</strong> Per-m² product-factor rescaling, missing density/factors/context, missing reference area, or a layered assembly needing per-layer allocation.</p>
+<p><strong>Data/provenance:</strong> Record supplied thickness, original/reference geometry quantity and evidence. Do not overwrite measured closed-solid volume or source product thickness. Store derived volume, not a rewritten material unit.</p>
+<p><strong>Failures:</strong> Nonpositive/nonfinite thickness; wrong basis; existing-volume conflict; undefined assembly allocation. <strong>Proposed diagnostics:</strong> <code>quantity.thickness_added</code>, <code>.invalid_thickness</code>, <code>.reference_area_missing</code>, <code>.volume_conflict</code>, <code>.assembly_allocation_required</code>, <code>.source_note_missing</code>.</p>
+<p><strong>Example workflow:</strong> RAW Element (Surface) → optional planned Thickness Helper → Physical Properties → GWP. Preferred today: connect Thickness directly to RAW Element.</p>
+<h3 id="component-raw-transport-scenario">Component: RAW Transport Scenario</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Status / implementation priority: Next after C/D foundations — priority 3.</strong></p>
+<p><strong>Purpose:</strong> Supply a documented A4 activity/scenario assignment.</p>
+<p><strong>Inputs:</strong> Elements; Distance (km); Transport mode; Transport factor with unit/declared amount and context; optional Load factor under a declared policy; Source Note. <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> Missing/project-specific A4. <strong>Cannot fix:</strong> Missing mass for mass-distance factors, missing factors or method mismatch; cannot infer transport mode from a product name.</p>
+<p><strong>Data/provenance:</strong> Require factor citation/revision, mode, route, factor activity basis, method context and evidence. Block a scenario contribution without provenance; retain input elements and diagnostic. Do not silently replace source A4.</p>
+<p><strong>Failures / diagnostics:</strong> Missing/nonfinite/negative distance, absent mode/factor, unsupported activity conversion, missing mass/volume, duplicated A4; <code>scenario.a4.distance_missing</code>, <code>.distance_invalid</code>, <code>.mode_missing</code>, <code>.factor_missing</code>, <code>.quantity_missing</code>, <code>.activity_unit_mismatch</code>, and shared scenario codes.</p>
+<p><strong>Example workflow:</strong> RAW Element → Physical Properties → Transport Scenario → GWP (A4). Explicit zero distance is only valid as an evidenced scenario choice, never a default for missing distance.</p>
+<h3 id="component-raw-construction-scenario">Component: RAW Construction Scenario</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Status / implementation priority: Next, priority 3, after module ledger and allocation design.</strong></p>
+<p><strong>Purpose:</strong> Assign evidenced A5 installation/site/waste contributions.</p>
+<p><strong>Inputs:</strong> Elements; Installation factor; Waste rate plus its basis; Site process factor/activity; Source Note; documented allocation policy (typed contract or later UI design). <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> Missing A5 where installation/loss data exist. <strong>Cannot fix:</strong> Missing production/process/waste-route factors, undefined boundaries, or incomplete other stages.</p>
+<p><strong>Data/provenance:</strong> State installed versus purchased quantity, waste destination, attribution to modules, factor activity unit, context and citation. Keep original element installed quantity and source factors intact; extra material demand is a traced scenario flow.</p>
+<p><strong>Failures / diagnostics:</strong> Invalid rates, missing waste basis or factors, ambiguous allocation, source A5 overlap; <code>scenario.a5.waste_basis_missing</code>, <code>.waste_rate_invalid</code>, <code>.allocation_unresolved</code>, <code>.factor_missing</code>, <code>.quantity_missing</code>, <code>.double_count_risk</code> and shared codes.</p>
+<p><strong>Example workflow:</strong> RAW Element → Construction Scenario → GWP (A5); A1–C only after all other stages are complete.</p>
+<h3 id="component-raw-replacement-scenario">Component: RAW Replacement Scenario</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Status / implementation priority: Later within priority 3; begin with explicit B4 only.</strong></p>
+<p><strong>Purpose:</strong> Describe replacement events under a declared study-period policy.</p>
+<p><strong>Inputs:</strong> Elements; Reference service life; Building study period; explicit Replacement count or automatic policy; Source Note; references to complete replacement-event factors/assignments. <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> B4 when an evidenced event inventory exists. <strong>Cannot fix:</strong> All B1–B7 by itself, use-stage energy/water, maintenance/repair, missing event factors, unsupported lifetime policy or incompatible contexts.</p>
+<p><strong>Data/provenance:</strong> Count must be nonnegative whole number; automatic policy must specify end-period treatment and evidence. A manually evidenced zero replacements is a real scenario decision, not missing-as-zero. Preserve original and replacement component lifetimes, study period, factor versions and attribution of removed products. Explicit count and automatic mode must not compete silently.</p>
+<p><strong>Failures / diagnostics:</strong> Missing lifetime/period when automatic policy is selected; invalid count; incomplete event inventory; conflicting policies; <code>scenario.b4.service_life_missing</code>, <code>.study_period_missing</code>, <code>.count_policy_missing</code>, <code>.event_scope_incomplete</code>, <code>.policy_conflict</code>, <code>scenario.b.modules_uncovered</code>.</p>
+<p><strong>Example workflow:</strong> RAW Element → Replacement Scenario → other required B assignments → GWP (B). A future report can expose B4 independently without pretending it is complete B.</p>
+<h3 id="component-raw-end-of-life-scenario">Component: RAW End-of-Life Scenario</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Status / implementation priority: Next — priority 2.</strong></p>
+<p><strong>Purpose:</strong> Fill specific missing C modules or deliberately supersede source scenarios.</p>
+<p><strong>Inputs:</strong> Elements; Demolition factor/activity; Waste route including transport legs; Processing route; Disposal route; route fractions and their factor references; Source Note. <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> Missing C1/C2/C3/C4 with real factors; particularly Danish C1/C2. <strong>Cannot fix:</strong> Absent route factors, mass when required, method mismatch, or recovery-credit D without its own model.</p>
+<p><strong>Data/provenance:</strong> Every assignment identifies C1/C2/C3/C4, activity unit, route/fraction, method, source/version. Require balanced material flow and context compatibility with retained C3/C4. Fraction totals below one leave an unresolved remainder unless an evidenced route covers it.</p>
+<p><strong>Failures / diagnostics:</strong> Missing route/activity/factor, invalid fractions, overlapping source modules; <code>scenario.c.route_missing</code>, <code>.route_balance_invalid</code>, <code>.factor_missing</code>, <code>.quantity_missing</code>, <code>.existing_module_conflict</code>, with module-specific details and shared codes.</p>
+<p><strong>Example workflow:</strong> Danish material → RAW Element → Physical Properties if needed → End-of-Life Scenario (evidenced C1/C2; retain C3/C4) → GWP (C). This needs the new assignment resolver; the present calculator cannot consume these planned assignments yet.</p>
+<h3 id="component-raw-reuse--recovery-scenario">Component: RAW Reuse / Recovery Scenario</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Status / implementation priority: Next design, staged after explicit C-flow contracts — priority 2.</strong></p>
+<p><strong>Purpose:</strong> Supply evidenced D net load/benefit scenarios, preserving sign and boundary.</p>
+<p><strong>Inputs:</strong> Elements; Reuse rate; Recycling rate; Recovery rate; Credit method with factor references; Source Note; linked C-flow scenario. <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> Missing/project-specific D where a defensible method and inventory exist. <strong>Cannot fix:</strong> Missing credit/substitution factors, allocation method, unbalanced flows, or missing C/other stages by inventing benefits.</p>
+<p><strong>Data/provenance:</strong> Require stated recovery quality/substitution, net flows, burdens/credits, source versions, method and relationship to C. Record D separately and explicitly supersede, never add to, an already complete source D.</p>
+<p><strong>Failures / diagnostics:</strong> Invalid/overlapping rates, inconsistent C quantities, missing method/factor, incomplete net inventory; <code>scenario.d.credit_method_missing</code>, <code>.factor_missing</code>, <code>.route_balance_invalid</code>, <code>.c_flow_inconsistent</code>, <code>.incomplete</code>, <code>.existing_module_conflict</code>, and <code>element.module_d</code>.</p>
+<p><strong>Example workflow:</strong> RAW Element → End-of-Life Scenario → Reuse / Recovery Scenario → GWP (D); a separate calculator may request A1–D when all stages are complete.</p>
+<h3 id="component-raw-module-factor-override">Component: RAW Module Factor Override</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Status / implementation priority: Later — priority 4, advanced/manual only.</strong></p>
+<p><strong>Purpose:</strong> Attach a verified missing-module GWP factor as an element-level assignment, not impersonate source EPD data.</p>
+<p><strong>Inputs:</strong> Elements; exact Module; GWP factor; Declared quantity/unit; indicator/method/standard/boundary context; provenance citation/version/evidence; explicit replacement policy if applicable. A numeric factor plus a free-text note alone is insufficient. <strong>Outputs:</strong> Elements.</p>
+<p><strong>Fixes:</strong> A specific missing module when reliable compatible evidence exists. <strong>Cannot fix:</strong> Missing quantities, undocumented conversions, method mismatch or unevidenced zero/not-applicable stages; cannot certify data.</p>
+<p><strong>Data/provenance:</strong> Mandatory traceable source and typed context; preserve original record, user identity/evidence status, assignment origin and replaced value. Negative D is allowed; any signed factor must remain source-backed. Require correct aggregate membership and block aggregate/leaf overlap.</p>
+<p><strong>Failures / diagnostics:</strong> Absent provenance, invalid factor/basis, ambiguous module, conflicts, incompatible context; <code>override.provenance_required</code>, <code>.factor_invalid</code>, <code>.declared_basis_invalid</code>, <code>.module_ambiguous</code>, <code>.source_conflict</code>, <code>.context_incompatible</code>.</p>
+<p><strong>Example workflow:</strong> RAW Element → Module Factor Override (reviewed missing C1 factor) → GWP (C), only if C2–C4 and quantities are also complete. Never use this to silence missing-data warnings without evidence.</p>
+<h2 id="8-implementation-order-and-decision-gates">8. Implementation order and decision gates</h2>
+<ol>
+<li><strong>Priority 1 — current A1–A3 reliability, not a new Physical Properties component.</strong> Use and verify existing density/measured-mass enrichment, Surface Thickness, Unit/count and source-preserving guidance. Improve alignment/provenance feedback and distinguish absent product aggregate from valid A1/A2/A3 leaves in summaries. Review unsupported per-metre handling as a separate quantity-basis change; kgkm/MJ remain activity inputs. No conversion by relabelling.</li>
+<li><strong>Foundation alongside priority 1:</strong> evidence-led LCIA metadata resolution, source scenario applicability and the module-assignment/diagnostic contracts. Existing unknown method identities mean new scenario factors cannot safely combine with arbitrary library records. Reuse reviewed, pinned context logic; do not blanket-promote the packs. Design a numeric per-module ledger so D and partial coverage remain inspectable. These are prerequisites, not new palette widgets in this audit.</li>
+<li><strong>Priority 2 — C and D.</strong> First make existing source D and complete German C understandable; then implement explicit C1/C2 completion and route contracts preserving source C3/C4. A narrow transport-activity calculation service may be needed for C2 before a public A4 component. Design Reuse/Recovery next; automatic credit models wait for allocation evidence. Since source D is already common, missing C1/C2 is the stronger immediate Danish gap.</li>
+<li><strong>Priority 3 — Transport/A4, then Construction/A5.</strong> Reuse the audited transport activity service; settle waste-basis/allocation and overlap policies before A5. Missing physical properties must be resolved upstream.</li>
+<li><strong>Priority 3, later — Replacement/B4, then remaining B requirements.</strong> B needs more than service life. Define event inventories, periods and replacement-endpoint rules; plan maintenance/repair and operational B6/B7 coverage separately. A Replacement component cannot by itself unlock whole-life output.</li>
+<li><strong>Priority 4 — advanced Module Factor Override.</strong> Implement only after the same typed provenance, context and conflict rules are enforced. It is an expert fallback, not the default way to “complete” an EPD.</li>
+<li><strong>RAW Inspector later</strong>, after the above contracts stabilise. Do not add Inspector, reporting, graph or fake scenario palette entries now. Existing visualisation can consume available results and mark unavailable items honestly.</li>
+</ol>
+<p>Complete whole-life <strong>arithmetic</strong> for eligible single source records is possible now; complete <strong>project</strong> whole-life assessment still requires applicability checks and context. For missing-stage records, installing all five proposed scenario components alone will not guarantee completion: real factors and the uncovered B modules are still required.</p>
+<h2 id="9-diagnostics-for-future-raw-inspector">9. Diagnostics for future RAW Inspector</h2>
+<p>Start with a deterministic rule table, not an LLM deciding scientific validity. Proposed future interface: <code>Data</code> → <code>Status</code>, <code>Issues</code>, <code>Recommended Actions</code>. Optional LLM wording may explain established facts later; it must not invent factors, replace provenance or override calculation status.</p>
+<p>Preserve existing diagnostic code, severity, owner/reference and scope; enrich them with:</p>
+<ul>
+<li>Stable element/part identity and GH tree path/item index, source dataset ID/revision and affected module(s).</li>
+<li>Required versus available quantity/factor, expected unit, actual unit, missing/invalid/ambiguous reason, and whether the issue blocks the selected GWP or only mass/normalised visualisation.</li>
+<li>Source versus user scenario/physical override origin; evidence/citation and validation status; active/superseded assignment, precedence decision and dependency chain.</li>
+<li>Recommended real component, mode and exact input, with availability state (<code>implemented</code>/<code>planned</code>), so users are not told to connect an unavailable component.</li>
+<li>Status dimensions separately: numeric completeness, quantity readiness, context compatibility and evidence quality. An available individual factor calculation may still have unresolved method context.</li>
+<li>Per-module availability and numeric contributions, explicit-zero status, omitted/not-applicable evidence, missing stages, study period and D boundary notice. “Partial” describes coverage; it must not be printed as a complete A1–C/A1–D total.</li>
+</ul>
+<p>Shared proposed scenario codes: <code>scenario.provenance_missing</code>, <code>scenario.context_unresolved</code>, <code>scenario.context_incompatible</code>, <code>scenario.module_conflict</code>, <code>scenario.input_alignment</code>, <code>scenario.study_period_mismatch</code>, <code>scenario.quantity_changed</code>, <code>scope.incomplete</code>. Codes proposed in this document do not currently exist unless explicitly identified as existing.</p>
+<p>Example rule: <code>element.density</code> + kg + known volume → recommend existing RAW Physical Properties / Density or Measured Mass, request evidence; do not recommend thickness when volume is already known. For m² GWP with missing density → explain “mass unavailable; area-based GWP can still calculate.” Missing C1/C2 → identify retained C3/C4 and the planned End-of-Life remedy, while explicitly saying it is not available yet. Incompatible methods → request source-context review, never a physical override.</p>
+<h2 id="10-risks-and-boundaries">10. Risks and boundaries</h2>
+<ul>
+<li>Missing is not zero. Preserve explicit zero separately from absent, invalid, not-declared or unresolved applicability.</li>
+<li>Never invent density or infer it from a material family. A user source note is provenance, not independent verification.</li>
+<li>Keep source units, factor quantities, boundaries, geography, version and original records. Distinguish scenario assumptions from source EPD observations.</li>
+<li>Do not mix incompatible methods/standards/indicators or bypass unresolved cross-dataset checks with a numeric sum. Do not normalise different source factors into supposed equivalence.</li>
+<li>Do not conceal partial C or missing B/D inside A1–C/A1–D. Keep D separately reportable even when included.</li>
+<li>Never apply both source aggregate and constituent modules, source and replacement scenario, or the same waste/recovery burden twice.</li>
+<li>A measured mass does not invent volume/area for normalised colour previews. Geometry/order mismatches must stay visible.</li>
+<li>This audit measures current local availability, not scientific verification, dataset suitability, current online release status or redistribution permission.</li>
+</ul>
+<h2 id="11-verification-and-change-scope">11. Verification and change scope</h2>
+<p>Deliverable changes are documentation only:</p>
+<ul>
+<li><code>docs/raw-data-enrichment-audit-and-roadmap.md</code> — this audit, eight calculation loops, component contracts and implementation plan.</li>
+<li><code>docs/raw-data-enrichment-audit-evidence.json</code> — full aggregate source inventory, categories/regions/families, module counts, engine readiness and verification evidence.</li>
+</ul>
+<p>Verification performed:</p>
+<ul>
+<li>Read-only inspection and hydration of all <strong>5,520</strong> dataset revisions; <strong>44,160</strong> existing-calculator scope evaluations. Count partitions and family/unit totals reconcile.</li>
+<li>Material-library SHA-256 unchanged before/after the audit.</li>
+<li><code>dotnet build RawLca.sln --configuration Release</code>: standard output build failed at the GHA copy step because Rhino 8 (PID 29816) held the plugin file open (MSB3027/MSB3021). The session was not closed or interrupted. The first sandbox attempt also exited without compiler diagnostics; verification was rerun with the installed runtime.</li>
+<li>Safe isolated-output verification: <code>dotnet build RawLca.sln --configuration Release -p:BaseOutputPath=[local development path omitted]</code> — <strong>passed, zero warnings/errors</strong>.</li>
+<li><code>dotnet test RawLca.sln --configuration Release</code> — <strong>1,021 passed, 0 failed, 0 skipped</strong>.</li>
+<li>No native Grasshopper smoke test was run for this planning task. No new components were installed.</li>
+</ul>
+<p>No component, production source, original material, palette registration or frozen validation file was modified for this audit. The temporary read-only probe remains under ignored <code>internal implementation reference</code>; it is an audit instrument, not a new calculation component. No commit or push.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

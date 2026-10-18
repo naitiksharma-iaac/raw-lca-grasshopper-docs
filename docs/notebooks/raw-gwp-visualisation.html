@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW GWP visualisation · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-gwp-visualisation.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#colour-preview">Colour preview</a><a href="#legend">Legend</a><a href="#example-workflow">Example workflow</a></div></details><h1 id="raw-gwp-visualisation">RAW GWP visualisation</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p>Visualisation communicates an existing result. It does not run an LCA, repair missing data, change source units, or alter RAW Element GWP values. Totals remain a separate operation (for example Grasshopper Mass Addition), subject to the Result&#39;s completeness and compatibility diagnostics.</p>
+<p>Two working components are visible under <strong>RAW LCA / Visualisation</strong>:</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Stable GUID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAW GWP Colour Preview</td>
+<td><code>3621875f-bd4a-4437-aa80-34fe7760d3e0</code></td>
+</tr>
+<tr>
+<td>RAW GWP Legend</td>
+<td><code>9b683246-89bd-48c5-a059-1085d578ea79</code></td>
+</tr>
+</tbody></table></div>
+<p>Existing components, ports and GUIDs are unchanged. No graph, report, inspector or standalone gradient component is exposed.</p>
+<h2 id="colour-preview">Colour preview</h2>
+<p>Inputs, in order:</p>
+<ol>
+<li><strong>Result</strong> — RAW Element GWP Result, one per branch.</li>
+<li><strong>Geometry</strong> — optional in the contract; required with today&#39;s Results, which contain quantities but no Rhino geometry. Connect RAW Element&#39;s Geometry output.</li>
+<li><strong>Values</strong> — optional manual GWP values in kg CO₂-eq, overriding Result values. A warning makes the override explicit. RAW cannot verify the unit or scope of manual numbers.</li>
+<li><strong>Low Bound</strong> — optional global lower display bound, in the selected colour mode&#39;s units.</li>
+<li><strong>High Bound</strong> — optional global upper display bound.</li>
+<li><strong>Colour Mode</strong> — optional text, default <code>Absolute GWP</code>.</li>
+<li><strong>Reverse Gradient</strong> — optional boolean, default false.</li>
+</ol>
+<p>Outputs, in order: <strong>Preview Geometry, Preview Colours, Legend Values, Legend Labels, Colour Mode, Warnings</strong>.</p>
+<p>Connect Preview Geometry and Preview Colours to Grasshopper <strong>Custom Preview</strong>. Disable overlapping ordinary geometry previews when presenting the colours. This component does not bake geometry or change object/material colours in Rhino.</p>
+<p>Geometry, Result elements and manual values match by exact branch path and item position. They are never flattened or broadcast. A mismatch retains the maximum number of slots, including null geometry or values; the affected branch receives grey unavailable colours until corrected. Missing geometry items are grey individually. This intentionally prevents a shorter list being silently paired with the wrong elements. Grouped Unit/count elements can represent several geometry objects: supply an explicit one-to-one geometry representation, or separate the elements upstream. Automatic group expansion is deferred.</p>
+<p>One shared finite-value scale is used across all branches. Bounds default to the minimum and maximum available display values. Manual bounds clip <strong>colours only</strong>, with a warning if values lie outside the range; Legend Values remain the original display values. Invalid bounds produce grey colours. Equal values (within 1e-12 relative numeric precision) produce a stable neutral colour and an explicit message; geometry round-off must not become a full colour range. Reverse Gradient changes colours only.</p>
+<h3 id="modes-and-units">Modes and units</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Colour Mode</th>
+<th>Display value</th>
+<th>Required result quantity</th>
+<th>Display unit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Absolute GWP</td>
+<td>Element GWP</td>
+<td>none</td>
+<td>kg CO₂-eq</td>
+</tr>
+<tr>
+<td>GWP per m²</td>
+<td>Element GWP / area</td>
+<td>positive finite reference area</td>
+<td>kg CO₂-eq/m²</td>
+</tr>
+<tr>
+<td>GWP per m³</td>
+<td>Element GWP / volume</td>
+<td>positive finite volume</td>
+<td>kg CO₂-eq/m³</td>
+</tr>
+<tr>
+<td>GWP per kg</td>
+<td>Element GWP / mass</td>
+<td>positive finite mass</td>
+<td>kg CO₂-eq/kg</td>
+</tr>
+<tr>
+<td>Module scope value</td>
+<td>Element GWP for the Result&#39;s already-selected scope</td>
+<td>none</td>
+<td>kg CO₂-eq</td>
+</tr>
+</tbody></table></div>
+<p>ASCII <code>m2</code> and <code>m3</code> in mode text are accepted. The preview does not switch the calculator&#39;s lifecycle scope: change that on RAW Element GWP. A mixed-scope preview warns that the values are not a like-for-like lifecycle comparison. Unknown mode text warns and uses Absolute GWP.</p>
+<p>Normalised modes use quantities retained in the matching Result row, including mass resolved by RAW Physical Properties. They do not measure optional geometry or infer density/thickness. Missing, zero, negative or non-finite denominators produce null display values, grey colours and path/item diagnostics. Area is reference area, not a solid&#39;s total face area. Manual values can be normalised only when the Result supplies an equally sized, correctly ordered quantity list.</p>
+<h3 id="internal-gradient-presets">Internal gradient presets</h3>
+<ul>
+<li><strong>Sequential low-to-high:</strong> pale teal → teal → dark plum for nonnegative values.</li>
+<li><strong>Diverging negative-to-positive:</strong> blue → neutral at zero → terracotta. Negative-only data uses the negative side. Zero remains the centre even for asymmetric ranges.</li>
+<li><strong>Module D benefit/load:</strong> teal benefits → neutral → terracotta loads when the supplied Result scope is D.</li>
+</ul>
+<p>Negative values are never clamped to zero. Manual bounds can visually clip either side, with a warning. Reversing a gradient reverses its endpoint colours; it never reverses signs. Equal-value neutral is distinct from the grey unavailable colour.</p>
+<h3 id="missing-values-and-diagnostics">Missing values and diagnostics</h3>
+<p>Unavailable GWP remains null, never zero. Unavailable/misaligned items are grey. All finite input values and positions are retained, even when no geometry can be coloured. No unmatched geometry or values are silently dropped. The Warnings output contains complete diagnostics with paths/indices; the runtime balloon shows at most the first twelve messages plus a count to avoid overwhelming the canvas.</p>
+<p>Result diagnostics, including unresolved LCIA context and unavailable modules, are forwarded. Displaying a colour does not establish scientific comparability or a verified whole-life result.</p>
+<h2 id="legend">Legend</h2>
+<p>Connect <strong>Legend Values → Legend Values</strong>, <strong>Legend Labels → Legend Labels</strong>, and <strong>Preview Colours → Preview Colours</strong> directly from RAW GWP Colour Preview.</p>
+<p>Inputs, in order: <strong>Legend Values, Legend Labels, Preview Colours, Base Point, Width, Height, Title, Unit</strong>.</p>
+<p>Outputs, in order: <strong>Legend Geometry, Legend Text, Legend Points, Legend Colours</strong>.</p>
+<p>The legend uses the exact observed preview colours, so manual bounds, negative values, equal-value neutral and reversal remain consistent. It sorts and deduplicates observed entries rather than inventing a new numerical ramp. Above seven finite entries it samples observed values, keeping extrema and values either side of zero; an unavailable entry is retained separately. A runtime message identifies sampling. The result is a discrete observed-value legend, not a histogram or continuous interpolated scale.</p>
+<p>Generated Legend Labels are readable text with the form <code>value unit | colour mode | module scope</code>. Keep them connected unchanged to infer the legend title and unit. With custom labels lacking that context, the fallback is <code>GWP</code> and <code>kg CO₂-eq</code>; provide Title and Unit when needed. User labels are retained. Unit changes the label only, never converts numbers. Mismatched legend input counts produce a warning and no misleading swatches.</p>
+<p>Swatches are meshes in world XY. Base Point defaults to the origin; Width defaults to 10 and Height to 50, both in Rhino model units. Multiple branches create separate legends arranged horizontally (12 × Width spacing). Change dimensions for your model scale. The component does not bake anything.</p>
+<ul>
+<li>Connect <strong>Legend Geometry + Legend Colours</strong> to another <strong>Custom Preview</strong>.</li>
+<li>Connect <strong>Legend Text + Legend Points</strong> to <strong>Text Tag</strong> or <strong>Text Tag 3D</strong>.</li>
+<li>Text and points include one title followed by the entry labels. Geometry and colours include only swatches. Those two pairs align independently.</li>
+</ul>
+<p>Automatic text sizing and presentation layout beyond the supplied placement/dimensions are deferred; standard GH text components control text size. Mode/scope are carried in normal text wires, so they persist with a saved definition without special serialization.</p>
+<h2 id="example-workflow">Example workflow</h2>
+<pre><code class="language-text">RAW Material Selector Danish
+  → RAW Element
+  → RAW Element GWP
+  → RAW GWP Colour Preview
+  → RAW GWP Legend
+</code></pre>
+<p>Also connect RAW Element <strong>Geometry</strong> directly to the preview&#39;s <strong>Geometry</strong> input. Add the two Custom Preview connections and text tags described above. For missing mass, enrich the Element upstream using verified physical properties; the visualisation cannot fill missing LCA or quantity data.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

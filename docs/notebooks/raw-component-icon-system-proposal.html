@@ -1,0 +1,1039 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW component icon system — design proposal · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-component-icon-system-proposal.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#review-the-visual-proposals">Review the visual proposals</a><a href="#1-audit-scope-and-current-behaviour">1. Audit scope and current behaviour</a><a href="#2-workflow-and-functional-families">2. Workflow and functional families</a><a href="#3-three-alternative-design-directions">3. Three alternative design directions</a><a href="#4-machine-process-family">4. Machine-process family</a><a href="#5-existing-infrastructure-and-implementation-feasibility">5. Existing infrastructure and implementation feasibility</a><a href="#6-approval-decisions-and-verification-status">6. Approval decisions and verification status</a></div></details><h1 id="raw-component-icon-system--design-proposal">RAW component icon system — design proposal</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p><strong>Status: review only; no production icon changes.</strong> Audit date: 18 October 2026. Repository: <code>raw-lca-grasshopper</code>, branch <code>feat/core-plugin-foundation</code>.</p>
+<p>The source contains <strong>56 concrete registered-component classes: 17 visible and 39 hidden</strong>. Only RAW Construct Machine Process supplies a custom component bitmap today. This proposal introduces seven functional families and three alternative drawing languages. Direction C is recommended for discussion, not selected or approved for implementation.</p>
+<h2 id="review-the-visual-proposals">Review the visual proposals</h2>
+<p>Start with the <a href="../reviews/history/index.html">visual review page</a>. It includes actual 24-pixel assets as well as the four sheets. View at 100% browser zoom; operating-system scaling still affects physical display size.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Sheet</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="../reviews/history/raw-icon-system/01-family-directions.png">01 — Family directions</a></td>
+<td>Seven functional families in geometric linework, solid technical and hybrid styles; large and 24 px on RAW orange.</td>
+</tr>
+<tr>
+<td><a href="../reviews/history/raw-icon-system/02-visible-components.png">02 — Visible components</a></td>
+<td>All 17 visible components, direction C as a review candidate; large, actual 24 px, neutral and selection-colour backgrounds.</td>
+</tr>
+<tr>
+<td><a href="../reviews/history/raw-icon-system/03-machine-modes.png">03 — Machine modes</a></td>
+<td>General Machine and five specialist concepts; full icon replacement versus constant icon with small badge.</td>
+</tr>
+<tr>
+<td><a href="../reviews/history/raw-icon-system/04-small-size-readability.png">04 — Small-size readability</a></td>
+<td>All visible components in A/B/C at 24, 18 and 16 px; neutral-background comparison.</td>
+</tr>
+</tbody></table></div>
+<p>These are original design drawings, <strong>not screenshots of implemented Grasshopper icons</strong>. Orange, neutral and selection colours are simulations for contrast checks. SVG masters and transparent PNGs are held only in the review folder, outside production resources.</p>
+<h2 id="1-audit-scope-and-current-behaviour">1. Audit scope and current behaviour</h2>
+<p>The audit inspected component classes, constructor metadata, exposure overrides, the palette allowlist, custom attributes, production resource files, existing design/workflow documents and the Python research prototype. Partial class files were consolidated; test harness classes were excluded. The machine-readable inventory (supporting internal reference retained privately) includes source paths and class names to disambiguate repeated display names.</p>
+<p>Source authority:</p>
+<ul>
+<li>RawPalette.cs (supporting internal reference retained privately) defines the current 17 visible names: Materials 5, Elements 4, Impact 6, Visualisation 2.</li>
+<li>RawComponent.cs (supporting internal reference retained privately) supplies the standard category/exposure rules and a null icon. Most hidden descendants now resolve to <code>RAW LCA / Elements</code> through the fallback, despite older Alpha/Advanced constructor labels. Hidden means absent from the normal palette, not removed or unloadable.</li>
+<li>The direct legacy RAW Material selector (supporting internal reference retained privately) retains <code>RAW LCA / Studio</code> metadata and is hidden. This does not mean Studio is an intended visible tab.</li>
+<li>Visible-product documentation (supporting internal reference retained privately) still lists an earlier 14-component snapshot. The inventory here follows current source, including the three machine-process workflow components.</li>
+<li>UX reorganisation (supporting internal reference retained privately) and mode-switching guidance (supporting internal reference retained privately) explain the present naming and menu conventions.</li>
+</ul>
+<p><strong>Important role correction:</strong> the visible RAW Physical Properties is now a <strong>read-only inspector</strong>, implemented by <code>PhysicalPropertiesInspectorComponent</code>. The old same-named editor is hidden and preserves legacy compatibility. RAW Update Material creates a derived material with physical-property overrides before element construction. The icons must communicate those different actions.</p>
+<h3 id="current-visible-components-and-proposed-metaphors">Current visible components and proposed metaphors</h3>
+<p>“None supplied” means the <code>Icon</code> override returns null; it does not promise a particular Grasshopper fallback drawing. The selectors also use a custom canvas layout that suppresses the standard nickname/icon region.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Component Name</th>
+<th>Grasshopper Category</th>
+<th>Purpose</th>
+<th>Current Icon</th>
+<th>Icon Source/File</th>
+<th>Current Visibility</th>
+<th>Proposed Icon Family</th>
+<th>Recommended Visual Metaphor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAW Material Selector Danish (supporting internal reference retained privately)</td>
+<td>RAW LCA / Materials</td>
+<td>Choose a Danish material by family. One pinned material output connects to RAW element components. Local BR18 library; no geometry conversion.</td>
+<td>None supplied (GH fallback)</td>
+<td>DanishMaterialSelectorComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Select</td>
+<td>Layered sample stack + selection pointer; source identified by component name.</td>
+</tr>
+<tr>
+<td>RAW Material Selector German / ÖKOBAUDAT (supporting internal reference retained privately)</td>
+<td>RAW LCA / Materials</td>
+<td>Choose an ÖKOBAUDAT material by family. One pinned material output connects to RAW element components. Local ÖKOBAUDAT library; no geometry conversion.</td>
+<td>None supplied (GH fallback)</td>
+<td>GermanMaterialSelectorComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Select</td>
+<td>Same source-browser mark; no flag or invented certification symbol.</td>
+</tr>
+<tr>
+<td>RAW Custom Material (supporting internal reference retained privately)</td>
+<td>RAW LCA / Materials</td>
+<td>Author a self-declared EnvironmentalDataset. A1-A3 supplied factor per declared unit; no database writes or inferred method.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Construct</td>
+<td>Material sample + explicit addition cross.</td>
+</tr>
+<tr>
+<td>RAW Material Info (supporting internal reference retained privately)</td>
+<td>RAW LCA / Materials</td>
+<td>Inspect a material&#39;s source, declared quantity, density and environmental metadata.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Inspect</td>
+<td>Material sample + inspection lens.</td>
+</tr>
+<tr>
+<td>RAW Update Material (supporting internal reference retained privately)</td>
+<td>RAW LCA / Materials</td>
+<td>Create a derived material with user-supplied physical properties. Original source material is preserved.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Modify / enrich</td>
+<td>Material sample + edit nib; a derived object, not source-data approval.</td>
+</tr>
+<tr>
+<td>RAW Construct Element (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Construct a RAW element from linear, surface, or solid geometry. Quantities use SI units.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Construct</td>
+<td>Line, face and solid arranged as one geometry vocabulary.</td>
+</tr>
+<tr>
+<td>RAW Construct Section (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Construct a section profile for linear RAW elements. Dimensions follow Rhino document units; outputs are SI.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Construct</td>
+<td>Bold cross-sectional I profile; represents the tool, not its current mode.</td>
+</tr>
+<tr>
+<td>RAW Wall Assembly (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Construct layered walls with preserved openings and quantity/preview output.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Construct</td>
+<td>Three ordered wall layers with a readable middle layer.</td>
+</tr>
+<tr>
+<td>RAW Physical Properties (supporting internal reference retained privately) (PhysicalPropertiesInspectorComponent)</td>
+<td>RAW LCA / Elements</td>
+<td>Inspect the physical properties of constructed RAW elements. Read-only; update material density with RAW Update Material.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Inspect</td>
+<td>Element cube + measurement frame; no edit or addition cue.</td>
+</tr>
+<tr>
+<td>RAW Element GWP (supporting internal reference retained privately)</td>
+<td>RAW LCA / Impact</td>
+<td>Calculates element-level Global Warming Potential for the selected lifecycle module scope.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Calculate</td>
+<td>Element + calculation register; no leaf or verified-result check.</td>
+</tr>
+<tr>
+<td>RAW Construct Machine Process (supporting internal reference retained privately)</td>
+<td>RAW LCA / Impact</td>
+<td>Evaluate one fabrication event/batch from measured energy, power × time, or power × mass / throughput. Electricity only; no invented measurements or factor defaults.</td>
+<td>General machine head / feed</td>
+<td>MachineProcessIcons.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Construct / calculate</td>
+<td>Machine cell, operation head and material-feed arrow.</td>
+</tr>
+<tr>
+<td>RAW Assign Process Impact (supporting internal reference retained privately)</td>
+<td>RAW LCA / Impact</td>
+<td>Allocate evaluated process events to elements with explicit EPD overlap, leaf module, evidence and context checks. Unknown or incompatible contributions remain pending.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Assign</td>
+<td>Process-event hexagon linked to an element; attachment does not imply eligibility.</td>
+</tr>
+<tr>
+<td>RAW Process Impact Breakdown (supporting internal reference retained privately)</td>
+<td>RAW LCA / Impact</td>
+<td>Separates evaluated material, eligible process, pending/excluded and D contributions. No environmental recalculation.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Inspect</td>
+<td>Separate contribution channels; do not suggest another calculation.</td>
+</tr>
+<tr>
+<td>RAW End-of-Life Scenario (supporting internal reference retained privately)</td>
+<td>RAW LCA / Impact</td>
+<td>Attach evidenced C1-C4 factors without overwriting source records.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Modify / enrich</td>
+<td>Treatment pathway branching into explicit routes.</td>
+</tr>
+<tr>
+<td>RAW Reuse / Recovery Scenario (supporting internal reference retained privately)</td>
+<td>RAW LCA / Impact</td>
+<td>Attach evidenced D factors and recovery assumptions; retain beyond-boundary status.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Modify / enrich</td>
+<td>Recovery route crossing a marked system boundary; no guaranteed benefit.</td>
+</tr>
+<tr>
+<td>RAW GWP Colour Preview (supporting internal reference retained privately)</td>
+<td>RAW LCA / Visualisation</td>
+<td>Colour existing GWP results on aligned geometry; normalisation, missing-data handling.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Visualise</td>
+<td>Coloured geometry faces, distinct from the calculation register.</td>
+</tr>
+<tr>
+<td>RAW GWP Legend (supporting internal reference retained privately)</td>
+<td>RAW LCA / Visualisation</td>
+<td>Generate legend geometry, text, points and colours from preview data.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Visible</td>
+<td>Visualise</td>
+<td>Stepped colour scale with reference ticks.</td>
+</tr>
+</tbody></table></div>
+<h3 id="hidden-and-legacy-inventory">Hidden and legacy inventory</h3>
+<p>These receive a functional classification and a suggested metaphor only. No dedicated legacy artwork or palette changes are proposed. Display-name duplicates are deliberately identified by implementation class.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Component Name</th>
+<th>Grasshopper Category</th>
+<th>Purpose</th>
+<th>Current Icon</th>
+<th>Icon Source/File</th>
+<th>Current Visibility</th>
+<th>Proposed Icon Family</th>
+<th>Recommended Visual Metaphor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAW Material (supporting internal reference retained privately)</td>
+<td>RAW LCA / Studio</td>
+<td>Select a pinned environmental dataset. Expand Select dataset to browse inside the component.</td>
+<td>None supplied (GH fallback)</td>
+<td>MaterialSelectorComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Select</td>
+<td>Legacy sample-browser mark; defer artwork.</td>
+</tr>
+<tr>
+<td>Geometry to Quantity (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Measure one valid Brep or mesh as volume, area or count. No environmental calculation.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Geometry + measuring frame.</td>
+</tr>
+<tr>
+<td>RAW Assembly (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Combine an ordered list of layers into one build-up per branch. No geometry or impact calculation.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Ordered layer stack.</td>
+</tr>
+<tr>
+<td>RAW Assembly Item (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Assign by explicit ID or zero-based index; one shared selector or one per element. Processes are explicitly applied to EVERY element.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Assign</td>
+<td>Recipe/process link to keyed item.</td>
+</tr>
+<tr>
+<td>RAW Assembly Scenario (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Explicit function and lifecycle scope for a complete keyed assembly. D remains separate.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Assembly inside explicit scope boundary.</td>
+</tr>
+<tr>
+<td>RAW Breakdown (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Group existing element/layer results without recalculating environmental factors. Incomplete totals stay unavailable.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Separated result branches.</td>
+</tr>
+<tr>
+<td>RAW Calculate (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Scale supplied manual/synthetic impacts. Missing required data blocks totals; D remains separate.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Calculate</td>
+<td>Calculation register + supplied values.</td>
+</tr>
+<tr>
+<td>RAW Calculate Assembly (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Calculate complete supplied-impact assembly; missing required data gives no physical total.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Calculate</td>
+<td>Assembly + calculation register.</td>
+</tr>
+<tr>
+<td>RAW Candidate Logger (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Record bounded session snapshots on false-to-true Record edges. No optimizer, objective or automatic file writing.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect / record</td>
+<td>Snapshot stack; explicit recording cue.</td>
+</tr>
+<tr>
+<td>RAW Color Panels (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Join geometry, element IDs and selected results with fingerprint checks. Grey means missing/invalid; D excluded.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Visualise</td>
+<td>Coloured panel array.</td>
+</tr>
+<tr>
+<td>RAW Compare (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Compare common Element Impact Results as design options. Supplied A1-A3 differences only; no ranking or fitness score.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Two aligned result columns.</td>
+</tr>
+<tr>
+<td>RAW Compare (Legacy) (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Legacy scenario comparison. Use RAW Compare for Studio Element Impact Results.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Paired scenario columns.</td>
+</tr>
+<tr>
+<td>RAW Compare Scenarios (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Compare a scenario list per branch against a zero-based baseline. Any incompatibility blocks numeric lists; D stays separate.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Baseline + scenario columns.</td>
+</tr>
+<tr>
+<td>RAW Coverage Check (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Check quantities and the selected GWP scope from Result. Direct Elements use A1-A3. Accept Elements or one common Result per branch. Does not certify comparability.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Coverage grid with open cells, not certification tick.</td>
+</tr>
+<tr>
+<td>RAW Element Impact (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Common impact calculation for measured element quantities. Supplied GWP A1-A3 only; missing values stay unavailable.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Calculate</td>
+<td>Legacy element + calculation register.</td>
+</tr>
+<tr>
+<td>RAW Export (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Export small RAW result tables to CSV/JSON on an explicit false-to-true Write edge. No provider-native or database export.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect / export</td>
+<td>Result table with outward file arrow.</td>
+</tr>
+<tr>
+<td>RAW Export (Legacy) (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Legacy no-write placeholder. Place the new RAW Export for explicit Studio table export.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect / export</td>
+<td>Deferred export outline; implementation is a placeholder.</td>
+</tr>
+<tr>
+<td>RAW Export Alpha (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Explicit local CSV/JSON from one selected snapshot. Toggle Write false then true; no silent writes or overwrites.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect / export</td>
+<td>Snapshot table with outward file arrow.</td>
+</tr>
+<tr>
+<td>RAW Geometry Quantity Audit (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Show what RAW is about to count: native quantities, selection issues and display-only previews. No repairs or impact calculation.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Geometry + measurement/selection frame.</td>
+</tr>
+<tr>
+<td>RAW Layer (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Assign a material dataset to one layer with positive thickness in metres.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Single material layer + thickness marks.</td>
+</tr>
+<tr>
+<td>RAW Linear Element (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Prepare a volume quantity and, for straight inputs, a rectangular display mesh. Quantity remains curve length x section area. No impact calculation.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Member with section profile.</td>
+</tr>
+<tr>
+<td>RAW Material Record (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Select a validated manual/synthetic record from a local JSON library.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Select</td>
+<td>Material record stack + pointer.</td>
+</tr>
+<tr>
+<td>RAW Material V2 (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Experimental source-audited metadata adapter. Connect RAW Material; only pinned evidence is applied. Never rewrites library data or forces totals.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Modify / enrich</td>
+<td>Material record + metadata attachment.</td>
+</tr>
+<tr>
+<td>RAW Optimisation Logger (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>In-memory completed-evaluation log. Explicit Record/Reset; bounded capacity; no automatic disk writes or generation numbers.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect / record</td>
+<td>Bounded snapshot stack.</td>
+</tr>
+<tr>
+<td>RAW Panel Quantity (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Measure keyed panel solids or explicit reference surfaces; output m3 or m2 using Rhino document units.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Panel + area/volume measuring marks.</td>
+</tr>
+<tr>
+<td>RAW Panel System (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Final/as-built panel systems. Exact tree paths or one shared recipe branch; one recipe broadcasts, otherwise one per panel. Composite stacks: area x thickness in mm.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Panel and layered recipe stack.</td>
+</tr>
+<tr>
+<td>RAW Physical Properties (supporting internal reference retained privately) (PhysicalPropertiesComponent)</td>
+<td>RAW LCA / Elements</td>
+<td>Legacy editor: density/measured-mass element overrides with provenance.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Modify / enrich</td>
+<td>Legacy element + physical override attachment; differs from visible inspector.</td>
+</tr>
+<tr>
+<td>RAW Process Contribution (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Supplied characterised process burden with explicit driver and exclusion from embedded factors.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Assign</td>
+<td>Supplied process burden attached to a driver.</td>
+</tr>
+<tr>
+<td>RAW Process Factor (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Supplied kg CO2-eq per panel. Assumed excluded from recipe factor; added once per geometry item.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Process factor record; no invented machine symbol.</td>
+</tr>
+<tr>
+<td>RAW Recipe Create (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Create a supplied-impact recipe; constituent/output evidence remains explicit. No ingredient impact derivation.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Material constituents joining a recipe record.</td>
+</tr>
+<tr>
+<td>RAW Recipe Factor (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Supplied A1A3 factor per kg and final/as-built density. Synthetic/manual Alpha value, not an EPD or ingredient-derived recipe.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Supplied recipe factor record.</td>
+</tr>
+<tr>
+<td>RAW Recipe Library (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Freeze supplied local record revisions for a run; content hash changes when inputs change.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Select</td>
+<td>Pinned recipe record stack.</td>
+</tr>
+<tr>
+<td>RAW Rectangular Section (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Define a constant rectangular section. Width and depth are always in metres.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Rectangular profile with dimensions.</td>
+</tr>
+<tr>
+<td>RAW Result Table (supporting internal reference retained privately) (AlphaResultTableComponent)</td>
+<td>RAW LCA / Elements</td>
+<td>Project selected evaluation rows. Contribution rows and summary rows must never be summed together.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Evaluation rows separated from totals.</td>
+</tr>
+<tr>
+<td>RAW Result Table (supporting internal reference retained privately) (ResultTableComponent)</td>
+<td>RAW LCA / Elements</td>
+<td>Readable element rows and totals, plus CSV text. N/A denotes unavailable quantities or GWP; no files are written.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Inspect</td>
+<td>Element result rows.</td>
+</tr>
+<tr>
+<td>RAW Scenario (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Build a single-material scenario from typed quantities. Explicit selected modules and function.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Material and quantities inside scope frame.</td>
+</tr>
+<tr>
+<td>RAW Surface Element (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Measure panel area and assign a dataset or layer assembly. Input geometry is the assessed quantity; no opening detection or thickening.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Reference surface face.</td>
+</tr>
+<tr>
+<td>RAW Unit Element (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Legacy explicit unit/count quantity adapter.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Counted object group.</td>
+</tr>
+<tr>
+<td>RAW Volume Element (supporting internal reference retained privately)</td>
+<td>RAW LCA / Elements</td>
+<td>Legacy closed-solid quantity adapter.</td>
+<td>None supplied (GH fallback)</td>
+<td>RawComponent.cs (supporting internal reference retained privately)</td>
+<td>Hidden</td>
+<td>Construct</td>
+<td>Closed solid cube.</td>
+</tr>
+</tbody></table></div>
+<h3 id="research-prototypes-and-non-palette-tools">Research prototypes and non-palette tools</h3>
+<p>The Python v0.1 prototype (supporting internal reference retained privately) explicitly states that it has no compiled GHA or polished component UI/icons. Its 11 numbered Grasshopper scripts and quick-test script are experimental host-script workflows, not extra registered components. Support modules, data synchronisation tools and tests are not component-icon targets.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Component/script</th>
+<th>GH category</th>
+<th>Purpose</th>
+<th>Current icon</th>
+<th>Icon source</th>
+<th>Visibility</th>
+<th>Proposed family</th>
+<th>Metaphor if revived</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00 RAW Sync Data</td>
+<td>Python script; no RAW registration</td>
+<td>Explicit reference-data synchronisation</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental/manual placement</td>
+<td>Select</td>
+<td>Source record + inward arrow</td>
+</tr>
+<tr>
+<td>01 RAW Product Mass</td>
+<td>Python script</td>
+<td>Geometry/physical inputs to product mass</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Inspect / calculate quantity</td>
+<td>Measured solid</td>
+</tr>
+<tr>
+<td>02 RAW BOM Item</td>
+<td>Python script</td>
+<td>Production material item</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Construct</td>
+<td>Sample + item record</td>
+</tr>
+<tr>
+<td>03 RAW Process Step</td>
+<td>Python script</td>
+<td>Reference-model process definition</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Construct</td>
+<td>Process event</td>
+</tr>
+<tr>
+<td>04 RAW Repair</td>
+<td>Python script</td>
+<td>Repair assumptions</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Modify / enrich</td>
+<td>Repair pathway</td>
+</tr>
+<tr>
+<td>05 RAW End Of Life</td>
+<td>Python script</td>
+<td>End-of-life assumptions</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Modify / enrich</td>
+<td>Treatment route</td>
+</tr>
+<tr>
+<td>06 RAW Scenario</td>
+<td>Python script</td>
+<td>Assemble reference-model scenario</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Construct</td>
+<td>Scope frame</td>
+</tr>
+<tr>
+<td>07 RAW Reference Scenario</td>
+<td>Python script</td>
+<td>Reference input scenario</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Select / construct</td>
+<td>Pinned scenario</td>
+</tr>
+<tr>
+<td>08 RAW Calculate</td>
+<td>Python script</td>
+<td>Run reference-model calculation</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Calculate</td>
+<td>Calculation register</td>
+</tr>
+<tr>
+<td>09 RAW Results</td>
+<td>Python script</td>
+<td>Present reference-model outputs</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Inspect</td>
+<td>Result channels</td>
+</tr>
+<tr>
+<td>10 RAW Library Info</td>
+<td>Python script</td>
+<td>Inspect reference library</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental</td>
+<td>Inspect</td>
+<td>Record + lens</td>
+</tr>
+<tr>
+<td>QUICK TEST RAW Reference</td>
+<td>Python script</td>
+<td>Reference harness, not product component</td>
+<td>Host script icon</td>
+<td>No custom resource</td>
+<td>Experimental/test</td>
+<td>No product family needed</td>
+<td>No new icon</td>
+</tr>
+</tbody></table></div>
+<h3 id="planned-components-separate-from-the-inventory">Planned components, separate from the inventory</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Planned work</th>
+<th>Functional family / future metaphor</th>
+<th>Status and boundary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ICE, EC3, KBOB selectors</td>
+<td>Select / same source-browser grammar</td>
+<td>Documentation only; data availability and redistribution must be resolved. No fake installed icons.</td>
+</tr>
+<tr>
+<td>Save Material / Export Material Library</td>
+<td>Record / sample with explicit file arrow</td>
+<td>Planned persistence/export; do not imply these exist today.</td>
+</tr>
+<tr>
+<td>Construct Product / explicit count workflow</td>
+<td>Construct / counted object group</td>
+<td>Planned UX; legacy Unit Element remains hidden.</td>
+</tr>
+<tr>
+<td>Roof Assembly / Floor Assembly</td>
+<td>Construct / oriented layer stacks</td>
+<td>Planned; reuse the assembly grammar. Earlier Cross Section concept is now covered by Construct Section.</td>
+</tr>
+<tr>
+<td>Transport / Construction / Replacement scenarios</td>
+<td>Enrich / route, site process, replacement cycle</td>
+<td>Planned; do not confuse them with implemented C/D enrichment.</td>
+</tr>
+<tr>
+<td>Module Factor Override</td>
+<td>Enrich / factor record with explicit edit cue</td>
+<td>Advanced and evidence-required; no approval/checkmark symbolism.</td>
+</tr>
+<tr>
+<td>GWP Graph / process contribution graphs</td>
+<td>Visualise / aligned bars</td>
+<td>Planned; existing Breakdown inspects data rather than providing these graphs.</td>
+</tr>
+<tr>
+<td>Impact Gradient</td>
+<td>Visualise / standalone colour ramp</td>
+<td>Planned as separate component; internal gradients already serve Preview/Legend.</td>
+</tr>
+<tr>
+<td>GWP Report</td>
+<td>Inspect / report sheet</td>
+<td>Planned; no new Reports tab implied.</td>
+</tr>
+<tr>
+<td>RAW Inspector</td>
+<td>Inspect / object with diagnostic lens</td>
+<td>Future rule-based diagnostic assistant; an icon must not imply automatic scientific validation.</td>
+</tr>
+<tr>
+<td>AP, EP, ODP, POCP, ADP calculation components</td>
+<td>Calculate / same register family, distinct labels</td>
+<td>Future metrics, not currently available through Element GWP.</td>
+</tr>
+<tr>
+<td>Material-flow, cutting waste and offcut recovery tools</td>
+<td>Enrich / split stock and retained offcut</td>
+<td>Research roadmap. Current six machine modes exist; older proposed standalone Machine Energy/CNC components should not be mistaken for additional implemented components.</td>
+</tr>
+</tbody></table></div>
+<p>References: <a href="raw-future-material-selectors.html">future selectors</a>, <a href="raw-fabrication-component-roadmap.html">fabrication roadmap</a>, product structure (supporting internal reference retained privately).</p>
+<h2 id="2-workflow-and-functional-families">2. Workflow and functional families</h2>
+<p>The icons communicate the <strong>operation</strong>, while the tab and component name identify domain/source. Do not allocate a different bright colour to every tab or use “green” to mean verified or environmentally beneficial.</p>
+<pre><code class="language-text">Selector → optional Update Material → Construct Element → Element GWP → Colour Preview → Legend
+    └→ Material Info (inspection)        ↑      └→ Physical Properties (inspection)
+                                  Construct Section
+
+Construct Element ───────────────→ Assign Process Impact → Element GWP → Process Impact Breakdown
+Construct Machine Process ──────→         ↑
+                                 coverage / allocation / evidence
+</code></pre>
+<p>Material Info and Physical Properties are inspection branches, not mandatory enrichment steps. Wall Assembly is another element-construction path. C/D scenarios enrich element data before Element GWP. Assignment retains pending/excluded contributions when eligibility is not established; its arrow means attachment, never unconditional addition.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Functional family</th>
+<th>Shape/action grammar</th>
+<th>Visible examples</th>
+<th>Guardrail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Select / retrieve</td>
+<td>Sample stack + pointer</td>
+<td>Danish, German selectors</td>
+<td>Same action may share icon; source remains explicit in text.</td>
+</tr>
+<tr>
+<td>Inspect</td>
+<td>Existing object + lens, measurement frame or separated channels</td>
+<td>Material Info, Physical Properties, Process Impact Breakdown</td>
+<td>No edit nib, plus sign or implied recalculation.</td>
+</tr>
+<tr>
+<td>Modify / enrich</td>
+<td>Existing object + edit or evidenced route</td>
+<td>Update Material, C and D scenarios</td>
+<td>No “verified” check; user data is not original source data.</td>
+</tr>
+<tr>
+<td>Construct</td>
+<td>Geometric object, profile, layers or new record</td>
+<td>Custom Material, Construct Element/Section, Wall Assembly</td>
+<td>Concrete structure rather than a generic gear on everything.</td>
+</tr>
+<tr>
+<td>Calculate</td>
+<td>Object + small calculation register</td>
+<td>Element GWP; Machine Process also evaluates</td>
+<td>Not a leaf, savings badge or approval symbol.</td>
+</tr>
+<tr>
+<td>Assign</td>
+<td>Process-event mark attached to an element</td>
+<td>Assign Process Impact</td>
+<td>Eligibility remains a data/diagnostic property.</td>
+</tr>
+<tr>
+<td>Visualise</td>
+<td>Coloured geometry or scale</td>
+<td>Colour Preview, Legend</td>
+<td>Colour communicates display, not new impact calculation.</td>
+</tr>
+</tbody></table></div>
+<p>Machine Process straddles construction and calculation: it creates an evaluated process event. The machine-cell silhouette is its primary identifier; the shared hexagonal process mark carries through to assignment. An eighth export/logging family is unnecessary for the visible palette; hidden recording/export tools receive only deferred variants.</p>
+<h2 id="3-three-alternative-design-directions">3. Three alternative design directions</h2>
+<p>All directions use an authored 24 × 24 grid, nominal 2 px margins, restrained geometry and no emojis, letters, flags, photorealism or shadows. The exact raster edge treatment still needs production pixel-tuning after approval.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Visual principles and family relationship</th>
+<th>Advantages</th>
+<th>Readability and limitations</th>
+<th>Recommended use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A — Geometric linework</td>
+<td>Open objects; repeated sample/element structures; approximately 1.55 px outline</td>
+<td>Closest to drawing and geometry conventions; clear profiles and layers</td>
+<td>Internal detail weakens at 16 px; adjacent open edges can blend. Colour Preview needs more than an unfilled cube to convey colouring.</td>
+<td>Strong option for a restrained technical palette if we simplify secondary details.</td>
+</tr>
+<tr>
+<td>B — Solid technical glyphs</td>
+<td>Approximately 2.5 px structural weight; filled masses and negative-space cuts</td>
+<td>Strong silhouettes and toolbar contrast; section and machine shapes remain prominent</td>
+<td>Material selection/edit cues can merge into the sample; dense mechanisms become blobs. Pure monochrome loses the preview/legend colour cue.</td>
+<td>Strong option where recognition at very low zoom takes priority.</td>
+</tr>
+<tr>
+<td>C — Hybrid technical</td>
+<td>Approximately 1.8 px outlines, filled structural anchors and light interior spaces; restrained colour only where meaningful</td>
+<td>Best balance in this review of object identity and action cues; differentiated inspect/update/select; coloured geometry reads as visualisation</td>
+<td>Requires optical tuning per icon; do not add more detail just because both fill and linework are available. Winding and small edit marks still weaken at 16 px.</td>
+<td>Recommended candidate for review, subject to user choice and native tests.</td>
+</tr>
+</tbody></table></div>
+<p>The review uses dark maroon <code>#41211E</code>, warm light <code>#F9EBDC</code> and RAW-like orange <code>#FF9D21</code>. Teal and warm muted colours distinguish visualisation facets/scales; they are not material/environmental values or a replacement for the application&#39;s real gradient semantics. Transparent icon assets have no orange tile baked into them.</p>
+<h3 id="individual-concept-decisions">Individual-concept decisions</h3>
+<ul>
+<li>Danish/German share the same selector icon deliberately. Their action is identical; flags or tiny country letters would consume space and misrepresent source identity as a physical material property. Keep the source in the component title and tooltip. Future selectors can reuse this convention.</li>
+<li>Custom Material uses an addition cross, Material Info a lens and Update Material an edit nib. These distinctions must survive monochrome and 24 px viewing.</li>
+<li>Construct Element includes a line, surface and solid. Its icon need not change per mode; the footer already states the mode. Construct Section uses a neutral recognisable cross-section as a tool metaphor, not a claim that all outputs are I-sections.</li>
+<li>Wall Assembly uses separated layers. Physical Properties uses a measuring frame around an element; this visible component must not receive the old editor metaphor.</li>
+<li>Element GWP uses a small calculation register beside an element. The register distinguishes it from Preview&#39;s coloured cube. Scope belongs in the existing footer/menu, not eight tiny scope labels inside the icon.</li>
+<li>Process Breakdown has separated channels rather than a calculator. C uses treatment branching; D uses a route beyond a boundary. Neither symbol promises completeness, recycling or a negative credit.</li>
+</ul>
+<h3 id="readability-review">Readability review</h3>
+<p>All four rendered sheets were visually inspected. Names, large concepts and scale probes fit their review panels. At authored 24 px the profile, wall layers, measurement frame, calculator and machine silhouettes remain distinct. The selector action cues are more fragile at 16 px, and the winding pattern is relatively dense. The small-badge machine option is less readable than full-mode silhouettes. These are qualitative design observations, not a recognition study or native Grasshopper acceptance test.</p>
+<p>Before production, tune the two most complex marks (Construct Element and Element GWP), reduce winding crossings if necessary, and inspect select/inspect/update side by side on the actual canvas. Do not rely on icon recognition alone where the exact source, module or mode matters.</p>
+<h2 id="4-machine-process-family">4. Machine-process family</h2>
+<p>The current installed <code>MachineProcessIcons</code> general mark is preserved. The review proposes an alternate family built around a machine bed, an operation silhouette and a material/feed cue. A hexagonal operation head is intentionally less CNC-specific than the existing spindle mark and is reused as the process-event symbol in Assign Process Impact.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Proposed silhouette</th>
+<th>Shared structure</th>
+<th>Limit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>General Machine</td>
+<td>Open machine cell, abstract operation head, feed and workpiece</td>
+<td>Bed, maroon structural weight, minimal feed cue</td>
+<td>General transformation, not a machine-energy measurement claim.</td>
+</tr>
+<tr>
+<td>CNC / Milling</td>
+<td>Downward spindle over stepped workpiece</td>
+<td>Cell/bed and same weight</td>
+<td>No depiction of a validated toolpath model.</td>
+</tr>
+<tr>
+<td>Robotic Process</td>
+<td>Two-segment arm and tool above bed</td>
+<td>Bed and joint rhythm</td>
+<td>Does not imply a specific robot or end-effector.</td>
+</tr>
+<tr>
+<td>3D Printing</td>
+<td>Nozzle over separated deposited layers</td>
+<td>Gantry/bed</td>
+<td>Distinguish additive layering from CNC subtraction.</td>
+</tr>
+<tr>
+<td>Coreless Winding / Fibre Placement</td>
+<td>Two support points and crossed fibre paths</td>
+<td>Bed and controlled linework</td>
+<td>Simplify crossings before use at small scale.</td>
+</tr>
+<tr>
+<td>Reclaimed Timber Preparation</td>
+<td>Stock beam, preparation head and feed</td>
+<td>Bed/feed language</td>
+<td>Do not encode an automatic reuse credit or timber grade.</td>
+</tr>
+</tbody></table></div>
+<p><strong>Option A: replace the instance center icon by mode.</strong> All 24 pixels remain available for a clear silhouette. Cache six bitmaps and invalidate only the changed component&#39;s icon cache on an actual mode change. Keep the palette&#39;s general-machine icon stable. This is the stronger future option if variants are approved.</p>
+<p><strong>Option B: constant general icon plus small mode badge.</strong> It preserves the base identity, but a badge takes scarce space and loses tool detail at 8 px. Drawing it outside the standard bitmap also introduces avoidable custom-attribute concerns; composing it inside 24 px makes the base smaller. The existing dark footer already identifies the process. This option is shown for comparison, not recommended as an additional mode control.</p>
+<p><strong>Suggested staged decision:</strong> approve one general machine mark first. Retain the footer as the mode identifier. If future variants are approved, prefer A with the native cache mechanism. Neither option is implemented by this proposal.</p>
+<h2 id="5-existing-infrastructure-and-implementation-feasibility">5. Existing infrastructure and implementation feasibility</h2>
+<h3 id="what-exists-now">What exists now</h3>
+<ul>
+<li>MachineProcessIcons.cs (supporting internal reference retained privately) creates one cached transparent 24 × 24 <code>System.Drawing.Bitmap</code> using vector-like GDI primitives. <code>ForMode(MachineProcessType _)</code> currently returns the same general bitmap for every mode. ConstructMachineProcessComponent.cs (supporting internal reference retained privately) overrides <code>Icon</code> to use it.</li>
+<li>RawComponent.cs (supporting internal reference retained privately) returns null by default. The direct Danish, German and legacy selectors also return null. RawLcaAssemblyInfo.cs (supporting internal reference retained privately) has no assembly icon. No production icon <code>.resx</code>, <code>.ico</code>, <code>.svg</code> or <code>.png</code> resource family or category-icon registration was found.</li>
+<li>RawModeUi.cs (supporting internal reference retained privately) and MachineProcessAttributes.cs (supporting internal reference retained privately) already retain native component rendering around custom instructions/dashboard. Dashboard metric marks are separate decorative drawings; do not repurpose them as the component icon system or add more header symbols.</li>
+<li>Danish selector attributes (supporting internal reference retained privately) and German selector attributes (supporting internal reference retained privately) call <code>RenderComponentCapsule(..., true, false, false, true, true, false)</code>. The installed API identifies the second boolean as <code>drawComponentNameBox</code>, controlling the nickname/icon region. It is false. Thus a new <code>Icon</code> override can supply a palette icon, but does <strong>not</strong> by itself put a center icon inside these custom selector canvases.</li>
+</ul>
+<h3 id="native-api-evidence">Native API evidence</h3>
+<p>McNeel specifies a <strong>24 × 24 bitmap</strong> for <code>GH_DocumentObject.Icon</code>, with caching for repeated drawing. Its methods include <code>DestroyIconCache()</code> for icon changes. The icon guide recommends a 24-pixel design and generally a two-pixel margin. The proposal follows these dimensions, without copying stock McNeel artwork. <a href="https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_DocumentObject_Icon.htm">Icon property</a>, <a href="https://developer.rhino3d.com/api/grasshopper/html/Methods_T_Grasshopper_Kernel_GH_DocumentObject.htm">document-object methods</a>, <a href="https://developer.rhino3d.com/guides/grasshopper/grasshopper-icons/">Grasshopper icon design guide</a>.</p>
+<p>The online API can describe a newer Rhino version; these behaviours were cross-checked in the installed Rhino 8 <code>C:/Program Files/Rhino 8/Plug-ins/Grasshopper/Grasshopper.xml</code>, including <code>Icon</code>, <code>Icon_24x24</code>, locked greyscale caching, <code>DestroyIconCache</code> and <code>RenderComponentCapsule</code> flags. Native attributes remain the proper integration point for custom body layout; see <a href="https://developer.rhino3d.com/guides/grasshopper/custom-attributes/">custom attributes</a>.</p>
+<h3 id="smallest-maintainable-future-implementation">Smallest maintainable future implementation</h3>
+<ol>
+<li>After design approval, extend the existing icon approach into a small <code>RawComponentIcons</code> catalogue keyed by semantic icon ID. Reuse <code>MachineProcessIcons</code> through it rather than introducing a second renderer, component family or UI framework.</li>
+<li>Store approved 24 px transparent bitmaps as embedded resources, or produce them once with the established GDI helper. Choose one production resource path. Keep editable vector masters separately. SVG is a design source here; the audited native property requires a bitmap, not an SVG file.</li>
+<li>Return cached bitmaps from normal component <code>Icon</code> overrides, including direct selector subclasses. Keep files/keys explicit rather than deriving them from translated component names. Do not regenerate bitmaps during <code>SolveInstance</code> or each paint, and do not dispose a shared cached bitmap from an individual component.</li>
+<li>For any later mode-dependent icon, reuse the existing safe mode-change callback. Only after an actual mode change, invalidate the icon cache and canvas. Restore the mode through existing serialization; ensure the correct icon is resolved after read. Do not alter ports, GUIDs or event identity for an icon change.</li>
+<li>Preserve GH&#39;s normal selection, error/warning, locked and icon/name display behaviour. Keep the default palette icon general; verify palette proxy caching independently from instance rendering.</li>
+<li>Leave selector bodies unchanged initially. If an in-body selector icon is requested, approve a small reserved title-area location separately; do not blindly enable native center rendering and overlap the dropdown/button. This design task does not implement that layout.</li>
+</ol>
+<h3 id="zoom-dpi-and-performance-gates">Zoom, DPI and performance gates</h3>
+<p>Twenty-four pixels is the native authored bitmap contract, not a promise of pixel-perfect rendering at every OS scale. SVG masters make future export/tuning possible; they do not automatically enable native vector icons. The 18/16 px review probes simulate reduced size rather than actual GH zoom policies.</p>
+<p>After implementation approval, verify Rhino 8 at common canvas zooms and Windows 100%, 150% and 200% scaling; normal, selected, locked and warning/error states; icon versus name display; all six machine modes; mode save/reopen; palette/default versus instance icon; selectors&#39; custom title region; dashboard/profiler and runtime-balloon separation. Measure redraw behaviour before claiming performance improvement. Cache invalidation should occur on a mode change, not continuously.</p>
+<h2 id="6-approval-decisions-and-verification-status">6. Approval decisions and verification status</h2>
+<p>Decisions needed before production work:</p>
+<ol>
+<li>Choose <strong>A linework, B solid, or C hybrid</strong>. Recommendation: C, then optical refinement of the densest marks. The full visible sheet uses C only to make review concrete.</li>
+<li>Approve or revise the functional metaphors, particularly shared Danish/German selection, Section&#39;s generic profile, and D&#39;s boundary pathway.</li>
+<li>Keep the current machine mark or refine the proposed general mark into the approved family. For future modes, choose full icon replacement or constant icon; the small badge is the less readable option.</li>
+<li>Confirm initial scope: standard palette/native center icons, with custom selector bodies retained. Adding a selector-body icon should be an explicit subsequent layout decision.</li>
+</ol>
+<p>This audit generated and visually checked four concept sheets, transparent 24 px PNGs and SVG masters in all three directions. Asset parsing, dimensions, inventory counts, links and the source/test baseline are checked separately in the review evidence. <strong>No build or automated calculation tests were run</strong> because no production code or resources changed. <strong>No new native Grasshopper or high-DPI host test was run.</strong> The sheets are not proof of native rendering.</p>
+<p>No component icons were registered or replaced. No calculation, dataset, GUID, port, mode, source compatibility or legacy exposure was changed. No commit or push was made. Implementation awaits explicit approval.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

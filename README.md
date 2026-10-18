@@ -1,31 +1,15 @@
-# RAW LCA for Grasshopper
+# RAW LCA — public research notebooks
 
-RAW LCA for Grasshopper is an early-stage roadmap for a geometry-linked EPD/LCA workflow for Rhino and Grasshopper, focused on circular and biobased construction materials.
+Public research, methodology, component explanations and curated visual studies for the private RAW LCA Grasshopper prototype.
 
-## Project status
+- [Published notebooks](https://naitiksharma-iaac.github.io/raw-lca-grasshopper-docs/notebooks/)
+- [Current components](docs/components.html)
+- [Visual studies](docs/reviews/index.html)
+- [Native icon review](docs/reviews/native-icons/index.html)
+- [Publication manifest](docs/publication-manifest.json)
 
-This repository publishes documentation and a proposed direction only. **No finished plugin is released yet**, no calculation tool is provided, and no environmental dataset is bundled.
+The site is static HTML/CSS with Markdown reading sources. Existing GitHub Pages deployment uses `main` → `/docs`. No calculation engine, plugin source, compiled plugin, environmental database, private meeting notes or project models are bundled.
 
-The proposed workflow connects geometry and quantities with traceable material and Environmental Product Declaration (EPD) records, environmental calculations, scenario comparison, and exportable results. Any future implementation will require scientific validation and clear provenance for every environmental value.
+Research notebooks are dated snapshots; older proposals are not current API documentation. The icon family is approved for testing, not finally approved aesthetically. Original research is retained in the private working repository. Third-party references remain attributed and linked to official sources.
 
-## Principles
-
-- V1 is local-first and no-server.
-- Users would manage their own permitted material and EPD records locally.
-- No environmental dataset is bundled, including ecoinvent-derived data.
-- Software licensing and data licensing are separate.
-- Future LCAx, ILCD+EPD, openEPD, and API connectors may be explored.
-- A future hosted platform would be considered only if funding and licensing allow; it is not a V1 dependency.
-
-## Documentation
-
-Open [docs/index.html](docs/index.html) locally or publish the `docs/` directory with GitHub Pages. The site is plain HTML and CSS with no build step or external assets.
-
-- [Architecture](docs/architecture.html)
-- [Data strategy](docs/data-strategy.html)
-- [Licensing](docs/licensing.html)
-- [Roadmap](docs/roadmap.html)
-- [Proposed components](docs/components.html)
-
-See [ROADMAP.md](ROADMAP.md), [LICENSE.md](LICENSE.md), and [NOTICE.md](NOTICE.md) for repository-level details.
-
+This repository is public. Its existing [licence status](LICENSE.md) remains unchanged; publication does not grant an open-source software licence or rights to third-party data/artwork.

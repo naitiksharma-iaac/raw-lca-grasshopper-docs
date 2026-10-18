@@ -1,0 +1,123 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW Element GWP and scenario enrichment · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-gwp-module-scope-and-scenarios.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#responsibilities-and-migration">Responsibilities and migration</a><a href="#stable-component-schema">Stable component schema</a><a href="#scope-requirements">Scope requirements</a><a href="#planned-scenario-components--documentation-only">Planned scenario components — documentation only</a></div></details><h1 id="raw-element-gwp-and-scenario-enrichment">RAW Element GWP and scenario enrichment</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<h2 id="responsibilities-and-migration">Responsibilities and migration</h2>
+<p>Quantity adapters (RAW Element, the legacy Surface/Volume adapters, RAW Linear Element and RAW Wall Assembly) measure geometry and produce environmental Elements. They do not calculate impacts. Planned scenario components enrich those Elements upstream. RAW Element GWP consumes just <strong>Elements</strong> and uses the existing common ImpactCalculator. Coverage Check and Result Table explain the result.</p>
+<p>RAW Element GWP is a new RAW LCA / Elements component, nickname <strong>Element GWP</strong>, GUID <code>b26a5c40-423b-4c9f-9de2-5e82bd94cd90</code>. Its description is “Calculates element-level Global Warming Potential for the selected lifecycle module scope.” The old RAW Element Impact keeps GUID <code>a9e547a8-b99e-40e1-9d46-28022d8acbc8</code>, its ports, and its default A1–A3 calculation. It is hidden from the palette but continues to load saved definitions. No automatic wire migration: place the new component and reconnect by name. This avoids assigning an old totals wire to a new per-element output.</p>
+<h2 id="stable-component-schema">Stable component schema</h2>
+<p>Input: <strong>Elements</strong> (tree).</p>
+<p>Outputs, always in this order:</p>
+<ol>
+<li><strong>Result</strong> — one ElementImpactResult per branch, including scope and diagnostics.</li>
+<li><strong>Element GWP</strong> — one value or null per input element, kg CO₂-eq.</li>
+<li><strong>Element Mass</strong> — one value or null per input element, kg.</li>
+<li><strong>Element Volume</strong> — one value or null per input element, m³.</li>
+<li><strong>GWP Unit</strong> — <code>kg CO₂-eq</code>, once per branch.</li>
+<li><strong>Module Scope</strong> — selected full scope label, once per branch.</li>
+</ol>
+<p>Paths and order are retained. Invalid input items invalidate that branch and give aligned null numeric outputs plus an input diagnostic in Result; they are never silently dropped to obtain a partial total. Known mass and volume remain available when only the selected GWP modules are missing. Scope changes do not alter the number/order of ports. They update the footer, tooltips, Module Scope and Result. Selection is saved as <code>GwpModuleScope</code>; absent/invalid saved selection defaults to Product.</p>
+<p>Totals are deliberately absent from the calculator&#39;s ports. Grasshopper Mass Addition can sum compatible, complete lists, but <strong>does not check RAW context compatibility and may ignore nulls</strong>. Check Result with RAW Coverage Check before treating such a sum as a complete total. Result retains the strict total for Result Table; individual source factors do not establish comparability across unresolved datasets.</p>
+<h2 id="scope-requirements">Scope requirements</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Menu mode</th>
+<th>Required source coverage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1–A3 Product stage (default)</td>
+<td>One valid A1–A3 aggregate, otherwise all A1, A2, A3</td>
+</tr>
+<tr>
+<td>A4 Transport</td>
+<td>A4</td>
+</tr>
+<tr>
+<td>A5 Construction / installation</td>
+<td>A5</td>
+</tr>
+<tr>
+<td>B Use / replacement stage</td>
+<td>B1–B7, or a B aggregate explicitly covering those leaves</td>
+</tr>
+<tr>
+<td>C End-of-life stage</td>
+<td>C1–C4, or a C aggregate explicitly covering those leaves</td>
+</tr>
+<tr>
+<td>D Beyond system boundary</td>
+<td>D; negative and explicit zero values retained</td>
+</tr>
+<tr>
+<td>A1–C Whole life excluding D</td>
+<td>Complete product stage, A4, A5, B and C</td>
+</tr>
+<tr>
+<td>A1–D Whole life including D</td>
+<td>Complete A1–C plus D</td>
+</tr>
+</tbody></table></div>
+<p>All eight modes are implemented for existing source factors. No scenario assumptions or new factors are synthesized. Availability depends on each dataset. A dataset containing only C3/C4 cannot yield a complete C total: Result identifies C1/C2 as unavailable. There is no automatic “not applicable = zero” policy. B does not infer reference service life, replacements, energy or water use. D produces a warning-only diagnostic requesting separate reporting even when included in A1–D.</p>
+<p>Only resolved EN15804 module records are used. B/C aggregates must explicitly list the correct leaf membership with consistent vocabulary. Supported aggregates take precedence over leaves; missing/ambiguous aggregates do not silently fall back. Other aggregate codes and partial aggregates are not decomposed by guesswork. Distinct GWP definitions, units or module vocabularies cannot be summed within a scope. Existing declared-unit conversion, density and method/context checks still apply. A1–A3 numerical behavior is unchanged. GWP is the only indicator; no AP/EP/ODP/POCP/ADP.</p>
+<p>Missing observations remain null, explicit zero remains zero, and original datasets/units/IDs/modules are unchanged. Source LCIA method warnings remain visible. The result carries SelectedIndicator=<code>GWP</code>, SelectedScope, ModuleScope, per-part Available/Unavailable module lists, pinned quantity references, context diagnostics and original Elements. Unavailable includes invalid/ambiguous coverage, not only absent observations. Coverage and table headings follow the selected scope.</p>
+<p>RAW Dataset Info continues inspecting source A1–A3 data; it is not a selected-scope report. Advanced Breakdown/Compare/Candidate Logger currently assume A1–A3: they explicitly reject other scopes rather than mislabel values. Extending those tables and JSON export scope metadata is a separate follow-up.</p>
+<h2 id="planned-scenario-components--documentation-only">Planned scenario components — documentation only</h2>
+<p>No scenario component or placeholder calculation is shipped in this change. Contracts are intentionally not frozen until factor provenance, basis and conflict rules are implemented and tested.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Planned component</th>
+<th>Inputs</th>
+<th>Output</th>
+<th>Required implementation decisions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAW Transport Scenario</td>
+<td>Elements; Distance; Transport mode; optional transport/fuel factor</td>
+<td>Elements</td>
+<td>Distance unit, mass basis, load/return assumptions, factor unit such as kg CO₂-eq/(t·km), pinned source and compatible method</td>
+</tr>
+<tr>
+<td>RAW Construction Scenario</td>
+<td>Elements; Waste rate; optional installation factor</td>
+<td>Elements</td>
+<td>Rate definition, installed/purchased quantity distinction, loss attribution, avoid counting production and disposal twice</td>
+</tr>
+<tr>
+<td>RAW Replacement Scenario</td>
+<td>Elements; Reference service life; Building study period; Replacement count/policy</td>
+<td>Elements</td>
+<td>Explicit policy and end-point convention; distinguish B4 from other B modules; never infer the whole B stage from replacements alone</td>
+</tr>
+<tr>
+<td>RAW End-of-Life Scenario</td>
+<td>Elements; Waste route; Demolition factor; Processing/disposal scenario</td>
+<td>Elements</td>
+<td>Separate C1–C4 accounting, route allocation, transport basis, evidence and boundary consistency</td>
+</tr>
+<tr>
+<td>RAW Reuse / Recovery Scenario</td>
+<td>Elements; Reuse rate; Recycling rate; Recovery credit method</td>
+<td>Elements</td>
+<td>Mutually consistent allocations, processing burdens, substitution quality and explicit D credit method; no automatic negative credits</td>
+</tr>
+</tbody></table></div>
+<p>One input on RAW Element GWP keeps quantity preparation, scenario authoring and GWP calculation independently testable. It also lets users chain only the assumptions they actually have.</p>
+<h3 id="proposed-contract-and-rollout">Proposed contract and rollout</h3>
+<ol>
+<li>Add an immutable enriched-element envelope containing the unchanged EnvironmentalElement and an ordered set of versioned scenario assignments. Preserve element identity, tree path and original dataset references; plain existing Elements remain valid input.</li>
+<li>Each assignment records target leaf modules, parameter values and units, factor/dataset references, evidence, method/indicator identity, declared basis, study period where relevant, and explicit source-vs-scenario precedence. Proposed contribution records include availability and calculation lineage. An absent contribution must never be represented as numeric zero.</li>
+<li>Add one explicit resolver in the common engine. Conflicting source and scenario contributions to the same module are blocked unless an evidenced replacement policy is selected. Do not add both. Split/aggregate coverage must be disjoint; different scenario chains may not overwrite each other silently.</li>
+<li>Implement Transport first with a documented factor basis and dimensional tests. The scenario enriches Elements; the common engine evaluates the supported contribution with pinned provenance. Validate source A4 conflicts, missing density/mass, units and round-trip serialization before exposing a component.</li>
+<li>Implement construction, replacement, C routes and D only after their policies and module attribution have regression fixtures. Replacement never marks all B complete; end-of-life never implies D. Freeze each contract after a native host save/reopen test.</li>
+<li>Extend Coverage, Result Table and later decision/report tools to show source versus scenario contributions, scenario assumptions, completeness and D separately. Test repeated enrichment, immutable inputs, tree broadcasting, invalid entries, mixed contexts and undo/save/reopen at each stage.</li>
+</ol>
+<p>Future example (scenario components below are <strong>planned</strong>, not available now):</p>
+<p><code>RAW Volume Element → RAW Transport Scenario → RAW End-of-Life Scenario → RAW Element GWP</code></p>
+<p>Current executable example:</p>
+<p><code>RAW Element (Solid/Surface/Linear) → RAW Element GWP → RAW Coverage Check / RAW Result Table</code></p>
+<p>Adding transport and end-of-life alone does not make A1–C complete if A5 or B are still missing.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

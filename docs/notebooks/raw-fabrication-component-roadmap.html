@@ -1,0 +1,142 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW fabrication component roadmap · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-fabrication-component-roadmap.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#product-boundary">Product boundary</a><a href="#common-process-event-contract-required-before-implementation">Common process-event contract, required before implementation</a><a href="#component-contracts">Component contracts</a><a href="#evidence-collection-before-development">Evidence collection before development</a><a href="#deferred-scientific-assumptions">Deferred scientific assumptions</a><a href="#proposed-implementation-gates">Proposed implementation gates</a></div></details><h1 id="raw-fabrication-component-roadmap">RAW fabrication component roadmap</h1>
+<blockquote>
+<p><strong>Public reading edition · 13 October 2026.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p><strong>13 October 2026 — research contracts, no new components implemented or exposed.</strong> Evidence and limitations are in <a href="raw-project-fabrication-research.html">project/fabrication research</a>; quantity and lifecycle priorities are in the <a href="raw-quantity-resolver-and-enrichment-roadmap.html">resolver roadmap</a>.</p>
+<h2 id="product-boundary">Product boundary</h2>
+<p>Prioritise reclaimed stock preparation and measured process energy. RAW has documented reclaimed-timber computational fabrication activity; Tanya&#39;s calculator also supplies editable printing, CNC, knitting and winding cases. A calculator preset establishes an intended modelling case, not measured factory performance. Robotics/printing/CNC wrappers should share one event, energy and material-flow model rather than independently recomputing LCA.</p>
+<p>The workflow remains:</p>
+<pre><code class="language-text">Material → Element → physical / lifecycle / process enrichment → Element GWP → Visualisation
+                               │
+                     evidence + quantity/contribution ledger
+</code></pre>
+<p>The ledger is <strong>proposed</strong>, not a current API. Element GWP remains one-input and GWP-only. It should consume validated enriched data, not acquire a collection of machine sliders.</p>
+<h2 id="common-process-event-contract-required-before-implementation">Common process-event contract, required before implementation</h2>
+<p>Each proposed event carries an event ID, element/part references and tree positions; activity and location/date; machine/tool IDs; material input/output quantities; consumed energy and carrier; allocated share and denominator; factor reference/version/unit/context; intended module and boundary; provenance and uncertainty; diagnostics and links to original observations. It also records whether the value is measured, calculated from measured inputs, estimated or a test fixture.</p>
+<p>Keep four independently reportable contributions: purchased-material impact, additional fabrication process, construction/use/EOL scenario and D beyond-boundary value. A factory process is not automatically A5. Before addition, record whether the product EPD already includes that process. “Additional” must identify a boundary not already counted. If this cannot be established, retain the event as pending with <code>process.boundary_overlap</code> or <code>process.boundary_unresolved</code>, not a combined GWP.</p>
+<p>Shared rules:</p>
+<ul>
+<li>Measured energy takes precedence over an estimated power/time route; do not add both. Effective power must specify operating/idle/auxiliary coverage; rated power alone is an estimate requiring an explicit assumption.</li>
+<li>Exact unit scaling is permitted only within the same typed quantity: kWh↔MJ is energy scaling, not proof that heat and electricity factors are interchangeable.</li>
+<li>GWP contribution = compatible activity quantity / factor declared amount × factor. No factor means no contribution value; it does not mean zero.</li>
+<li>Batch energy requires an evidenced allocation basis (mass, units, occupied time or another reviewed driver). Allocation fractions must reconcile to the event total. Do not broadcast the full batch burden to every element.</li>
+<li>Stock balance distinguishes retained product, reusable offcut, chips/dust, reject and moisture/evaporation. Do not apply a whole-mixture retention percentage as though all loss were dry material waste.</li>
+<li>Recovered mass is a flow, not a credit. D requires a reviewed substitution/allocation method and counterfactual; never award an automatic negative factor.</li>
+<li>Preserve source datasets and factor history. Require explicit overwrite and compatible method/context for additions; a source-note string cannot resolve unknown LCIA metadata.</li>
+<li>Every output keeps input element alignment. Unmatched or rejected events remain visible as unavailable/pending, not dropped.</li>
+</ul>
+<p>Proposed diagnostics below are design names, not claims of existing code. Freeze names only after contract review.</p>
+<h2 id="component-contracts">Component contracts</h2>
+<h3 id="raw-machine-energy">RAW Machine Energy</h3>
+<p><strong>Category:</strong> RAW LCA / Impact. <strong>Priority:</strong> next fabrication phase, after quantity/context work and a measured pilot. <strong>Purpose:</strong> attach a transparent energy event without inventing consumption.</p>
+<p><strong>Inputs:</strong> Elements; Measured Energy (optional kWh); Effective Power (optional kW); Duration (optional hours); Energy Carrier; Energy Factor and declared basis/context; Location/period; Module/boundary; Batch Allocation if applicable; Source Note. Prefer a compact event object rather than exposing every advanced field as a permanent port.</p>
+<p><strong>Outputs:</strong> enriched Elements. Energy and contribution breakdown remain in the event ledger for future visualisation/reporting.</p>
+<p><strong>Logic / use:</strong> use measured kWh, otherwise valid effective kW × hours. Apply a compatible electricity/heat factor with explicit quantity conversion if required. Store energy even when GWP factor is missing. Do not infer runtime from geometry or select a country grid silently.</p>
+<p><strong>Cannot fix:</strong> missing material GWP, material density, source method context or unestablished module boundary.</p>
+<p><strong>Diagnostics:</strong> <code>process.energy_missing</code>, <code>process.power_time_invalid</code>, <code>process.measured_energy_precedence</code>, <code>process.factor_missing</code>, <code>process.carrier_mismatch</code>, <code>process.allocation_required</code>, <code>process.boundary_overlap</code>, <code>process.context_unresolved</code>, <code>process.evidence_missing</code>.</p>
+<p><strong>Evidence:</strong> meter log or operating measurement; machine/auxiliary coverage; matching grid/year and factor rights. No power value from Tanya&#39;s presets becomes a default.</p>
+<p><strong>Example:</strong> <code>Element → Machine Energy [metered milling event, reviewed production boundary] → Element GWP</code>.</p>
+<h3 id="raw-reclaimed-timber-preparation">RAW Reclaimed Timber Preparation</h3>
+<p><strong>Category:</strong> Impact, with stock quantity services shared with Elements. <strong>Priority:</strong> first specialist pilot after Machine Energy. <strong>Purpose:</strong> retain stock identity and account for preparation of variable reclaimed timber.</p>
+<p><strong>Inputs:</strong> Elements; Stock IDs and original stock quantities; Final Used Quantities; Measured Mass or qualified density/condition; Offcut/Reject records; Cutting/planing/milling events; Recovery route; Origin/grade/provenance. Optional cut count/length and collection event.</p>
+<p><strong>Outputs:</strong> enriched Elements with linked stock ledger; future offcut stock objects only after ownership/identity contracts are defined.</p>
+<p><strong>Logic / use:</strong> reconcile original to finished stock and loss streams, allocate actual process events, retain reusable remnants as inventory. Variable lengths/sections come from measurements; a nominal rectangular section is not silently imposed. Sorting, scanning, grading, trimming, planing, milling and joining are separate events where actually used. Structural grade remains provenance, not an LCA inference.</p>
+<p><strong>Cannot fix:</strong> absent reuse-grade evidence, unknown prior-life allocation, mechanical capacity, unspecified transport or speculative D credit.</p>
+<p><strong>Diagnostics:</strong> <code>stock.identity_missing</code>, <code>stock.condition_mismatch</code>, <code>stock.quantity_inconsistent</code>, <code>stock.allocation_required</code>, <code>stock.offcut_unassigned</code>, <code>process.mass_balance</code>, plus shared process codes.</p>
+<p><strong>Evidence:</strong> scanned/measured stock, material state/moisture, source history, accepted grading record, actual operation log and offcut destination. Distinguish prior-life source allocation from preparation burdens.</p>
+<p><strong>Example:</strong> <code>Stock geometry → Element → Physical Properties → Timber Preparation → Element GWP</code>.</p>
+<h3 id="raw-cnc-process">RAW CNC Process</h3>
+<p><strong>Category:</strong> Impact. <strong>Priority:</strong> next after shared services, ideally using the same timber pilot. <strong>Purpose:</strong> account for a CAM/stock event and its additional consumption, not calculate machine instructions.</p>
+<p><strong>Inputs:</strong> Elements; Stock/sheet quantity; Finished/nested quantity; Toolpath metadata; Measured Time/Energy or calibrated estimate; Cut depth/passes/feed/tool diameter if estimating; Dust/chips/offcut partitions; Factor/boundary/evidence.</p>
+<p><strong>Outputs:</strong> enriched Elements with process and waste ledger.</p>
+<p><strong>Logic / use:</strong> measure stock-minus-product consistently, account for shared stock only once, use actual energy/time route. Toolpath length alone does not provide cycle time: tool changes, traverses, acceleration, setup and extraction matter. Nesting utilisation is not the same as recovered material fraction.</p>
+<p><strong>Cannot fix:</strong> missing CAM calibration, ambiguous overlap between stock allocations, missing waste route or factor context.</p>
+<p><strong>Diagnostics:</strong> <code>cnc.stock_missing</code>, <code>cnc.nesting_overlap</code>, <code>cnc.time_unverified</code>, <code>process.mass_balance</code>, <code>process.boundary_overlap</code>, <code>process.allocation_required</code>.</p>
+<p><strong>Evidence:</strong> machine and CAM version; input stock and output measurements; cycle/energy logs; destination of dust versus reusable offcuts. Toolpath fields are optional metadata when consumption is metered, required only by a validated estimation model.</p>
+<p><strong>Example:</strong> <code>Element → CNC Process [measured event] → Element GWP</code>; share Machine Energy internally instead of adding the same electricity twice.</p>
+<h3 id="raw-robotic-process">RAW Robotic Process</h3>
+<p><strong>Category:</strong> Impact. <strong>Priority:</strong> later, after a recorded RAW robotic milling event. <strong>Purpose:</strong> describe robot and end-effector consumption as an identifiable process event.</p>
+<p><strong>Inputs:</strong> Elements; Process/robot ID; End-effector; Process/setup/idle time; Metered Energy or calibrated power states; Path/feed information; Material/auxiliary consumption; Rejects; Allocation; Factor/context/boundary; Source Note.</p>
+<p><strong>Outputs:</strong> enriched Elements.</p>
+<p><strong>Logic / use:</strong> separately account for robot, spindle/tool, vacuum/compressed air and curing equipment where applicable. Reuse CNC or winding services for material transformations. A shared event ID prevents counting a robotic milling event in both CNC and Robotics wrappers.</p>
+<p><strong>Cannot fix:</strong> unavailable cycle-time calibration or automatically assign environmental benefit to robotic rather than manual fabrication.</p>
+<p><strong>Diagnostics:</strong> <code>robot.end_effector_missing</code>, <code>robot.auxiliary_scope_unknown</code>, <code>process.event_duplicate</code>, <code>process.time_unverified</code>, shared energy/context codes.</p>
+<p><strong>Evidence:</strong> controller cycle logs, cell configuration and meter coverage. A toolpath or robot model is not a measured kWh record. Robotic assembly stays a candidate until a RAW case and consumable inventory are available.</p>
+<p><strong>Example:</strong> <code>Element → Robotic Process [recorded milling cycle] → Element GWP</code>.</p>
+<h3 id="raw-3d-printing-process">RAW 3D Printing Process</h3>
+<p><strong>Category:</strong> Impact. <strong>Priority:</strong> later, second evidence pilot. <strong>Purpose:</strong> account for feed, supports, actual consumption and post-processing of a printed product.</p>
+<p><strong>Inputs:</strong> Elements; Feed/product/support masses; Composition and wet/dry state; Infill/layer height/path/extrusion metadata; Print time/energy; Observed failures or an explicit evidenced failure scenario; Post-processing/curing events; Factors/boundary; Source Note.</p>
+<p><strong>Outputs:</strong> enriched Elements with material balance and separate process contributions.</p>
+<p><strong>Logic / use:</strong> prefer measured/slicer-validated mass, not outer-envelope solid volume for an infilled print. Treat supports and failed pieces separately. Record failure-rate denominator and observation period before estimating expected consumption. Do not apply failed-print rates to a batch that already includes failed consumption. Oven energy needs batch allocation; evaporation is not automatically solid scrap.</p>
+<p><strong>Cannot fix:</strong> missing binder composition, unknown cured density, unlicensed factor data, or unreviewed biogenic storage assumptions.</p>
+<p><strong>Diagnostics:</strong> <code>print.mass_basis_unknown</code>, <code>print.supports_missing</code>, <code>print.failure_basis_ambiguous</code>, <code>print.moisture_balance</code>, <code>process.allocation_required</code>, <code>process.boundary_overlap</code>.</p>
+<p><strong>Evidence:</strong> weighed feed/product/supports, slicer/profile version, run/oven logs and composition data. Infill and layer height are diagnostic/refinement fields unless a validated model explicitly uses them. Clay printing is not established by the current Clay powder example.</p>
+<p><strong>Example:</strong> <code>Printed geometry → Element → measured mass → Printing Process → Element GWP</code>.</p>
+<h3 id="raw-cutting--milling-waste">RAW Cutting / Milling Waste</h3>
+<p><strong>Category:</strong> Impact. <strong>Priority:</strong> shared service next to Timber Preparation; standalone UI only if repeated use justifies it. <strong>Purpose:</strong> prevent untraceable loss multipliers and retain reusable stock.</p>
+<p><strong>Inputs:</strong> Elements; Input/output mass or consistent volumes with physical evidence; Waste/offcut partitions; Measurement basis; Route/provenance; Explicit allocation policy if required.</p>
+<p><strong>Outputs:</strong> enriched Elements with mass-flow ledger; no automatic impact credit.</p>
+<p><strong>Logic / use:</strong> reconcile loss once. If <code>w</code> means loss/input, input = retained / (1−w); if <code>w</code> means extra procurement/retained, input = retained × (1+w). These definitions are different and must not share an unlabeled percentage input. Upstream material factors must not be increased twice if their boundary already includes yield losses.</p>
+<p><strong>Diagnostics:</strong> <code>waste.rate_basis_missing</code>, <code>waste.invalid_balance</code>, <code>waste.route_missing</code>, <code>waste.already_included</code>, <code>stock.offcut_unassigned</code>.</p>
+<p><strong>Evidence:</strong> measured stock/remnant/waste ledger, wet/dry basis and known factor boundary. Sawdust can be a by-product, recoverable stock or waste depending on evidence; it is not automatically all three.</p>
+<p><strong>Example:</strong> <code>Timber/CNC event → waste ledger → evidenced treatment/recovery scenario → Element GWP</code>.</p>
+<h3 id="raw-offcut--recovery-scenario">RAW Offcut / Recovery Scenario</h3>
+<p><strong>Category:</strong> Impact. <strong>Priority:</strong> later, after stock identity and C/D contracts. <strong>Purpose:</strong> connect real offcut destinations to treatment or reuse scenarios without double counting.</p>
+<p><strong>Inputs:</strong> Elements; Offcut IDs/quantities; Destination/use; Recovery fraction and evidence; Treatment/transport factors if applicable; Substitution/credit method; Source Note.</p>
+<p><strong>Outputs:</strong> enriched Elements retaining recoverable inventory and separately identified C/D assignments where justified.</p>
+<p><strong>Logic / use:</strong> distinguish “available for reuse” from verified subsequent use. A single remnant cannot be both allocated to another product and credited as avoided virgin material under an inconsistent method. Reuse of a stock item is different from an assumed future recycling rate.</p>
+<p><strong>Diagnostics:</strong> <code>recovery.destination_unknown</code>, <code>recovery.credit_method_missing</code>, <code>recovery.double_allocation</code>, <code>recovery.quantity_exceeds_stock</code>, <code>scenario.d_beyond_boundary</code>.</p>
+<p><strong>Evidence:</strong> transaction/use record or clearly labelled prospective scenario, applicable allocation rules, matching factors. Negative D is supported only as an evidenced signed contribution, not inferred from reuse percentage.</p>
+<p><strong>Example:</strong> <code>Timber Preparation → Offcut / Recovery → GWP [C or D separately]</code>.</p>
+<h3 id="fibre-placement--coreless-winding-and-textile-process">Fibre placement / coreless winding and textile process</h3>
+<p><strong>Category:</strong> Impact if later justified. <strong>Priority:</strong> documentation/research only for dedicated components. <strong>Purpose:</strong> support the explorer&#39;s hemp/epoxy and knitted-hemp cases through common BOM/process services before creating another palette family.</p>
+<p><strong>Inputs:</strong> Elements/product target; Fibre, binder and auxiliary masses; Areal/linear mass if deriving quantity; Winding/yarn length; Energy/time; Waste; Curing; Source evidence. Tension, fibre orientation and machine settings are recorded for interpretation or a validated process model.</p>
+<p><strong>Outputs:</strong> enriched Elements, composition and process contributions.</p>
+<p><strong>Logic:</strong> separate fibres and resin, measured wet/dry/cured mass, losses and curing energy. Knitting can be an ordered carding/spinning/knitting chain. Do not scale impacts by structural performance or assume resin separation at EOL without evidence.</p>
+<p><strong>Diagnostics:</strong> <code>composite.composition_missing</code>, <code>composite.mass_basis_unknown</code>, <code>fibre.linear_mass_missing</code>, <code>process.curing_missing</code>, <code>recovery.route_unverified</code>.</p>
+<p><strong>Evidence:</strong> project-specific BOM, yarn/resin properties, actual consumption, cure logs and validated recovery route. Tanya&#39;s preset is a useful test shape, not a measured bill of fabrication.</p>
+<h2 id="evidence-collection-before-development">Evidence collection before development</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Pilot</th>
+<th>Minimum evidence package</th>
+<th>Acceptance gate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>One reclaimed-timber preparation batch</td>
+<td>Stock IDs, measured stock/final/offcut quantities, density or mass condition, machine and auxiliary meter logs, cut/operation record, source/grade evidence</td>
+<td>Quantities reconcile; allocation reproduces measured batch consumption; no double material/process burden</td>
+</tr>
+<tr>
+<td>One printing/biopolymer batch</td>
+<td>Feed composition and water/solids, support/reject/product masses, print/oven energy and allocation, factor rights/context</td>
+<td>Mass and energy routes documented; drying distinguished from material loss; repeated event not double counted</td>
+</tr>
+<tr>
+<td>One source C/D case</td>
+<td>Original modules, exact declared basis, context/indicator evidence, route/credit documentation</td>
+<td>Additions remain pending when context unknown; missing modules remain unavailable; D separately reported</td>
+</tr>
+</tbody></table></div>
+<p>No fabricated observations should be created to fill this checklist. Obtain records from the researchers/operators; the next implementation instruction should choose the pilot explicitly.</p>
+<h2 id="deferred-scientific-assumptions">Deferred scientific assumptions</h2>
+<ul>
+<li>Do not copy machine power/time/lifetime numbers or “net-negative” conclusions from explorer presets.</li>
+<li>Machine manufacture/wear allocation by machine mass and lifetime is a research model requiring an appropriate equipment inventory, allocation and boundary review.</li>
+<li>Dynamic carbon storage, carbon-delay credit, prospective factor interpolation and EF normalisation remain separate research outputs until validated. They do not silently augment EPD A1–A3 or D.</li>
+<li>Transport collection may already be included in Tanya&#39;s alternative-material factors. Adding a second generic collection event would risk double counting.</li>
+<li>Repeated A1–A3 production is not a complete B stage; replacement/removal/transport/repair require explicit event and time rules.</li>
+<li>A process wrapper does not repair an unresolved LCIA method. Source standards/indicator units must remain compatible for aggregation.</li>
+</ul>
+<h2 id="proposed-implementation-gates">Proposed implementation gates</h2>
+<ol>
+<li>Finish quantity/category/provenance work first.</li>
+<li>Approve event and material-flow contracts using real pilot data.</li>
+<li>Implement measured Machine Energy and shared loss/allocation services; keep events separately reportable.</li>
+<li>Add Timber Preparation/CNC wrapper using the same service, then evaluate whether Robotics needs a separate component.</li>
+<li>Add printing and fibre wrappers only after their evidence exists. Keep calibrated estimates visibly distinct from measurements.</li>
+<li>Add process graphs and Inspector recommendations after stable diagnostics. No graph, Inspector or scenario component is implemented by this plan.</li>
+</ol>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

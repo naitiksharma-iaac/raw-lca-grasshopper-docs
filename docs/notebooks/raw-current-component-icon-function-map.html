@@ -1,0 +1,179 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Current RAW visible components: function-to-icon audit · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-current-component-icon-function-map.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#raw-material-selector-danish">RAW Material Selector Danish</a><a href="#raw-material-selector-german--ökobaudat">RAW Material Selector German / ÖKOBAUDAT</a><a href="#raw-custom-material">RAW Custom Material</a><a href="#raw-material-info">RAW Material Info</a><a href="#raw-update-material">RAW Update Material</a><a href="#raw-construct-element">RAW Construct Element</a><a href="#raw-construct-section">RAW Construct Section</a><a href="#raw-wall-assembly">RAW Wall Assembly</a><a href="#raw-physical-properties">RAW Physical Properties</a><a href="#raw-element-gwp">RAW Element GWP</a><a href="#raw-construct-machine-process">RAW Construct Machine Process</a><a href="#raw-assign-process-impact">RAW Assign Process Impact</a><a href="#raw-process-impact-breakdown">RAW Process Impact Breakdown</a><a href="#raw-end-of-life-scenario">RAW End-of-Life Scenario</a><a href="#raw-reuse--recovery-scenario">RAW Reuse / Recovery Scenario</a><a href="#raw-gwp-colour-preview">RAW GWP Colour Preview</a><a href="#raw-gwp-legend">RAW GWP Legend</a><a href="#mode-and-identity-distinctions">Mode and identity distinctions</a></div></details><h1 id="current-raw-visible-components-function-to-icon-audit">Current RAW visible components: function-to-icon audit</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p>18 October 2026. Authoritative palette: <code>internal implementation reference</code>; current visible list contains 17 components. Full port and source-hash evidence is in component-contracts.json (supporting internal reference retained privately). Hidden legacy components are not counted.</p>
+<h2 id="raw-material-selector-danish">RAW Material Selector Danish</h2>
+<ul>
+<li>Category: RAW LCA / Materials</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: None; family and selection dialogue in body</li>
+<li>Outputs: Material</li>
+<li>Function: Selects one pinned Danish BR18/Table 7 material with unchanged units and metadata.</li>
+<li>Important limit: Selecting is not creating or validating a dataset.</li>
+<li>Recommended graphical meaning: Two open custom letters use strong stems, rounded D counter and decisive K junction. Country cue identifies the Danish selector; no border.</li>
+</ul>
+<h2 id="raw-material-selector-german--ökobaudat">RAW Material Selector German / ÖKOBAUDAT</h2>
+<ul>
+<li>Category: RAW LCA / Materials</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: None; family and selection dialogue in body</li>
+<li>Outputs: Material</li>
+<li>Function: Selects one pinned German/ÖKOBAUDAT material from the current library.</li>
+<li>Important limit: Country/source lettering is identification, not certification.</li>
+<li>Recommended graphical meaning: Open rounded Ö and two-bowl B; large separated umlaut dots are retained as essential source lettering.</li>
+</ul>
+<h2 id="raw-custom-material">RAW Custom Material</h2>
+<ul>
+<li>Category: RAW LCA / Materials</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Name; Declared Unit; A1-A3 GWP; Density; Material family; Region; Source / boundary note; Context Type; Method ID; Method Version; Characterisation Basis; Indicator ID; Indicator Version; Indicator Definition; Method Citation</li>
+<li>Outputs: Dataset; Name; Declared Unit; Source; Context Summary</li>
+<li>Function: Creates a self-declared material and its explicit context.</li>
+<li>Important limit: No database write or inferred method; custom is not source-verified.</li>
+<li>Recommended graphical meaning: Authored specification</li>
+</ul>
+<h2 id="raw-material-info">RAW Material Info</h2>
+<ul>
+<li>Category: RAW LCA / Materials</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Material</li>
+<li>Outputs: Name; Source; Declared Quantity; Region; Lifecycle Modules; A1-A3 GWP; Density; Evidence / Type; Method Summary; Indicator Summary; Context Summary</li>
+<li>Function: Inspects original, custom or derived material metadata.</li>
+<li>Important limit: Read-only; not the element physical inspector.</li>
+<li>Recommended graphical meaning: Specimen + readings</li>
+</ul>
+<h2 id="raw-update-material">RAW Update Material</h2>
+<ul>
+<li>Category: RAW LCA / Materials</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Material; New Name; Density; Source Note; Override Existing</li>
+<li>Outputs: Material</li>
+<li>Function: Creates a user-derived material overlay with name/density evidence; source stays unchanged.</li>
+<li>Important limit: Does not edit source factors or scientifically verify an override.</li>
+<li>Recommended graphical meaning: Parent → derived specimen</li>
+</ul>
+<h2 id="raw-construct-element">RAW Construct Element</h2>
+<ul>
+<li>Category: RAW LCA / Elements</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Linear: Curve; Material; Cross-section. Surface: Surface; Material; Thickness. Volume: Solid geometry; Material.</li>
+<li>Outputs: Element; Geometry; Quantity; Quantity Unit; Mass; Volume</li>
+<li>Function: Combines geometry and material with optional dimensional data into an analytical element and known quantities.</li>
+<li>Important limit: Not a Windows window; no GWP calculated here. Unit/count remains legacy-only.</li>
+<li>Recommended graphical meaning: Three distinct input tokens converge toward a single volumetric analytical object: material, geometry and dimensional information. Tokens are schema cues, not a claim that every mode has three mandatory inputs.</li>
+</ul>
+<h2 id="raw-construct-section">RAW Construct Section</h2>
+<ul>
+<li>Category: RAW LCA / Elements</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Right-click shape: Rectangular, I-Section, Trapezoidal, Triangular, Polygonal, Circular; corresponding dimensions/profile and Section Name</li>
+<li>Outputs: Section; Area; Width; Depth</li>
+<li>Function: Constructs geometric section data in SI from document-unit dimensions or a profile.</li>
+<li>Important limit: No structural strength calculation; section is an input to Linear elements.</li>
+<li>Recommended graphical meaning: Cut profile</li>
+</ul>
+<h2 id="raw-wall-assembly">RAW Wall Assembly</h2>
+<ul>
+<li>Category: RAW LCA / Elements</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Geometry; Material/Layer Materials/Panel Material; Thickness/Layer Thicknesses/Panel Thickness; Wall Name; Wall Class; Alignment; Flip Direction; Generate Preview; mode-specific cavity/frame/support/grid data</li>
+<li>Outputs: Wall Elements; Preview Geometry; Net Area; Volume; Summary; Warnings; Layer Meshes; Layer Colours; Layer Names; Layer Volumes</li>
+<li>Function: Constructs measured wall elements and material-part previews. Seven modes: Solid Layer, Layered, Cavity, Framed, Rainscreen, Sandwich Panel, Curtain Wall.</li>
+<li>Important limit: Assembly, not three generic bars; does not perform independent LCA arithmetic.</li>
+<li>Recommended graphical meaning: Continuous layered corner</li>
+</ul>
+<h2 id="raw-physical-properties">RAW Physical Properties</h2>
+<ul>
+<li>Category: RAW LCA / Elements</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Elements</li>
+<li>Outputs: Geometry; Length; Area; Volume; Mass; Density; Material Name; Physical Data Summary</li>
+<li>Function: Reads constructed elements and exposes available physical quantities and their provenance.</li>
+<li>Important limit: Read-only. No density editing, no invented average density for layered elements, no GWP.</li>
+<li>Recommended graphical meaning: One intact block branches into a dimension, a plane and a mass-like filled mark. These represent available geometry/quantity/mass outputs, not actual pieces of the material.</li>
+</ul>
+<h2 id="raw-element-gwp">RAW Element GWP</h2>
+<ul>
+<li>Category: RAW LCA / Impact</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Elements</li>
+<li>Outputs: Result; Element GWP; Element Mass; Element Volume; GWP Unit; Module Scope</li>
+<li>Function: Calculates GWP for the selected scope using quantities, material factors and eligible enrichment.</li>
+<li>Important limit: GWP identity is constant in all eight modes. Missing modules/context are not repaired by an icon.</li>
+<li>Recommended graphical meaning: One continuous horizontal abbreviation, custom open G and P counters with a simplified flowing W. GWP stays fixed across module scopes.</li>
+</ul>
+<h2 id="raw-construct-machine-process">RAW Construct Machine Process</h2>
+<ul>
+<li>Category: RAW LCA / Impact</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Process Name; Power (kW); Material Processed (kg); Output Rate (kg/h); Processing Time (h); Measured Energy (kWh); Electricity Emissions Factor; Factor Source / Location; Source Note; specialist inputs by mode</li>
+<li>Outputs: Process; Processing Time (h); Energy (kWh); Process GWP (kg CO2-eq); Energy Intensity (kWh/kg); Impact Data; Status</li>
+<li>Function: Constructs and evaluates one stable fabrication event from entered parameters and one authoritative energy route.</li>
+<li>Important limit: Energy/electricity GWP only; not a machine simulator. Constructing data and identifying a machine mode are related but different.</li>
+<li>Recommended graphical meaning: Different input tokens converge into a rounded process-event record with an energy trace. It constructs evaluated energy/process data, not a CNC tool or robot. Direction matches Construct Element; the record and energy stroke distinguish the output.</li>
+</ul>
+<h2 id="raw-assign-process-impact">RAW Assign Process Impact</h2>
+<ul>
+<li>Category: RAW LCA / Impact</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Elements; Process; Lifecycle Module; EPD Coverage; Allocation Method; Allocation Values / Shares; Evidence / Source Note</li>
+<li>Outputs: Elements</li>
+<li>Function: Allocates evaluated events into element ledgers with duplicate, overlap, boundary and context checks.</li>
+<li>Important limit: Assignment is not automatic approval; uncertain contributions remain pending.</li>
+<li>Recommended graphical meaning: Allocated connection</li>
+</ul>
+<h2 id="raw-process-impact-breakdown">RAW Process Impact Breakdown</h2>
+<ul>
+<li>Category: RAW LCA / Impact</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: RAW Impact Result</li>
+<li>Outputs: Material GWP; Process GWP; Eligible Combined GWP; Pending / Excluded Contributions; Module Scope; Status / Diagnostics</li>
+<li>Function: Reads and separates material/process contributions from an existing result.</li>
+<li>Important limit: No independent recalculation; unavailable values remain unavailable.</li>
+<li>Recommended graphical meaning: Separated contribution ledger</li>
+</ul>
+<h2 id="raw-end-of-life-scenario">RAW End-of-Life Scenario</h2>
+<ul>
+<li>Category: RAW LCA / Impact</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Elements; C1 Factor; C2 Factor; C3 Factor; C4 Factor; C Factor Unit / Basis; Waste Route; Source Note; Override Existing</li>
+<li>Outputs: Elements</li>
+<li>Function: Assigns evidenced C1–C4 factors to elements, protecting source values by default.</li>
+<li>Important limit: Waste route is descriptive evidence, not a simulated routing network. Complete C requires all four modules; partial remains flagged.</li>
+<li>Recommended graphical meaning: Element reaches a terminal bar; four separated endpoints indicate C1–C4 factor slots. The fan-out expresses scenario coverage after current use, not simulated mass routes.</li>
+</ul>
+<h2 id="raw-reuse--recovery-scenario">RAW Reuse / Recovery Scenario</h2>
+<ul>
+<li>Category: RAW LCA / Impact</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Elements; D Factor; D Factor Unit / Basis; Reuse Rate; Recycling Rate; Recovery Rate; Credit Method; Source Note; Override Existing</li>
+<li>Outputs: Elements</li>
+<li>Function: Assigns an evidenced net D factor with provenance and rate metadata beyond the current system boundary.</li>
+<li>Important limit: Rates do not calculate credits. D can be positive or negative; no automatic benefit or guaranteed reuse.</li>
+<li>Recommended graphical meaning: A material piece leaves one support, crosses a broken system boundary and appears on a second support. It suggests an evidenced continuation beyond current use.</li>
+</ul>
+<h2 id="raw-gwp-colour-preview">RAW GWP Colour Preview</h2>
+<ul>
+<li>Category: RAW LCA / Visualisation</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Result; Geometry; Values; Low Bound; High Bound; Colour Mode; Reverse Gradient</li>
+<li>Outputs: Preview Geometry; Preview Colours; Legend Values; Legend Labels; Colour Mode; Warnings</li>
+<li>Function: Maps existing GWP values to geometry colours, with explicit supported normalisation and unavailable handling.</li>
+<li>Important limit: Visualisation only; no environmental recalculation.</li>
+<li>Recommended graphical meaning: Mapped facade</li>
+</ul>
+<h2 id="raw-gwp-legend">RAW GWP Legend</h2>
+<ul>
+<li>Category: RAW LCA / Visualisation</li>
+<li>Source (supporting internal reference retained privately)</li>
+<li>Inputs: Legend Values; Legend Labels; Preview Colours; Base Point; Width; Height; Title; Unit</li>
+<li>Outputs: Legend Geometry; Legend Text; Legend Points; Legend Colours</li>
+<li>Function: Creates reference swatches, labels and placement points from preview output.</li>
+<li>Important limit: No LCA calculation or baking.</li>
+<li>Recommended graphical meaning: Calibrated swatches</li>
+</ul>
+<h2 id="mode-and-identity-distinctions">Mode and identity distinctions</h2>
+<p>The visible Physical Properties component is read-only and belongs to Elements. It is not the hidden historical override component. Construct Element combines supplied geometry and material; Element GWP calculates only GWP. End-of-Life assigns C1–C4 factors, with Waste Route as evidence; it does not simulate waste flows. Reuse / Recovery assigns an explicit signed D factor; rates are metadata and do not independently generate credits. Construct Machine Process constructs and evaluates a stable event, while General Machine is one of its six modes.</p>
+<p>Machine common inputs are preserved across modes; specialist inputs add finished/removed stock and toolpath metadata for CNC, identity/auxiliary energy for robot, product/support/curing for printing, binder/curing for winding, finished/offcut mass for timber. These physical silhouettes are mode cues, not claims of automatic fabrication modelling.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

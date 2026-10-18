@@ -1,0 +1,373 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW project and fabrication research · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-project-fabrication-research.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#evidence-and-scope">Evidence and scope</a><a href="#tanya-calculator-model-summary">Tanya calculator model summary</a><a href="#raw-project-and-fabrication-workflow-map">RAW project and fabrication workflow map</a><a href="#machineprocess-parameter-requirements">Machine/process parameter requirements</a><a href="#materialfabrication-implications">Material/fabrication implications</a></div></details><h1 id="raw-project-and-fabrication-research">RAW project and fabrication research</h1>
+<blockquote>
+<p><strong>Public reading edition · 13 October 2026.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p>Research snapshot: <strong>13 October 2026</strong>. Documentation only. Findings describe inspected source code and records, not a newly validated LCA. No production code, material records or frozen Vertikal files were changed. The companion next development plan (supporting internal reference retained privately) separates recommendations from unanswered meeting questions.</p>
+<h2 id="evidence-and-scope">Evidence and scope</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Evidence inspected</th>
+<th>What it establishes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td><a href="https://github.com/TanyaTsui/lca_circular_biobased/tree/8d4499481696dad80c948dbc5050be7f837ec41c">Tanya research repository, pinned revision</a></td>
+<td>Research model and repository browser implementation</td>
+</tr>
+<tr>
+<td>T2</td>
+<td><a href="https://github.com/TanyaTsui/lca_circular_biobased/blob/8d4499481696dad80c948dbc5050be7f837ec41c/notebooks/260813_lcaModel/01_dataPrep.ipynb">01_dataPrep.ipynb</a>, <a href="https://github.com/TanyaTsui/lca_circular_biobased/blob/8d4499481696dad80c948dbc5050be7f837ec41c/notebooks/260813_lcaModel/02_model.ipynb">02_model.ipynb</a></td>
+<td>Data preparation, inventory arithmetic and research assumptions</td>
+</tr>
+<tr>
+<td>T3</td>
+<td><a href="https://tanyatsui.github.io/raw_impact_explorer/">Public explorer</a>, <a href="https://github.com/TanyaTsui/tanyatsui.github.io/tree/263437bd773f87b7a70ebc37d9e3a5058101ee5f/raw_impact_explorer">deployed source revision</a></td>
+<td>Current browser model, controls, presets and bundled catalogue</td>
+</tr>
+<tr>
+<td>R1</td>
+<td><a href="https://www.intcdc.uni-stuttgart.de/research/associated-projects/ap-43/">Official RAW project description, Stuttgart</a>, <a href="https://cordis.europa.eu/project/id/101161441">CORDIS project 101161441</a></td>
+<td>RAW is the resource-aware architecture research project focused on waste-sourced and fast-growing biobased resources; variable material properties and adaptive fabrication are central</td>
+</tr>
+<tr>
+<td>R2</td>
+<td><a href="https://adk.elsevierpure.com/en/activities/the-raw-cita-timber-workshop-2/">RAW–CITA Timber Workshop</a></td>
+<td>Documented reclaimed-timber work: CT characterisation, registration/grading, Grasshopper allocation/joints and robotic milling</td>
+</tr>
+<tr>
+<td>L1</td>
+<td>Existing source-model audit (supporting internal reference retained privately), questions for Tanya (supporting internal reference retained privately), discussion notes (supporting internal reference retained privately)</td>
+<td>Earlier source comparisons and open questions; notes do not contain confirmed answers</td>
+</tr>
+<tr>
+<td>L2</td>
+<td><a href="raw-data-enrichment-audit-and-roadmap.html">Dataset audit</a>, machine-readable evidence (supporting internal reference retained privately)</td>
+<td>Local source coverage and quantity gaps</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>Frozen Vertikal validation summary (supporting internal reference retained privately), component audit (supporting internal reference retained privately)</td>
+<td>Local technical test of building-element workflows, with explicit modelling assumptions</td>
+</tr>
+</tbody></table></div>
+<p>The live <code>index.html</code>, <code>calc.js</code>, <code>app.js</code> and <code>presets.js</code> matched the pinned T3 files byte-for-byte. Inspection was read-only; the online research-log submission was not invoked. Notebooks were parsed, not executed: Brightway databases, upstream processed inputs and the separate binder inventory are not all reproducibly supplied here. Numerical parity with the browser is therefore <strong>not claimed</strong>. The main <code>rawproject.eu</code> page was inaccessible through the web reader; R1/R2 supply the public project evidence instead.</p>
+<p>Local inspection covered <code>docs/</code>, <code>examples/grasshopper/Workflow-1_Beam</code>, synthetic examples, the current palette, quantity/impact/scenario code and related test source. Synthetic examples are test fixtures, not material evidence. Frozen Rhino/GH files were not opened for editing or resaved.</p>
+<h2 id="tanya-calculator-model-summary">Tanya calculator model summary</h2>
+<h3 id="input-structure">Input structure</h3>
+<p>The notebook describes a mass-based product recipe rather than a Rhino geometry adapter. Its example is a 1 kg biopolymer product using pea-protein binder, sawdust and seagrass; repair can also use hemp fibre. The browser exposes four editable cases: biopolymer printing/baking, reclaimed hardwood scanning/CNC, knitted hemp, and hemp/epoxy coreless winding. These are <strong>model presets</strong>, not evidence that every process was measured or fabricated.</p>
+<p>The deployed catalogue contains 16 BOM material names: bark chips, cellulose reject fibres, cement, cotton fibre, epoxy fibre glue, hardwood, hemp dust, hemp fibre, lime, mechanical fasteners, pea-protein binder, peas, sawdust, seagrass, softwood and wood glue. Material acquisition choices include virgin, co-product, recycled and wild-harvested, subject to availability for each material. Additional factor roles cover electricity, machine wear, transport, waste treatment and avoided burdens. These are separate from the Danish/ÖKOBAUDAT material library.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Input group</th>
+<th>Fields / controls</th>
+<th>RAW implication</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Product / BOM</td>
+<td>Target kg; material; source type; mass percentage</td>
+<td>Preserve composition and acquisition provenance; geometry-derived mass can eventually feed a BOM model</td>
+</tr>
+<tr>
+<td>Ordered production chain</td>
+<td>Process name; machine mass; power; batch material and duration; machine lifetime; retained percentage; machine source</td>
+<td>Model process events separately from purchased material factors</td>
+</tr>
+<tr>
+<td>Electricity</td>
+<td>Location; baseline or prospective background</td>
+<td>Require geography, year, method and electricity-factor identity</td>
+</tr>
+<tr>
+<td>Repair / life</td>
+<td>Enable repair; product fraction repaired; repair count; expected life; extension per repair; separate repair BOM and chain</td>
+<td>Repair is not an automatic replacement schedule</td>
+</tr>
+<tr>
+<td>End of life</td>
+<td>Composting, open/closed recycling, incineration, landfill shares</td>
+<td>Route shares need explicit inventories and allocation rules</td>
+</tr>
+<tr>
+<td>Exploration</td>
+<td>Today/Future foreground cases, master and individual levers; independent background interpolation</td>
+<td>Label sensitivity estimates distinctly from source observations</td>
+</tr>
+</tbody></table></div>
+<p>The browser also supports process reordering, JSON input import/export and expandable contribution breakdowns. Background choices are baseline, <code>image_SSP2-L_2050</code> and <code>image_SSP2-M_2050</code>. The independent background slider interpolates factor scores; it is not a time-resolved emissions trajectory. Export reproducibility needs review because endpoint inputs and background do not necessarily capture every intermediate foreground slider state. No logging/integration with the external research sheet is proposed.</p>
+<h3 id="calculation-structure">Calculation structure</h3>
+<ol>
+<li>Data preparation uses Brightway, ecoinvent 3.12 cut-off and EF v3.1 mappings, with external mapping/constant sheets and a separate biopolymer-binder database. The browser uses compiled factor arrays, not a live Brightway solver.</li>
+<li>Work backwards through process retention to determine feed mass. For each process, duration = required input mass / throughput; electricity = power × duration; allocated machine mass = machine mass × duration / lifetime hours.</li>
+<li>Multiply BOM fractions of incoming mass by the selected material/source burden. Recycled acquisition uses an allocation/quality-ratio combination rather than assuming reclaimed material has zero burden.</li>
+<li>Calculate repair material/process burdens for explicit repair events. Storage duration uses lifetime and extensions. Repair and original material can have different storage periods.</li>
+<li>Calculate end-of-life treatment burdens and separate avoided-burden credits using route fractions and product-level constants.</li>
+<li>Calculate experimental biogenic growth/storage and delayed-emission benefits. Virgin inputs use a GWPbio lookup; non-virgin inputs use a dynamic characterisation expression. These research benefits must not be silently added to EPD GWP or renamed module D.</li>
+</ol>
+<p>This structure has <strong>material, production, repair, treatment and benefit contributions</strong>. It does not provide an approved mapping of all contributions onto EN 15804 A1–A3/A4/A5/B/C/D. Manufacturing electricity may belong in A3, site installation in A5 and waste processing in C3, depending on the assessed boundary; a process name alone cannot choose the module.</p>
+<h3 id="output-structure">Output structure</h3>
+<p>Notebook outputs include category series, climate totals, biogenic/avoided benefits and normalised research plots. The deployed model retains 25 EF category entries, including parent categories and subdivisions; these must not be added together as independent impacts. The UI presents burden/benefit/net results and material, production, repair and EOL drill-downs. RAW Grasshopper should remain <strong>GWP-only</strong> for this phase; future multi-indicator work needs separate contracts.</p>
+<h3 id="hardcoded-assumptions-and-review-points">Hardcoded assumptions and review points</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Evidence location</th>
+<th>Decision for RAW</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Generic 50 km collection appears in alternative-material preparation</td>
+<td>T2 data-prep cell <code>36502511</code> and lookup branches</td>
+<td>Do not adopt as a transport default or count it again in A4</td>
+</tr>
+<tr>
+<td>Machine power, throughput, lifetime, yields, repair schedules and routes are supplied by examples</td>
+<td>T2 example cells; T3 <code>presets.js</code></td>
+<td>Treat as example assumptions, not equipment specifications</td>
+</tr>
+<tr>
+<td>Heat/electric recovery efficiencies and primary quality ratio are constants</td>
+<td>T3 <code>calc.js</code> constants and <code>computeEolBenefits</code></td>
+<td>Require reviewed methods and units before reuse</td>
+</tr>
+<tr>
+<td>One <code>RAW product</code> set of EOL constants represents the mixture</td>
+<td>T2/T3 EOL logic</td>
+<td>Establish composition-specific applicability; no automatic composite recycling credit</td>
+</tr>
+<tr>
+<td><code>absSeries</code> removes factor signs in EOL treatment</td>
+<td>T3 <code>computeEolBurdens</code></td>
+<td>Do not copy; preserve signed observations and investigate intended semantics</td>
+</tr>
+<tr>
+<td>Missing burden lookup starts from zeros; duplicate categories overwrite</td>
+<td>T3 <code>getUnitBurdenAt</code></td>
+<td>RAW must return unavailable/ambiguous, not zero or last-row-wins</td>
+</tr>
+<tr>
+<td>Retention scales the whole mixture</td>
+<td>T2/T3 process chain</td>
+<td>Separate evaporation, dry solids, scrap and recovered offcuts before production use</td>
+</tr>
+<tr>
+<td>Carbon applied to initial incoming masses, including process losses</td>
+<td>T2 sequestration cells; T3 carbon functions</td>
+<td>Review losses, disposal timing, carbon basis and horizon; retain as research only</td>
+</tr>
+<tr>
+<td>LHV/dry-mass basis and energy-credit conversion require review</td>
+<td>T2/T3 incineration formulas</td>
+<td>Check factor units explicitly; do not infer MJ/kWh compatibility from a label</td>
+</tr>
+<tr>
+<td>Source licence/redistribution and factor authority remain dependencies</td>
+<td>T2 imports, compiled T3 data</td>
+<td>Public JavaScript availability does not grant reuse rights for underlying databases</td>
+</tr>
+</tbody></table></div>
+<h3 id="notebook-versus-current-explorer">Notebook versus current explorer</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Notebook / research reference</th>
+<th>Current deployed explorer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cases</td>
+<td>One main printed-product worked model</td>
+<td>Four presets and editable blank workflow</td>
+</tr>
+<tr>
+<td>Throughput entry</td>
+<td>Rate in kg/hour</td>
+<td>Batch mass / batch duration, with legacy rate fallback</td>
+</tr>
+<tr>
+<td>Background</td>
+<td>Baseline preparation in inspected notebooks</td>
+<td>Compiled baseline + two prospective backgrounds; prospective build provenance needs its generating notebook</td>
+</tr>
+<tr>
+<td>EOL in burden total</td>
+<td><code>total_burdens</code> cell <code>0c2f2c55</code> adds material, production and repair</td>
+<td><code>calc.js</code> <code>totalBurdens</code> also adds EOL treatment</td>
+</tr>
+<tr>
+<td>Missing benefit parameters</td>
+<td>Notebook can raise an error</td>
+<td>Browser can skip the contribution</td>
+</tr>
+<tr>
+<td>Empty process chain</td>
+<td>Not the main worked path</td>
+<td>Browser explicitly uses target product mass as input mass</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td>EF tables and plots</td>
+<td>Interactive comparisons and contribution drill-downs</td>
+</tr>
+</tbody></table></div>
+<p>These differences mean the source comment claiming a one-to-one port is not enough to certify parity. The research repository browser and the separately deployed browser must also remain separately versioned. Tanya should select the authoritative calculation specification before any port.</p>
+<p><strong>Suitable for Grasshopper now:</strong> explicit quantities, separate material/process contributions, evidence-bearing inputs, source identity, aligned elements and actionable diagnostics. <strong>Research/reference only:</strong> carbon-delay credits, prospective blending, quality-allocation formula choices, machine-wear allocation and unreviewed EF-to-EPD/module mapping.</p>
+<h2 id="raw-project-and-fabrication-workflow-map">RAW project and fabrication workflow map</h2>
+<p>Evidence levels: <strong>documented activity</strong> (R2), <strong>calculator case</strong> (T3), <strong>local validation</strong> (L3), <strong>candidate</strong> (not established as a RAW project). Proposed modules below are conditional on the assessed production/site/use/EOL boundary.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Workflow / evidence</th>
+<th>Geometry and likely LCA unit</th>
+<th>Quantities and physical evidence</th>
+<th>Process evidence</th>
+<th>Modules potentially affected</th>
+<th>RAW path / requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reclaimed timber grading, allocation and milling — documented activity</td>
+<td>Irregular stock item, solid or variable linear member; kg, m³, m, item</td>
+<td>Stock and used volume, measured mass, moisture-qualified density; defects and recovery partitions</td>
+<td>Cut/trim/plane/mill time, power or metered energy; stock origin and grading record</td>
+<td>Acquisition/production; A4 if applicable; C/D only with route rules</td>
+<td>Element + Physical Properties now; stock/preparation and offcut contracts next research</td>
+</tr>
+<tr>
+<td>Hardwood CNC — calculator case</td>
+<td>Scanned solid/member; kg or m³</td>
+<td>Input/output mass, section variation, offcuts</td>
+<td>Scan/mill event energy, yield and batch allocation</td>
+<td>Production or site stage explicitly assigned</td>
+<td>Shared Machine Energy plus CNC adapter, not preset power defaults</td>
+</tr>
+<tr>
+<td>Robotic milling / adaptive fabrication — documented activity</td>
+<td>Toolpath plus stock/finished geometry</td>
+<td>Stock and removed volume/mass; auxiliary materials</td>
+<td>Robot, spindle, extraction/compressor energy, setup/idle/process time</td>
+<td>A3/A5/C conditional</td>
+<td>Robotic Process as event wrapper over common energy/waste model</td>
+</tr>
+<tr>
+<td>Robotic assembly — candidate extension</td>
+<td>Assembly, fastener count, movement path</td>
+<td>Component inventory/count and joining consumables</td>
+<td>End-effector, robot/auxiliary time/energy</td>
+<td>A3 or A5 conditional</td>
+<td>Evidence collection first; milling evidence does not prove assembly performance</td>
+</tr>
+<tr>
+<td>Biopolymer extrusion and baking — calculator case and notebook</td>
+<td>Deposited path/solid; kg; binder/fibre BOM</td>
+<td>Wet feed versus dry product, supports, waste, density if deriving mass</td>
+<td>Printer and oven energy, batch mass, duration, failures, curing</td>
+<td>Production; repair if separately defined</td>
+<td>Printing Process + Machine Energy later; keep water and solids separate</td>
+</tr>
+<tr>
+<td>Knitted hemp — calculator case</td>
+<td>Textile surface or formed item; kg or m²</td>
+<td>Dry fibre mass, areal mass and yarn losses</td>
+<td>Carding/spinning/knitting energy and yield</td>
+<td>Production; repair and C/D conditional</td>
+<td>Fibre/textile category; generic process chain before specialist palette</td>
+</tr>
+<tr>
+<td>Hemp/epoxy winding — calculator case</td>
+<td>Paths plus composite member; kg, m, item</td>
+<td>Fibre and resin masses; linear mass; cured mass</td>
+<td>Winding and curing energy, tension record, losses</td>
+<td>Production; C/D depend on actual composite route</td>
+<td>Multi-material BOM + process events later; do not treat composite as fully recyclable fibre</td>
+</tr>
+<tr>
+<td>Timber/cladding, glazing, slabs, wall layers, balconies — local validation</td>
+<td>Surface, solid, linear, assembly; m²/m³/kg/item</td>
+<td>Net area, thickness, section, volume, count; matching product specification</td>
+<td>Only additional fabrication not already inside factor</td>
+<td>Existing A1–A3 path; source C/D where available</td>
+<td>Element / Rectangular Section / Wall Assembly → GWP</td>
+</tr>
+<tr>
+<td>Clay powder — current software/data example</td>
+<td>Surface + thickness or solid; kg</td>
+<td>Volume exists but density/mass may not</td>
+<td>No actual clay fabrication measured here</td>
+<td>Source modules only</td>
+<td>Physical Properties resolves mass; does not establish clay-printing research</td>
+</tr>
+<tr>
+<td>Mycelium and other composites — candidate</td>
+<td>Solid/panel; kg/m³/m²</td>
+<td>Composition, moisture, density, growing substrate</td>
+<td>Growth/drying/sterilisation inventories</td>
+<td>Undetermined</td>
+<td>Documentation only until RAW evidence and factors exist</td>
+</tr>
+</tbody></table></div>
+<p>The Vertikal test has 1,401 references across 16 systems. It is a locally prepared technical workflow example, not proof of an as-built inventory or a RAW-funded fabrication project. Timber net/gross area, repeated balcony instances, schematic sheet thickness, assumed concrete dimensions and incomplete structure matter. A PV array plane is not a manufactured-panel count. Do not turn the synthetic-context test total into a project assessment. See L3 for the recorded limitations.</p>
+<h2 id="machineprocess-parameter-requirements">Machine/process parameter requirements</h2>
+<p><strong>R</strong> required for the chosen calculation route; <strong>O</strong> optional refinement; <strong>P</strong> diagnostic/provenance only; <strong>F</strong> future research. Required fields are conditional: metered kWh replaces power × duration; an evidenced measured mass replaces density-based inference. No numeric machine defaults are proposed.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Process</th>
+<th>R — calculation inputs</th>
+<th>O — refinements</th>
+<th>P — traceability / interpretation</th>
+<th>F — calibration or research</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reclaimed timber preparation</td>
+<td>Original/final stock quantities; offcut/waste quantities for yield; metered energy <strong>or</strong> effective power + time; matching energy factor; explicit allocation if batched</td>
+<td>Cuts and cutting length when estimating time; collection distance when modelling transport separately; recoverable-offcut fraction</td>
+<td>Stock ID/origin; reuse evidence; machine type; moisture condition (R if needed to match density/mass basis); grade/defects</td>
+<td>Predict time from cut geometry; structural reuse grading; causal link between defects and yield</td>
+</tr>
+<tr>
+<td>CNC milling/cutting</td>
+<td>Stock/sheet dimensions or measured input; used/nested area or final mass; removed mass/area; measured time/energy route; factor</td>
+<td>Cut length/depth, passes, feed and tool diameter for validated time estimate; reusable-offcut fraction; extraction energy</td>
+<td>Machine/tool ID, CAM revision, dust collection route; power specification versus measured draw</td>
+<td>Reliable toolpath-to-time/energy and nesting-to-reuse models</td>
+</tr>
+<tr>
+<td>Robotics</td>
+<td>Robot/process time and measured energy or effective power; material feed/outputs; separately used consumables</td>
+<td>End-effector energy, path length/feed rate, idle/setup, rejected parts</td>
+<td>Cell configuration; end-effector type; operation and batch IDs</td>
+<td>Kinematic simulation as cycle-time predictor, motion-dependent power, failure allowance from repeated trials</td>
+</tr>
+<tr>
+<td>3D printing</td>
+<td>Actual deposited/feed mass; support mass if present; measured energy or printer power + time; energy factor; material factors</td>
+<td>Infill, layer height, extrusion length and bead section for validated estimates; observed failure rate; post-processing energy</td>
+<td>Slicer version/profile, material batch, wet/dry state, reused supports</td>
+<td>Predicted energy from slicing; material-specific drying shrinkage; probabilistic scrap without measured history</td>
+</tr>
+<tr>
+<td>Winding / fibre placement</td>
+<td>Fibre and binder masses; process and curing energy route; material/energy factors</td>
+<td>Winding length with verified linear mass, measured waste fraction, reusable tooling allocation</td>
+<td>Tension, speed, cure schedule, fibre/resin identity and ratio</td>
+<td>Strength equivalence, process settings → energy; composite recovery model</td>
+</tr>
+</tbody></table></div>
+<p>For all rows, Source Note and factor identity are required provenance for accepted process estimates even though their text does not multiply a value. Nameplate power alone is insufficient to certify consumed energy. Recovery percentages describe a material flow; they do not create an avoided-burden credit. If a parameter drives an empirical estimate, record its calibration source and uncertainty.</p>
+<h2 id="materialfabrication-implications">Material/fabrication implications</h2>
+<ul>
+<li>Keep one general Element adapter and shared quantity/evidence services; specialist fabrication wrappers should reuse them.</li>
+<li>Separate material composition, product form, acquisition history and process type. A reclaimed timber member can also be a panel or a linear product; “reclaimed” must not set an impact factor to zero.</li>
+<li>Preserve input/output mass balance, offcut identity and method boundaries before estimating savings.</li>
+<li>Keep process contributions independently reportable. Adding fabrication energy to an EPD that already includes it can double count production.</li>
+<li>See <a href="raw-material-category-roadmap.html">category roadmap</a>, <a href="raw-quantity-resolver-and-enrichment-roadmap.html">resolver roadmap</a> and <a href="raw-fabrication-component-roadmap.html">fabrication contracts</a> for the proposed implementation boundaries.</li>
+</ul>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

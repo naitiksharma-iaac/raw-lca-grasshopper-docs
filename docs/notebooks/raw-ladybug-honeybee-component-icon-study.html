@@ -1,0 +1,119 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ladybug/Honeybee component icon study for RAW LCA · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-ladybug-honeybee-component-icon-study.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#findings">Findings</a><a href="#lb-import-epw">LB Import EPW</a><a href="#lb-construct-location">LB Construct Location</a><a href="#lb-deconstruct-location">LB Deconstruct Location</a><a href="#lb-sunpath">LB SunPath</a><a href="#lb-create-legend">LB Create Legend</a><a href="#lb-area-normalize">LB Area Normalize</a><a href="#hb-room">HB Room</a><a href="#hb-room-from-solid">HB Room from Solid</a><a href="#hb-deconstruct-object">HB Deconstruct Object</a><a href="#hb-solve-adjacency">HB Solve Adjacency</a><a href="#hb-model">HB Model</a><a href="#hb-geometry-properties">HB Geometry Properties</a><a href="#method-and-rights">Method and rights</a></div></details><h1 id="ladybughoneybee-component-icon-study-for-raw-lca">Ladybug/Honeybee component icon study for RAW LCA</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p>18 October 2026. Research only; no production icon changes.</p>
+<p><a href="../reviews/component-family/index.html">Visual review</a>. Twelve genuine 24px component icons are paired with source code and JSON at pinned commits. Each <code>ghenv.Component.Name</code> was checked. The manifest records exact URLs and SHA-256 hashes. No relationship is inferred from an arbitrary internet image.</p>
+<h2 id="findings">Findings</h2>
+<p>The sample does not use one template. Lettering names a precise data format or operation; familiar geometry identifies constructed objects; shared objects establish families; changed relationships and gaps indicate extraction or adjacency; a small picture of the output can explain a legend. Thick outlines and saturated fills help these particular icons, but RAW need not copy those colours or artwork. Small changes such as the Room roof colour establish family similarity more clearly than they disclose exact input contracts. Labels remain necessary.</p>
+<h2 id="lb-import-epw">LB Import EPW</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Import%20EPW.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Reads an EPW weather file into a Location and weather data collections.</li>
+<li><strong>Observed graphic:</strong> Red file-like rectangle with large black EPW lettering and a small upper-corner mark.</li>
+<li><strong>Metaphor:</strong> Abbreviation / file</li>
+<li><strong>Interpretation for RAW:</strong> The familiar file-format name is more specific than a general weather symbol. RAW can use GWP or source initials when the text is the object of interest.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Import%20EPW.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/src/LB%20Import%20EPW.py">paired component implementation</a>; commit <code>4dde2331e8cb9b38c492ccbb99df4a52eb505529</code>.</li>
+</ul>
+<h2 id="lb-construct-location">LB Construct Location</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Construct%20Location.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Creates a Location from name, latitude, longitude, time zone and elevation.</li>
+<li><strong>Observed graphic:</strong> Black I / NY lettering with a red heart, referencing the familiar I-love-NY composition.</li>
+<li><strong>Metaphor:</strong> Lettering / cultural location metaphor</li>
+<li><strong>Interpretation for RAW:</strong> Location is suggested by a place-name reference. The icon alone does not disclose the input schema; tooltip and paired deconstructor complete its meaning.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Construct%20Location.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/src/LB%20Construct%20Location.py">paired component implementation</a>; commit <code>4dde2331e8cb9b38c492ccbb99df4a52eb505529</code>.</li>
+</ul>
+<h2 id="lb-deconstruct-location">LB Deconstruct Location</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Deconstruct%20Location.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Extracts name, latitude, longitude, time zone and elevation from a Location.</li>
+<li><strong>Observed graphic:</strong> Same I / NY arrangement, with a red X replacing the heart.</li>
+<li><strong>Metaphor:</strong> Paired lettering / operation change</li>
+<li><strong>Interpretation for RAW:</strong> A small shared-motif change distinguishes opposing operations. X can also imply error/deletion: RAW should make decomposition direction clearer rather than copy it.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Deconstruct%20Location.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/src/LB%20Deconstruct%20Location.py">paired component implementation</a>; commit <code>4dde2331e8cb9b38c492ccbb99df4a52eb505529</code>.</li>
+</ul>
+<h2 id="lb-sunpath">LB SunPath</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20SunPath.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Produces sun-path geometry and sun vectors for location and times.</li>
+<li><strong>Observed graphic:</strong> Yellow circular disc, cross-like divisions and a red curved trace.</li>
+<li><strong>Metaphor:</strong> Environmental phenomenon / diagram</li>
+<li><strong>Interpretation for RAW:</strong> The icon resembles the kind of solar diagram produced. It need not reproduce every analemma to cue the output.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20SunPath.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/src/LB%20SunPath.py">paired component implementation</a>; commit <code>4dde2331e8cb9b38c492ccbb99df4a52eb505529</code>.</li>
+</ul>
+<h2 id="lb-create-legend">LB Create Legend</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Create%20Legend.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Creates colour swatches, label objects/text and colours for values/range.</li>
+<li><strong>Observed graphic:</strong> Vertical red-to-blue swatches with black marks/numerals alongside.</li>
+<li><strong>Metaphor:</strong> Output miniature</li>
+<li><strong>Interpretation for RAW:</strong> A compact image of the output is directly meaningful. Colour here encodes a scale, not a claim that every low value is good.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Create%20Legend.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/src/LB%20Create%20Legend.py">paired component implementation</a>; commit <code>4dde2331e8cb9b38c492ccbb99df4a52eb505529</code>.</li>
+</ul>
+<h2 id="lb-area-normalize">LB Area Normalize</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Area%20Normalize.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Divides a compatible data collection by an area and changes the data type/unit; invalid types or zero area fail.</li>
+<li><strong>Observed graphic:</strong> Two-tone red/pink rectangle with a horizontal divide and white m² below.</li>
+<li><strong>Metaphor:</strong> Unit / mathematical operation</li>
+<li><strong>Interpretation for RAW:</strong> The denominator names the operation. RAW Physical Properties should not imply normalisation simply because it exposes area.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/icon/LB%20Area%20Normalize.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/ladybug-grasshopper/4dde2331e8cb9b38c492ccbb99df4a52eb505529/ladybug_grasshopper/src/LB%20Area%20Normalize.py">paired component implementation</a>; commit <code>4dde2331e8cb9b38c492ccbb99df4a52eb505529</code>.</li>
+</ul>
+<h2 id="hb-room">HB Room</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Room.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Combines Honeybee Faces into a Room with optional construction/modifier/program settings.</li>
+<li><strong>Observed graphic:</strong> Yellow/orange isometric enclosed room with cyan window faces and dark outlines.</li>
+<li><strong>Metaphor:</strong> Constructed object</li>
+<li><strong>Interpretation for RAW:</strong> Recognisable room is the shared object family. The source function is construction even without an assembly arrow in the icon.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Room.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/src/HB%20Room.py">paired component implementation</a>; commit <code>b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b</code>.</li>
+</ul>
+<h2 id="hb-room-from-solid">HB Room from Solid</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Room%20from%20Solid.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Converts closed Rhino solids/meshes into Honeybee Rooms, with optional model properties.</li>
+<li><strong>Observed graphic:</strong> Same room silhouette, but its top is grey instead of yellow.</li>
+<li><strong>Metaphor:</strong> Shared object / input distinction</li>
+<li><strong>Interpretation for RAW:</strong> The subtle top change distinguishes a related constructor. It is legible as a family, but exact grey-top semantics require labels; RAW should not over-rely on tiny changes.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Room%20from%20Solid.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/src/HB%20Room%20from%20Solid.py">paired component implementation</a>; commit <code>b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b</code>.</li>
+</ul>
+<h2 id="hb-deconstruct-object">HB Deconstruct Object</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Deconstruct%20Object.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Returns constituent Faces, Apertures, Doors and Shades from Honeybee geometry objects.</li>
+<li><strong>Observed graphic:</strong> Room faces are separated around pink/red junction lines and larger gaps.</li>
+<li><strong>Metaphor:</strong> Decomposition</li>
+<li><strong>Interpretation for RAW:</strong> Separated pieces visually reinforce extracting child objects. RAW must extract properties, not copy an exploded room or suggest it physically disassembles material.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Deconstruct%20Object.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/src/HB%20Deconstruct%20Object.py">paired component implementation</a>; commit <code>b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b</code>.</li>
+</ul>
+<h2 id="hb-solve-adjacency">HB Solve Adjacency</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Solve%20Adjacency.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Finds matching faces between Rooms and assigns boundary relationships, with explicit options.</li>
+<li><strong>Observed graphic:</strong> Two yellow/orange cells, a central grey division and black inward-facing marks.</li>
+<li><strong>Metaphor:</strong> Relationship / boundary process</li>
+<li><strong>Interpretation for RAW:</strong> The interface between objects carries the meaning. It is not merely a building picture; RAW assignment needs equally explicit joining/ledger logic without a verification tick.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Solve%20Adjacency.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/src/HB%20Solve%20Adjacency.py">paired component implementation</a>; commit <code>b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b</code>.</li>
+</ul>
+<h2 id="hb-model">HB Model</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Model.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Collects Rooms and permitted orphaned geometry into a simulation Model.</li>
+<li><strong>Observed graphic:</strong> Multi-storey building-like stack with cyan bands, yellow facade and grey top.</li>
+<li><strong>Metaphor:</strong> Aggregate object</li>
+<li><strong>Interpretation for RAW:</strong> More complex aggregate distinguishes Model from a single Room. RAW should reserve assembly complexity for an actual composite rather than decorate every icon.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Model.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/src/HB%20Model.py">paired component implementation</a>; commit <code>b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b</code>.</li>
+</ul>
+<h2 id="hb-geometry-properties">HB Geometry Properties</h2>
+<p><a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Geometry%20Properties.png">Actual icon — original source</a></p>
+<ul>
+<li><strong>Function from code:</strong> Reads wall/window area, volume and floor-area measures from Rooms or Model.</li>
+<li><strong>Observed graphic:</strong> Room silhouette with dimension-like lines extending along its right and lower sides.</li>
+<li><strong>Metaphor:</strong> Object / measurement</li>
+<li><strong>Interpretation for RAW:</strong> Dimension marks distinguish reading quantities from constructing the room. RAW can use a block with distinct attribute outputs instead of an editor metaphor.</li>
+<li><strong>Attribution:</strong> Ladybug Tools contributors; individual icon artist not established. <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/icon/HB%20Geometry%20Properties.png">Icon</a> · <a href="https://raw.githubusercontent.com/ladybug-tools/honeybee-grasshopper-core/b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b/honeybee_grasshopper_core/src/HB%20Geometry%20Properties.py">paired component implementation</a>; commit <code>b8c12677ceeb57e1ce9c8185fdc0ecbd03df986b</code>.</li>
+</ul>
+<h2 id="method-and-rights">Method and rights</h2>
+<p>Observations describe the actual pixels; interpretations are design judgements, not author interviews. This is a purposive sample of related constructors, inspectors and environmental visualisation tools, not a statistical claim about the entire plugin. Official repository source headers identify AGPL-3.0; repository licence files are retained with references. Third-party images are research evidence only and must not be included in RAW implementation resources. Original RAW proposals were drawn as new paths, not traced from these icons.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

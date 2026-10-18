@@ -1,0 +1,334 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW quantity resolver and enrichment roadmap · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-quantity-resolver-and-enrichment-roadmap.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#current-implementation-not-a-blank-slate">Current implementation, not a blank slate</a><a href="#dataset-constraints-that-determine-priority">Dataset constraints that determine priority</a><a href="#quantity-resolver-rules">Quantity resolver rules</a><a href="#diagnostics-and-future-inspector-contract">Diagnostics and future Inspector contract</a><a href="#lifecycle-loops-and-enrichment-contracts">Lifecycle loops and enrichment contracts</a><a href="#practical-implementation-order">Practical implementation order</a></div></details><h1 id="raw-quantity-resolver-and-enrichment-roadmap">RAW quantity resolver and enrichment roadmap</h1>
+<blockquote>
+<p><strong>Public reading edition · 13 October 2026.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<p><strong>13 October 2026. Planning only; no implementation in this task.</strong> Read alongside the <a href="raw-project-fabrication-research.html">project research</a>, <a href="raw-material-category-roadmap.html">category proposal</a> and <a href="raw-fabrication-component-roadmap.html">fabrication contracts</a>.</p>
+<h2 id="current-implementation-not-a-blank-slate">Current implementation, not a blank slate</h2>
+<p>The palette allowlist (supporting internal reference retained privately) currently exposes Materials, Elements, Impact and Visualisation. Materials contains the Danish/German selectors, Custom Material and Dataset Info. Elements contains RAW Element, Wall Assembly and Rectangular Section. Impact contains Element GWP, Physical Properties, End-of-Life Scenario and Reuse / Recovery Scenario. Colour Preview and Legend are visible under Visualisation. Inspector, transport, construction, replacement and process-specific components are not implemented in the visible palette.</p>
+<p>The quantity calculator (supporting internal reference retained privately) accepts kg/t, m², m³ and item under explicit conditions. RAW Element (supporting internal reference retained privately) already derives volume from surfaces with thickness and curves with cross-sections. <strong>Linear geometry support is not direct support for a factor per metre</strong>: the impact path currently accepts Area/Volume/Mass/Count bases, not a direct Length basis. Do not advertise the latter as implemented.</p>
+<p>Physical Properties (supporting internal reference retained privately) already keeps source data immutable, prefers measured mass, validates positive finite numbers and protects existing density unless explicitly overridden. It rejects ambiguous multi-material allocation. C/D scenarios (supporting internal reference retained privately) already accept evidenced factors on the exact source basis, retain history and protect existing observations. They are factor assignments, <strong>not waste-route or recycling-credit simulators</strong>. Unresolved context leaves new factors pending; descriptive Source Note alone does not make them calculable. D rates are metadata and cannot generate a credit.</p>
+<p>Existing test source covers these behaviours in PhysicalPropertiesTests (supporting internal reference retained privately), LifecycleScenarioTests (supporting internal reference retained privately), SolidSurfaceElementTests (supporting internal reference retained privately) and ElementGwpTests (supporting internal reference retained privately). Tests were inspected, not rerun during this documentation task.</p>
+<h2 id="dataset-constraints-that-determine-priority">Dataset constraints that determine priority</h2>
+<p>Counts below reuse the 13 October audit evidence (supporting internal reference retained privately). The database hash and record/unit counts were independently checked read-only for this research; the full calculator probe was not repeated.</p>
+<ul>
+<li>Danish: 441 records; A1–A3, C3, C4 and D are present, but A4/A5/B/C1/C2 are absent.</li>
+<li>German: 5,079 records with broader but uneven coverage. Numeric A4 exists on 2,904 and A5 on 2,963 records; any B on 2,539; complete B1–B7 on 1,556. Complete C1–C4 exists on 3,118; D on 4,337.</li>
+<li>251 records have usable A1–A3 factors but need density or measured mass for the audit&#39;s quantity route. This does not mean every missing density blocks every unit basis.</li>
+<li>179 records have unsupported direct units: 121 m, 49 MJ and 9 kg·km. Only 115 of those also had usable A1–A3 factors in the original probe. These are different denominators.</li>
+<li>1,496 German records support complete-scope A1–C and A1–D arithmetic with matching quantities in that probe. All 5,520 local source records retain unresolved LCIA method metadata. Arithmetic completeness is not verified whole-life assessment or permission to aggregate incompatible records.</li>
+</ul>
+<p>This favours a safe metre route and physical evidence ahead of many new scenario inputs. Energy and freight records should feed future process/scenario services, not an automatic geometry conversion.</p>
+<h2 id="quantity-resolver-rules">Quantity resolver rules</h2>
+<h3 id="resolution-sequence">Resolution sequence</h3>
+<ol>
+<li>Read the immutable dataset&#39;s declared <strong>amount, unit, quantity kind and reference basis</strong>, selected GWP indicator and scope. Preserve raw units; explicitly approved unit aliases may be canonicalised internally without rewriting the record.</li>
+<li>Inspect element quantities and their origin: measured, geometry-derived, source density or user physical override. Preserve tree path, index, geometry identity and material-part identity.</li>
+<li>Resolve a compatible quantity path. Never infer a product section, count, density, thickness, moisture condition or energy carrier from family/name alone.</li>
+<li>Divide the resolved quantity by the declared amount. For example a factor per 1,000 kg uses <code>mass / 1000</code>, not <code>mass × factor</code> without the denominator. Explicit kg↔t conversion is an exact unit scale, not a guessed physical property.</li>
+<li>Check factor availability and module/context compatibility separately. A valid mass does not repair missing GWP. Select a valid aggregate or its complete leaves without adding both.</li>
+<li>Return an available value or null with structured reasons. Keep known geometry/quantities even when GWP is unavailable. Never repair missing values using zero, absolute value or last-item broadcasting.</li>
+</ol>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Factor basis</th>
+<th>Allowed path</th>
+<th>Enrichment needed</th>
+<th>Block conditions / safeguards</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>kg or t</td>
+<td>Measured mass; otherwise established mass; otherwise V × evidenced ρ</td>
+<td>Physical Properties for density or measured mass; thickness/section if V absent</td>
+<td>Nonfinite/nonpositive physical override, unknown condition, ambiguous assembly allocation; measured mass wins</td>
+<td>Existing basic routes; strengthen evidence/diagnostics</td>
+</tr>
+<tr>
+<td>m³</td>
+<td>Closed solid volume; one reference area × explicit thickness; length × verified section area</td>
+<td>Element Surface Thickness or Linear Cross-section</td>
+<td>Open solid, missing thickness/section, invalid scale; no automatic inversion from mass/density</td>
+<td>Existing</td>
+</tr>
+<tr>
+<td>m²</td>
+<td>Matching reference/product area</td>
+<td>Select correct reference surface or layered system</td>
+<td>Entire solid skin is not product area; no rescaling 4 mm product GWP by a 40 mm slider; product mismatch remains visible</td>
+<td>Existing</td>
+</tr>
+<tr>
+<td>m</td>
+<td>Product/centreline length matching declared profile and specification</td>
+<td>Linear quantity path; profile evidence when needed</td>
+<td>Do not scale factor with section area unless source explicitly permits it; no area-to-length guess</td>
+<td><strong>Proposed next</strong></td>
+</tr>
+<tr>
+<td>item</td>
+<td>Explicit count with a defined item identity</td>
+<td>Unit/count mode and product specification</td>
+<td>Geometry list is only an item count when one object represents one product; PV array plane is not one PV module</td>
+<td>Existing basic count route</td>
+</tr>
+<tr>
+<td>kWh / MJ energy service</td>
+<td>Metered energy, or effective kW × hours; exact 1 kWh = 3.6 MJ when carrier/basis match</td>
+<td>Future Machine Energy with source factor and boundary</td>
+<td>Electricity cannot be substituted for heat; no nameplate-only measured claim; process factor cannot scale a solid directly</td>
+<td>Proposed process route, not current Element GWP</td>
+</tr>
+<tr>
+<td>kg·km / t·km transport</td>
+<td>Carried mass × distance with explicit factor denominator and mode</td>
+<td>Future Transport Scenario</td>
+<td>Missing distance/mass/mode, wrong payload unit, boundary overlap; kg·km is not kg</td>
+<td>Proposed scenario route</td>
+</tr>
+<tr>
+<td>Other / unclear</td>
+<td>None by default</td>
+<td>Dataset Info; obtain documented conversion or choose compatible dataset</td>
+<td>Missing/ambiguous unit, unequal declared/reference basis without verified mapping, unsupported service unit</td>
+<td>Unavailable, actionable diagnostic</td>
+</tr>
+</tbody></table></div>
+<p>Surface example: Clay powder at <code>A = 1.89 m²</code>, <code>t = 0.004 m</code> gives <code>V = 0.00756 m³</code>. Its kg factor still needs evidenced density <code>ρ</code>, giving <code>m = 0.00756ρ</code>, or measured mass directly. No numerical density is proposed. Glass declared per m² instead uses <code>A / declared area</code>; thickness can change reported volume without changing this product factor.</p>
+<p>Solid example: closed volume <code>V</code> plus source or evidenced density supports a kg factor; missing density does not block a matching m³ factor. Solid surface-area sum cannot substitute for a glazing reference area.</p>
+<p>Linear example: <code>L × section area</code> gives volume and, with density, mass. Variable stock needs measured volume or an explicitly validated varying-section integration, not one nominal rectangle. A future per-metre factor needs only the matching product length for arithmetic, with profile compatibility checked independently.</p>
+<h3 id="evidence-and-precedence-contract">Evidence and precedence contract</h3>
+<p>Keep separate origins: <strong>source dataset</strong>, <strong>user physical override</strong>, <strong>lifecycle scenario assignment</strong>, <strong>machine/process estimate</strong>, and <strong>synthetic/future placeholder</strong>. Placeholder data must never be an available production result. Provenance should include evidence reference, author/date, unit and state, affected element/part, method/context identity, version and uncertainty/status.</p>
+<p>Measured mass is per element, not per branch. User density does not replace source observations. For assemblies, enrich material parts before aggregation; do not distribute a measured total mass among layers without an explicit allocation basis. Invalid newly supplied overrides should fail visibly without destroying valid existing quantities. A source note is evidence text, not scientific verification.</p>
+<p>No new standalone resolver component is recommended initially. Implement a shared internal service used by RAW Element/GWP/guidance, preserving stable public ports. A later inspector can expose its resolution trace.</p>
+<h2 id="diagnostics-and-future-inspector-contract">Diagnostics and future Inspector contract</h2>
+<p>Preserve existing codes; extend with structured context rather than renaming them casually. Each issue needs code, severity, element/part/path/index, dataset reference, scope/module, missing input, observed/required unit, evidence origin, blocking/advisory status and recommended component/action. Separate <strong>quantity-ready</strong>, <strong>factor-ready</strong>, <strong>context-compatible</strong>, <strong>scope-complete</strong> and <strong>inventory-complete</strong> states.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Existing / proposed code family</th>
+<th>Meaning and action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Existing <code>element.density</code>, <code>element.thickness</code>, <code>element.volume_basis</code></td>
+<td>Supply physical evidence or the required geometry quantity. Missing density is advisory for valid m²/m³ arithmetic, blocking for a missing mass route</td>
+</tr>
+<tr>
+<td>Existing <code>element.unit</code>, <code>element.declared_basis</code>, <code>element.reference_basis</code>, <code>element.quantity_basis</code></td>
+<td>Unsupported/missing basis; inspect source. Do not rename the unit to bypass it</td>
+</tr>
+<tr>
+<td>Existing <code>physical.*</code></td>
+<td>Added density/mass, blocked override, precedence, missing note, invalid value, no override, assembly allocation required</td>
+</tr>
+<tr>
+<td>Existing <code>element.gwp_missing</code>, <code>element.gwp_scope</code>, <code>element.gwp_indicator</code>, <code>element.method</code>, <code>element.gwp_context</code></td>
+<td>Distinguish no factor, incomplete module, wrong indicator and unresolved/conflicting context</td>
+</tr>
+<tr>
+<td>Existing <code>scenario.c_*</code>, <code>scenario.d_*</code>, <code>element.module_d</code></td>
+<td>Missing/partial C, evidence/basis/context rejection, override protection, D beyond boundary</td>
+</tr>
+<tr>
+<td>Proposed <code>quantity.length_required</code>, <code>quantity.profile_mismatch</code>, <code>quantity.condition_mismatch</code></td>
+<td>Direct m route or condition-specific density/profile cannot yet be justified</td>
+</tr>
+<tr>
+<td>Proposed <code>quantity.count_basis_ambiguous</code>, <code>quantity.area_basis_ambiguous</code></td>
+<td>Explain count/reference-face ambiguity without choosing for the user</td>
+</tr>
+<tr>
+<td>Proposed <code>process.energy_missing</code>, <code>process.factor_missing</code>, <code>process.boundary_overlap</code>, <code>process.mass_balance</code>, <code>process.allocation_required</code></td>
+<td>Keep fabrication estimates unavailable until evidence and boundaries match</td>
+</tr>
+<tr>
+<td>Proposed <code>evidence.pending</code>, <code>evidence.licence_unknown</code></td>
+<td>Missing confirmation is explicit; no factor release or scientific approval implied</td>
+</tr>
+</tbody></table></div>
+<p>Current <code>ElementGuidance</code> still recommends hidden Coverage Check and sometimes old Layer/Assembly workflows. Updating those messages to visible Element/Physical Properties/Dataset Info paths is a near-term documentation/UI-guidance task; do not unhide old reporting or build Inspector as a workaround. Retain deep Result diagnostics for later use.</p>
+<h2 id="lifecycle-loops-and-enrichment-contracts">Lifecycle loops and enrichment contracts</h2>
+<p>All enrichment components take and return <strong>Elements</strong>, preserve tree/list alignment and keep the source material immutable. RAW Element GWP keeps one Elements input. Typed diagnostics travel with the enriched object and Result; warnings do not become extra calculator ports.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Current path / missing-data behaviour</th>
+<th>Enrichment dependency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1–A3</td>
+<td>Matching quantity × source A1–A3 or compatible A1/A2/A3; unresolved-source warning remains</td>
+<td>Physical Properties if mass missing; Element thickness/section for volume</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>Source A4 works where usable; absent stays null</td>
+<td>Future Transport with compatible factor, payload, distance and boundary</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>Source A5 where usable; absent stays null</td>
+<td>Future Construction with explicit site process and waste allocation</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Current B scope requires complete B1–B7 or valid aggregate; B4 alone is not full B</td>
+<td>Replacement can address B4 only; other B modules need source/scenario evidence or a reviewed scope design</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Complete compatible C1–C4/valid aggregate required; partial C remains identified but combined C withheld</td>
+<td>Existing End-of-Life accepts evidenced missing leaves, pending resolved context</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Preserve signed source/assigned value; warn beyond boundary; missing null</td>
+<td>Existing Reuse / Recovery requires explicit factor, not rates alone</td>
+</tr>
+<tr>
+<td>A1–C</td>
+<td>All required A/B/C groups; do not infer unreported stages are zero</td>
+<td>Physical, C and later A4/A5/B where needed</td>
+</tr>
+<tr>
+<td>A1–D</td>
+<td>A1–C plus D; retain separate D and beyond-boundary diagnostic</td>
+<td>Above plus D evidence</td>
+</tr>
+</tbody></table></div>
+<p>User-declared zero is allowed only as an evidenced numeric observation on a valid basis/context; missing is never zero. A genuinely not-applicable stage needs a future explicit justified status contract, not an empty value silently promoted to zero.</p>
+<h3 id="component-contracts-and-priorities">Component contracts and priorities</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Component / category / priority</th>
+<th>Purpose and when used</th>
+<th>Inputs → outputs</th>
+<th>Logic, limitations and diagnostics</th>
+<th>Evidence dependency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Material organisation / Materials / <strong>Now</strong>, extend selectors</td>
+<td>Find relevant stock/product and supported source factor</td>
+<td>Existing selector filters + proposed facets/search → same RAW Material</td>
+<td>Overlay categories only; no merging factors; flag mapping ambiguity and role mismatch</td>
+<td>Curated source/category rules and preserved identity</td>
+</tr>
+<tr>
+<td>Shared quantity resolver / internal / <strong>Now</strong></td>
+<td>Explain and choose evidenced quantity path</td>
+<td>Element quantities + material basis → resolution trace/status used by existing components</td>
+<td>Rules above; no extra palette component initially; <code>quantity.*</code> plus existing codes</td>
+<td>Typed units, profile/condition metadata</td>
+</tr>
+<tr>
+<td>RAW Physical Properties / Impact / <strong>Now</strong>, strengthen existing</td>
+<td>Mass absent for kg/t; actual measured mass available</td>
+<td>Elements, Density kg/m³?, Measured Mass kg/element?, Source Note?, Override Existing=false → Elements</td>
+<td>Measured mass first; protect source density; reject invalid/ambiguous assembly overrides; <code>physical.*</code></td>
+<td>Positive finite value plus evidence/condition; missing note warning does not certify evidence</td>
+</tr>
+<tr>
+<td>Thickness / Layer guidance / Elements / <strong>Now</strong>, reuse existing</td>
+<td>Surface needs volume/mass</td>
+<td>Existing Element Thickness or Wall Assembly layers; proposed validation receives Elements + thickness/evidence only if needed → Elements</td>
+<td>Do not duplicate visible components before a real gap; conflict with assembly thickness must be explicit; <code>element.thickness</code>, proposed condition/conflict codes</td>
+<td>Actual product/layer thickness; no m² factor rescaling</td>
+</tr>
+<tr>
+<td>Section guidance / Elements / <strong>Now</strong>, reuse Section</td>
+<td>Curve needs volume/mass</td>
+<td>Existing Rectangular Section dimensions or verified section → RAW Element Linear</td>
+<td>Derive cross-section area; variable stock needs appropriate volume route; no nominal-size guesses</td>
+<td>Section geometry/units, member specification</td>
+</tr>
+<tr>
+<td>RAW End-of-Life Scenario / Impact / <strong>Next</strong>, review existing</td>
+<td>Missing source C leaves and evidenced additions</td>
+<td>Elements, C1?, C2?, C3?, C4?, Factor Basis?, Waste Route?, Source Note?, Override Existing=false → Elements</td>
+<td>Assign source-basis factors; partial C withheld; source preserved; <code>scenario.c_added/partial/missing_modules/override_blocked/source_note_missing/unit_unsupported/context_unresolved</code></td>
+<td>Source Note required, matching resolved method/indicator; route label alone supplies no factor</td>
+</tr>
+<tr>
+<td>RAW Reuse / Recovery Scenario / Impact / <strong>Next</strong>, review existing</td>
+<td>Explicit net D source/scenario factor</td>
+<td>Elements, D Factor?, Basis?, Reuse/Recycling/Recovery Rates?, Credit Method?, Source Note?, Override Existing=false → Elements</td>
+<td>Signed D; no automatic multiplication by rates; missing null; <code>scenario.d_*</code>, beyond-boundary warning</td>
+<td>Evidenced net-credit method and matching context; no double credit with material recycled content</td>
+</tr>
+<tr>
+<td>RAW Transport Scenario / Impact / <strong>Later</strong></td>
+<td>No applicable source A4; separately defined transport event</td>
+<td>Elements, Distance, Mode, Factor + basis/context, Load Factor?, Source Note → Elements</td>
+<td>Payload × distance × compatible factor; no repeated load-factor correction already embedded in factor; proposed <code>transport.mass_missing/distance_missing/factor_missing/boundary_overlap</code></td>
+<td>Route, mode, evidence, factor units and included return/occupancy</td>
+</tr>
+<tr>
+<td>RAW Construction Scenario / Impact / <strong>Later</strong></td>
+<td>Additional site installation/waste</td>
+<td>Elements, Installation Factor?, Waste Rate?, Site Process?, Source Note → Elements</td>
+<td>Explicit measured/site burdens; waste convention defined before scaling procurement; proposed <code>construction.waste_basis/factor_missing/double_count</code></td>
+<td>Site boundary and denominator; never automatically multiply all A1–A3 by an unspecified loss percentage</td>
+</tr>
+<tr>
+<td>RAW Replacement Scenario / Impact / <strong>Later</strong></td>
+<td>B4 replacements or separately defined repair event</td>
+<td>Elements, Service Life, Study Period, Count or reviewed policy, Source Note; explicit event factors if needed → Elements</td>
+<td>No inferred cycles; repair differs from replacement; B4 does not complete all B; proposed <code>replacement.policy_missing/service_life_missing/scope_partial</code></td>
+<td>Timing, functional equivalence, included removal/transport/production and terminal-event rule</td>
+</tr>
+<tr>
+<td>RAW Module Factor Override / Impact / <strong>Later, advanced</strong></td>
+<td>Expert missing factor with independently traceable evidence</td>
+<td>Elements, module, factor, declared basis, full context, provenance, explicit override → Elements</td>
+<td>Never default workflow; validate compatible indicator/method, history and source protection; proposed <code>override.context_conflict/evidence_missing/basis_mismatch</code></td>
+<td>Provenance mandatory, approved scope and data licence; cannot “resolve” unknown source by text alone</td>
+</tr>
+<tr>
+<td>Colour Preview / Legend / Visualisation / <strong>Now</strong>, existing</td>
+<td>Communicate selected Result</td>
+<td>Current Result/geometry/values/bounds/mode → preview, colours and legend</td>
+<td>Preserve missing-data neutral state; valid denominators only; keep scope labels</td>
+<td>Result quantities/context; no calculation edits</td>
+</tr>
+<tr>
+<td>Material/category/process graphs / Visualisation / <strong>Later</strong></td>
+<td>Compare compatible contributions</td>
+<td>Results + group key → graph geometry, labels, values</td>
+<td>Explicit unavailable bucket, compatibility/completeness and contribution-type separation</td>
+<td>Stable process ledger and aggregation rules</td>
+</tr>
+<tr>
+<td>RAW Inspector / Impact or Visualisation / <strong>Later</strong></td>
+<td>Explain any RAW object&#39;s structured issues</td>
+<td>Data → Status, Issues, Recommended Actions</td>
+<td>Rule-based first; optional LLM paraphrases facts only; no invented density/factors</td>
+<td>Stable diagnostic schemas and tested recommendations</td>
+</tr>
+</tbody></table></div>
+<p>Example chains:</p>
+<pre><code class="language-text">Selector → Element Surface + Thickness → Physical Properties → Element GWP
+Selector → Element Linear + Section → Element GWP
+Element → End-of-Life Scenario → Element GWP [C]
+Element → Reuse / Recovery Scenario → Element GWP [D; report separately]
+Element → future Machine Energy/process event → compatible module contribution → Element GWP
+</code></pre>
+<p>The last chain is planned; current Elements cannot be assumed to accept arbitrary process-energy ledgers. See the <a href="raw-fabrication-component-roadmap.html">fabrication roadmap</a> for the proposed typed contract.</p>
+<h2 id="practical-implementation-order">Practical implementation order</h2>
+<h3 id="next-12-weeks-subject-to-development-approval">Next 1–2 weeks, subject to development approval</h3>
+<ol>
+<li>Review category overlay examples and factor-role separation; keep selector UI and canonical records stable. Resolve misleading energy/MEP classification and preserve multilingual search.</li>
+<li>Write the shared quantity-resolution specification and regression matrix. Add direct m only after profile/length and declared/reference-basis rules are reviewed. Do not introduce MJ or kg·km geometry fallbacks.</li>
+<li>Strengthen Physical Properties evidence/condition messages, alignment and multi-part guidance; reuse existing Thickness and Section. Remove recommendations that require hidden legacy UI.</li>
+<li>Verify real Clay powder, m² glass, m³ blocks, a per-metre product, item count and unsupported MJ/transport cases. Compare A1–A3 outputs unchanged where already valid.</li>
+</ol>
+<h3 id="next-development-phase">Next development phase</h3>
+<p>Review C/D assignments with resolved evidence fixtures and unresolved real-source cases. Document why pending factors remain unavailable; review aggregate precedence, provenance history and no-double-credit rules. Obtain source method metadata rather than relaxing compatibility. Then specify A4 and A5; define repair versus B4 and full-B semantics before Replacement. Keep quantities/material/process contributions distinct.</p>
+<h3 id="longer-term-fabrication-aware-research">Longer term: fabrication-aware research</h3>
+<p>Collect measured stock/process events from one reclaimed timber operation and one printed/biobased operation. Implement shared Machine Energy and mass-balance services first; specialise only where measurements justify it. Add graphs after stable contributions, advanced overrides after evidence review, and Inspector after codes stabilise. Dynamic carbon, prospective backgrounds and machine-wear allocation remain separate research features pending Tanya&#39;s methodological approval.</p>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>

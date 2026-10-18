@@ -1,0 +1,158 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW LCA — dataset selector refinement · RAW LCA</title><link rel="stylesheet" href="../research.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Research & development notes</a><nav><a href="../index.html">Home</a><a href="../notebooks/index.html">Research notebooks</a><a href="../components.html">Components</a><a href="../reviews/index.html">Visual studies</a><a href="../licensing.html">Scope & rights</a></nav></header><main><p class="eyebrow">Research notebook / public reading edition</p><p><a href="raw-selector-icon-refinement.md">Read Markdown on GitHub or download source</a></p><details><summary>Contents</summary><div class="toc"><a href="#decision">Decision</a><a href="#feedback-correctly-preserved">Feedback correctly preserved</a><a href="#alternatives-evaluated">Alternatives evaluated</a><a href="#evaluation-method">Evaluation method</a><a href="#visual-and-source-evidence">Visual and source evidence</a><a href="#graphic-specification-and-editable-assets">Graphic specification and editable assets</a></div></details><h1 id="raw-lca--dataset-selector-refinement">RAW LCA — dataset selector refinement</h1>
+<blockquote>
+<p><strong>Public reading edition · Historical development snapshot.</strong> This is an archived research/design notebook, not current API documentation or a validated assessment. Source-code links, private local paths and bundled third-party reference files are omitted. Later implementation may supersede recommendations: see the <a href="../components.html">current component guide</a> and <a href="../reviews/native-icons/index.html">native icon checkpoint</a>. Original private research is preserved.</p>
+</blockquote>
+<blockquote>
+<p><strong>Historical, unapproved recommendation:</strong> the user rejected Measured Tectonics as identity and did not approve BR18 / ÖKO. The current corrective review keeps RAW LCA, uses the inspected original RAW logo, and recommends open RAW-derived DK / ÖB. See <a href="../reviews/component-family/index.html">the corrective review</a> and feedback audit (supporting internal reference retained privately). The earlier study below is preserved as evidence, not current approval.</p>
+</blockquote>
+<p>18 October 2026. <strong>Recommendation for review; no production implementation.</strong></p>
+<h2 id="decision">Decision</h2>
+<p>Recommend <strong>B: BR18 / ÖKO with minimal architectural baselines</strong>. This replaces the earlier DK/ÖB enclosing-register recommendation for these two icons only. Other brand and component decisions remain unchanged.</p>
+<ul>
+<li>Danish: <code>BR18</code>, with an open baseline and one origin tick referencing the datum of a table/register.</li>
+<li>German: <code>ÖKO</code>, including the umlaut, with a plain open baseline. No matching enclosure is imposed.</li>
+<li>Full dataset names remain in component names and tooltips. BR18 identifies the regulatory source, not uniquely Table 7; ÖKO is a shortened identifier, not an official logo or certification mark.</li>
+</ul>
+<p><a href="../reviews/history/index.html">Open the focused review</a>.</p>
+<h2 id="feedback-correctly-preserved">Feedback correctly preserved</h2>
+<p>The user likes original S2 (BR18/ÖKO baseline identifiers) and S3 (Danish table-register / German oblique facade-grid). The criticism concerned the latest DK/ÖB <strong>enclosing three-line boundary</strong>, not all architectural notation. The original <a href="../reviews/history/raw-identity-research/06-selector-identities.png">06-selector-identities.png</a> was visually reviewed, along with its editable S2/S3 construction in <code>build_review.py</code>.</p>
+<p>The new review preserves both earlier directions. No flags, authority seals or official wordmark artwork were copied.</p>
+<h2 id="alternatives-evaluated">Alternatives evaluated</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Original work developed</th>
+<th>Strength</th>
+<th>Limitation / decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>Custom open DK / ÖB lettering, curved counters and no boundary</td>
+<td>Largest letters; strongest small-size letter separation</td>
+<td>DK is country-level; ÖB is proposed RAW shorthand. Retain as alternate, not preferred.</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Refined BR18 / ÖKO with minimal baseline</td>
+<td>Most direct source recognition while preserving architectural notation</td>
+<td>BR18 is compact at 24 px and weaker at 16 px. Preferred for the native 24 px target.</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Optically balanced table-register and oblique facade grid</td>
+<td>Strong text-free silhouettes; directly preserves S3</td>
+<td>Shapes alone cannot uniquely name the sources; requires learned association. Retain as full alternate.</td>
+</tr>
+<tr>
+<td>H</td>
+<td>Source lettering above miniature register/facade cells</td>
+<td>Explicit hybrid test combines S2 and S3</td>
+<td>Competing counters, cells and umlaut crowd the small tile. Not selected.</td>
+</tr>
+<tr>
+<td>Mixed B/C</td>
+<td>Danish BR18 datum paired with German facade</td>
+<td>Tests different constructions fairly rather than enforcing identical treatment</td>
+<td>Source naming becomes asymmetric. Lower than B because German identity is less immediate, not because different constructions are forbidden.</td>
+</tr>
+</tbody></table></div>
+<p>The recommended baseline is itself a restrained architectural hybrid. Adding more literal geometry is not automatically an improvement.</p>
+<h2 id="evaluation-method">Evaluation method</h2>
+<p>Scores are <strong>design judgements</strong>, informed by source semantics and direct raster review. They are not user-recognition measurements. Unlike the broad brand matrix, this focused matrix weights source identification most highly because the task is to distinguish datasets.</p>
+<p>Weights: source specificity 30%; actual 24 px legibility 25%; architectural relevance 15%; pair differentiation 15%; family fit 5%; future extensibility 5%; native feasibility 5%. Each criterion uses the same ordinal 1–5 scale; total = sum(weight × rating / 5).</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th align="right">Specificity</th>
+<th align="right">24 px</th>
+<th align="right">Architecture</th>
+<th align="right">Differentiate</th>
+<th align="right">Family</th>
+<th align="right">Extend</th>
+<th align="right">Feasible</th>
+<th align="right">Total / 100</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">77</td>
+</tr>
+<tr>
+<td>B</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">88</td>
+</tr>
+<tr>
+<td>C</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">82</td>
+</tr>
+<tr>
+<td>H</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">73</td>
+</tr>
+<tr>
+<td>Mixed B/C</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">85</td>
+</tr>
+</tbody></table></div>
+<p>The machine-readable decision.json (supporting internal reference retained privately) records the same ratings. Native feasibility means suitability for a transparent 24 × 24 bitmap slot, not successful execution in Grasshopper.</p>
+<h2 id="visual-and-source-evidence">Visual and source evidence</h2>
+<ul>
+<li>Reused source reference R15: <a href="https://www.bygningsreglementet.dk/bilag/b2/bilag_2/tabel_7/">Danish Building Regulations, Table 7</a>, and the existing actual page capture. This supports BR18/table terminology; it is not a new material-data audit.</li>
+<li>Reused R14: <a href="https://www.oekobaudat.de/en.html">ÖKOBAUDAT portal</a>, with its existing facade/header capture. This supports the ÖKO identifier and architectural facade cue. No claim that the facade icon is an official source identity.</li>
+<li>Original S2/S3 sheet and vectors were reused as design evidence, not discarded or silently replaced.</li>
+<li>A real historical screenshot supplied by the user was preserved byte-for-byte in <code>evidence/grasshopper-original.png</code>. <code>context.json</code> records its original filename, SHA-256 and exact toolbar crop.</li>
+<li>A/B/C/H were compared at <strong>24 source pixels</strong> within that real toolbar crop. Only the first two historical placeholder slots were overlaid. These are prominently labelled <strong>design composites</strong>, never passed off as installed icons. The obsolete Advanced/Alpha/Elements/Studio labels are retained to avoid fabricating a current palette.</li>
+<li>Additional 24 px swatches test neutral palette, orange, selection-colour approximation and canvas grey. They are design background tests, not native state tests.</li>
+<li>The HTML displays independent 64/32/24/18/16 px PNGs with explicit CSS dimensions. Sheet previews may be scaled to fit the browser; they are not substitutes for the independent pixel samples. Browser zoom and Windows display scaling affect physical size.</li>
+</ul>
+<p>The earlier statement that BR18 is simply too crowded at 24 px was too categorical. Refined letter spacing and open baseline make it a viable, more source-specific option. The weaker 16 px result is retained as a limitation rather than concealed by showing only enlarged art.</p>
+<h2 id="graphic-specification-and-editable-assets">Graphic specification and editable assets</h2>
+<p>Eight original concepts (A/B/C/H × Danish/German), each with a transparent 24-unit SVG master and optical 18/16-unit export masters; forty PNGs at 64, 32, 24, 18 and 16 px. Letterforms use editable paths, not linked text or distributed font files.</p>
+<ul>
+<li>Neutral ink: <code>#303638</code>.</li>
+<li>Geometry stroke: 1.3 px at 24 px.</li>
+<li>Lettering: approximately 1.05–1.35 px, with curved counters and open diagonals.</li>
+<li>Square datum ends; rounded path joins.</li>
+<li>Sub-24 exports strengthen hairlines and omit the Danish baseline origin tick. They do not change the source letters.</li>
+<li>No orange background is baked into any icon asset.</li>
+<li>Current custom selector attributes suppress the normal centre-icon region. Palette-icon implementation would not automatically add an icon to the component body; that remains a separately scoped UI decision.</li>
+</ul>
+</main><footer>Public documentation snapshot · 18 October 2026. Private plugin source and environmental datasets are not distributed here. Provisional design is not final approval.</footer></body></html>
