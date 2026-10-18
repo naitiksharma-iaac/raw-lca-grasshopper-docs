@@ -1,0 +1,71 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAW Architectural Materials and RAW Other Materials — implementation plan · RAW LCA</title><link rel="stylesheet" href="../research.css"><link rel="stylesheet" href="../materials/catalogue.css"></head><body><header class="site"><a href="../index.html"><b>RAW LCA</b> / Notebooks</a><nav><a href="../materials/classification/index.html">Classification review</a><a href="../materials/index.html">Full catalogue</a><a href="index.html">All notebooks</a></nav></header><main><h1>RAW Architectural Materials and RAW Other Materials — implementation plan</h1>
+<p><strong>Planning only. No new component, GUID, palette entry, material edit or conversion is implemented.</strong> Existing Danish and German selectors remain complete and unchanged.</p>
+<h2>One library, two additional discovery views</h2>
+<pre><code class="language-text">Original pinned material library ── identity + revision ── classification overlay
+            │                                               │
+            ├── Danish selector (complete original pack)      │
+            ├── German selector (complete original pack)     │
+            ├── Architectural Materials ◀── approved eligibility/category filter
+            └── Other Materials ◀────────── remaining/unresolved records
+                         │
+              unchanged RAW Material selection
+                         │
+              Construct Element → Element GWP
+</code></pre>
+<p>The overlay contains proposed navigation metadata, not a second set of factors. Join on <strong>stable RAW ID + pinned revision</strong>, never name, provider UUID alone, or translated labels. Provider UUID may represent several scenario records. A new source revision requires reassessment; never inherit approval silently.</p>
+<h2>Existing implementation inspected</h2>
+<p><code>GermanMaterialBrowser</code> already opens a lightweight source index through <code>RawDatasetSearchService.BrowseSourceIndex</code>. It resolves full packages only when selected, caches lazy tasks by <code>(RawId, Revision)</code> and bounds concurrent readers. Reuse this pattern rather than eagerly decoding every record. <code>MaterialSelectorSession</code> provides document-scoped cached discovery/resolution, library stamps and immutable payload handling; it is another existing reuse point, not a reason for a second database.</p>
+<p><code>ResolvedDatasetSelection</code> carries the exact dataset, supporting records, source and declared quantity. <code>MaterialDatasetGoo</code> wraps that selection and exposes <code>EnvironmentalDataset</code> without changing it. Both new selectors should emit the same single <strong>Material</strong> output. Existing downstream adapters and GWP services must see the identical selection as if it came from the original selector.</p>
+<p><code>MaterialSelectorState</code> persists identity/revision and filters. Extend discovery state only in the future implementation, with versioned overlay filter fields; do not reinterpret the existing <code>MaterialFamily</code> field or change how the current selectors browse. <code>DanishMaterialRow</code> and <code>GermanMaterialRow</code> remain the source-specific presentation paths. Do not replace their provenance or declared-unit guidance with architectural eligibility.</p>
+<h2>Proposed component contract</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Category</th>
+<th>Discovery controls</th>
+<th>Output</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAW Architectural Materials</td>
+<td>RAW LCA / Materials</td>
+<td>Source, house, subcategory, search, include conditional records</td>
+<td>Material</td>
+<td>Architecturally relevant records; conditional items visibly require specification/evidence</td>
+</tr>
+<tr>
+<td>RAW Other Materials</td>
+<td>RAW LCA / Materials</td>
+<td>Source, role, unresolved reason, search</td>
+<td>Material</td>
+<td>Remaining feedstocks, intermediates, activities and unresolved records</td>
+</tr>
+</tbody></table>
+<p>No mandatory data input is needed for a selector. Reuse native family-menu and material-dialog patterns. The dialog should show source, original declared quantity, proposed house/role, eligibility, review status and unresolved warnings. Provide a direct route to source metadata. Do not imply Other means invalid: a manufacturing input can be valid in a properly defined process workflow.</p>
+<p>Recommend two eligibility scopes in Architectural Materials: evidence-reviewed by default, with an explicit <strong>Include conditional materials</strong> toggle. Other Materials is the complement of the approved Architectural eligibility partition, not the complement of the currently displayed filter. Conditional items must not disappear from both views. Until a user approves the classification layer, the research statuses here must not become production approval.</p>
+<h2>Overlay and review contract</h2>
+<p>Each proposal records <code>id</code>, <code>revision</code>, <code>taxonomy_version</code>, primary house/subcategory, secondary applications, role, eligibility, confidence, review status, rule/review ID, evidence and required further evidence. Original source category and current RAW category remain separately readable. Confidence describes classification evidence, not environmental data quality.</p>
+<p>Review decisions are separate append-only records containing identity/revision, proposed correction, reason, reviewer identity (future authenticated or signed workflow), timestamp and taxonomy version. The current website exports unsigned user proposals only. Future import must validate IDs, revision freshness, enumerations and provenance, and present a diff for approval. Never accept browser exports as automatic authority.</p>
+<p>Missing classification → Other / unresolved with a diagnostic, not an exception or name-based guess. Conflicting classifications → review queue. Missing selected dataset revision → existing unavailable-selection behaviour, not nearest-name replacement. Missing overlay → retain existing original selectors; new curated selectors report unavailable classification.</p>
+<h2>Suggested implementation sequence after approval</h2>
+<ol>
+<li>Agree taxonomy and resolve high-impact false positives: natural stone, coatings, generic stock, precast systems and MEP activities.</li>
+<li>Approve a versioned overlay and its review governance. Resolve Danish metadata publication separately; private plugin may use its licensed underlying library without exposing it on Pages.</li>
+<li>Add a shared read-only classification index over the existing source index, with bounded lazy package resolution and source filters.</li>
+<li>Add the two selectors, reusing native selection/state/output contracts. Choose GUIDs only during implementation.</li>
+<li>Verify byte/identity parity with selections from Danish/German components, save/reopen, all sources, stale revisions, conditional warnings, pagination, empty and unavailable overlays.</li>
+<li>Run existing element/GWP regressions and genuine Rhino/Grasshopper tests. Unit conversion is a separate approved task.</li>
+</ol>
+<h2>Acceptance gates</h2>
+<ul>
+<li>Original selector counts and complete source access unchanged.</li>
+<li>No factor/density/unit/module/source-category edits or duplicated factor resources.</li>
+<li>One primary category; secondary applications do not duplicate records in totals.</li>
+<li>Architectural versus Other partition covers every record without multiplying scenario variants.</li>
+<li>Item, length and activity units retain existing compatibility warnings. Classification never authorizes a quantity conversion.</li>
+<li>No eager full-library loading regression; test cold and warm selection performance against the existing browser.</li>
+<li>Conditional eligibility, unresolved LCIA context and reference-quantity requirements remain visible independently.</li>
+</ul>
+<p><a href="raw-architectural-selector-plan.md">Markdown source</a></p></main><footer>Classification proposals only · no production changes</footer></body></html>
