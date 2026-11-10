@@ -1,0 +1,339 @@
+{
+  "all": {
+    "total": 5520,
+    "houses": {
+      "Building Services / MEP": 1893,
+      "Other Materials": 407,
+      "General Building Materials": 1138,
+      "Insulation": 305,
+      "Finishes": 138,
+      "Facades and Cladding": 69,
+      "Connections and Accessories": 279,
+      "Floors": 421,
+      "Doors, Windows and Glazing": 352,
+      "Roofs": 104,
+      "Structure": 202,
+      "Walls and Partitions": 160,
+      "Ceilings": 52
+    },
+    "eligibility": {
+      "Architectural — reviewed": 30,
+      "Other / unresolved": 407,
+      "Architectural — conditional": 5083
+    },
+    "roles": {
+      "Finished building product": 3563,
+      "Unresolved": 181,
+      "General construction material": 1138,
+      "Intermediate manufacturing product": 99,
+      "Building assembly": 117,
+      "Architectural accessory or component": 294,
+      "Raw manufacturing feedstock": 26,
+      "Other industrial dataset": 28,
+      "Energy or transport activity": 74
+    },
+    "subcategories": {
+      "Structure": {
+        "Structural timber": 67,
+        "Structural profiles": 105,
+        "Reinforcement": 30
+      },
+      "Walls and Partitions": {
+        "Precast wall products": 3,
+        "Masonry units": 80,
+        "Partition systems": 23,
+        "Wall boards": 54
+      },
+      "Floors": {
+        "Surface finishes": 383,
+        "Screeds and subfloors": 26,
+        "Structural floor products": 3,
+        "Floor systems": 9
+      },
+      "Facades and Cladding": {
+        "Facade coatings": 13,
+        "Facade assemblies": 14,
+        "Cladding products": 4,
+        "Curtain wall systems": 38
+      },
+      "Roofs": {
+        "Roof membranes and underlays": 95,
+        "Roof systems": 3,
+        "Roof coverings": 6
+      },
+      "Insulation": {
+        "Board and mat insulation": 85,
+        "Insulation systems": 16,
+        "Loose and formed insulation": 194,
+        "Thermal breaks": 10
+      },
+      "Doors, Windows and Glazing": {
+        "Frames and profiles": 42,
+        "Glazing and infill": 22,
+        "Doors": 172,
+        "Windows": 102,
+        "Rooflights": 14
+      },
+      "Finishes": {
+        "Wall and ceiling finishes": 70,
+        "Paints and coatings": 16,
+        "Primers and adhesives": 49,
+        "Multi-application stone products": 3
+      },
+      "Connections and Accessories": {
+        "Seals and joints": 68,
+        "Membranes and barriers": 53,
+        "Fixings and fittings": 87,
+        "Shading and opening devices": 71
+      },
+      "Building Services / MEP": {
+        "Heating and hot water": 251,
+        "Water and drainage": 159,
+        "Ventilation and cooling": 34,
+        "Conveyance": 8,
+        "Lighting and electrical": 1429,
+        "Fire protection": 12
+      },
+      "General Building Materials": {
+        "Binders and additives": 395,
+        "Aggregates and fill": 54,
+        "Unspecified building products": 236,
+        "Metal stock": 129,
+        "Timber and boards": 119,
+        "Concrete and mortar": 205
+      },
+      "Ceilings": {
+        "Ceiling panels and acoustic products": 38,
+        "Ceiling systems": 14
+      },
+      "Other Materials": {
+        "Application unresolved": 181,
+        "Manufacturing intermediates": 98,
+        "Manufacturing feedstocks": 26,
+        "Treatment and industrial processes": 28,
+        "Energy and transport": 74
+      }
+    },
+    "review_covered_records": 48
+  },
+  "sources": {
+    "denmark_br18_table7": {
+      "total": 441,
+      "houses": {
+        "Building Services / MEP": 86,
+        "Other Materials": 153,
+        "General Building Materials": 62,
+        "Insulation": 22,
+        "Finishes": 18,
+        "Facades and Cladding": 9,
+        "Connections and Accessories": 22,
+        "Floors": 20,
+        "Doors, Windows and Glazing": 19,
+        "Roofs": 10,
+        "Structure": 6,
+        "Walls and Partitions": 13,
+        "Ceilings": 1
+      },
+      "eligibility": {
+        "Architectural — reviewed": 4,
+        "Other / unresolved": 153,
+        "Architectural — conditional": 284
+      },
+      "roles": {
+        "Finished building product": 196,
+        "Unresolved": 128,
+        "General construction material": 62,
+        "Intermediate manufacturing product": 9,
+        "Building assembly": 8,
+        "Architectural accessory or component": 22,
+        "Raw manufacturing feedstock": 12,
+        "Other industrial dataset": 4
+      },
+      "subcategories": {
+        "Structure": {
+          "Structural timber": 6
+        },
+        "Walls and Partitions": {
+          "Precast wall products": 3,
+          "Masonry units": 10
+        },
+        "Floors": {
+          "Surface finishes": 13,
+          "Screeds and subfloors": 4,
+          "Structural floor products": 3
+        },
+        "Facades and Cladding": {
+          "Facade coatings": 6,
+          "Facade assemblies": 2,
+          "Cladding products": 1
+        },
+        "Roofs": {
+          "Roof membranes and underlays": 10
+        },
+        "Insulation": {
+          "Board and mat insulation": 6,
+          "Insulation systems": 6,
+          "Loose and formed insulation": 10
+        },
+        "Doors, Windows and Glazing": {
+          "Frames and profiles": 12,
+          "Glazing and infill": 4,
+          "Doors": 1,
+          "Windows": 2
+        },
+        "Finishes": {
+          "Wall and ceiling finishes": 10,
+          "Paints and coatings": 5,
+          "Primers and adhesives": 3
+        },
+        "Connections and Accessories": {
+          "Seals and joints": 8,
+          "Membranes and barriers": 8,
+          "Fixings and fittings": 6
+        },
+        "Building Services / MEP": {
+          "Heating and hot water": 65,
+          "Water and drainage": 10,
+          "Ventilation and cooling": 6,
+          "Conveyance": 4,
+          "Lighting and electrical": 1
+        },
+        "General Building Materials": {
+          "Binders and additives": 6,
+          "Aggregates and fill": 18,
+          "Unspecified building products": 26,
+          "Metal stock": 9,
+          "Timber and boards": 3
+        },
+        "Ceilings": {
+          "Ceiling panels and acoustic products": 1
+        },
+        "Other Materials": {
+          "Application unresolved": 128,
+          "Manufacturing intermediates": 9,
+          "Manufacturing feedstocks": 12,
+          "Treatment and industrial processes": 4
+        }
+      },
+      "review_covered_records": 6
+    },
+    "okobaudat": {
+      "total": 5079,
+      "houses": {
+        "Building Services / MEP": 1807,
+        "Other Materials": 254,
+        "Structure": 196,
+        "Facades and Cladding": 60,
+        "Finishes": 120,
+        "Walls and Partitions": 147,
+        "Floors": 401,
+        "Doors, Windows and Glazing": 333,
+        "General Building Materials": 1076,
+        "Connections and Accessories": 257,
+        "Ceilings": 51,
+        "Roofs": 94,
+        "Insulation": 283
+      },
+      "eligibility": {
+        "Architectural — reviewed": 26,
+        "Other / unresolved": 254,
+        "Architectural — conditional": 4799
+      },
+      "roles": {
+        "Architectural accessory or component": 272,
+        "Intermediate manufacturing product": 90,
+        "Finished building product": 3367,
+        "Building assembly": 109,
+        "Unresolved": 53,
+        "General construction material": 1076,
+        "Raw manufacturing feedstock": 14,
+        "Energy or transport activity": 74,
+        "Other industrial dataset": 24
+      },
+      "subcategories": {
+        "Structure": {
+          "Structural timber": 61,
+          "Structural profiles": 105,
+          "Reinforcement": 30
+        },
+        "Walls and Partitions": {
+          "Partition systems": 23,
+          "Masonry units": 70,
+          "Wall boards": 54
+        },
+        "Floors": {
+          "Surface finishes": 370,
+          "Screeds and subfloors": 22,
+          "Floor systems": 9
+        },
+        "Facades and Cladding": {
+          "Facade assemblies": 12,
+          "Facade coatings": 7,
+          "Curtain wall systems": 38,
+          "Cladding products": 3
+        },
+        "Roofs": {
+          "Roof membranes and underlays": 85,
+          "Roof systems": 3,
+          "Roof coverings": 6
+        },
+        "Insulation": {
+          "Loose and formed insulation": 184,
+          "Board and mat insulation": 79,
+          "Insulation systems": 10,
+          "Thermal breaks": 10
+        },
+        "Doors, Windows and Glazing": {
+          "Frames and profiles": 30,
+          "Doors": 171,
+          "Windows": 100,
+          "Rooflights": 14,
+          "Glazing and infill": 18
+        },
+        "Finishes": {
+          "Multi-application stone products": 3,
+          "Wall and ceiling finishes": 60,
+          "Paints and coatings": 11,
+          "Primers and adhesives": 46
+        },
+        "Connections and Accessories": {
+          "Seals and joints": 60,
+          "Fixings and fittings": 81,
+          "Membranes and barriers": 45,
+          "Shading and opening devices": 71
+        },
+        "Building Services / MEP": {
+          "Lighting and electrical": 1428,
+          "Heating and hot water": 186,
+          "Water and drainage": 149,
+          "Ventilation and cooling": 28,
+          "Fire protection": 12,
+          "Conveyance": 4
+        },
+        "General Building Materials": {
+          "Binders and additives": 389,
+          "Timber and boards": 116,
+          "Unspecified building products": 210,
+          "Concrete and mortar": 205,
+          "Metal stock": 120,
+          "Aggregates and fill": 36
+        },
+        "Ceilings": {
+          "Ceiling panels and acoustic products": 37,
+          "Ceiling systems": 14
+        },
+        "Other Materials": {
+          "Manufacturing intermediates": 89,
+          "Application unresolved": 53,
+          "Manufacturing feedstocks": 14,
+          "Energy and transport": 74,
+          "Treatment and industrial processes": 24
+        }
+      },
+      "review_covered_records": 42
+    }
+  },
+  "source_pages": {
+    "available": 339
+  }
+}

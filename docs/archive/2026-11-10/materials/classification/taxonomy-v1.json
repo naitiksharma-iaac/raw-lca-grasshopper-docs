@@ -1,0 +1,104 @@
+{
+  "version": "1.0.0",
+  "houses": {
+    "Structure": [
+      "Structural timber",
+      "Structural profiles",
+      "Reinforcement",
+      "Structural products — application needed"
+    ],
+    "Walls and Partitions": [
+      "Masonry units",
+      "Wall boards",
+      "Partition systems",
+      "Precast wall products"
+    ],
+    "Floors": [
+      "Structural floor products",
+      "Screeds and subfloors",
+      "Surface finishes",
+      "Floor systems"
+    ],
+    "Facades and Cladding": [
+      "Curtain wall systems",
+      "Facade assemblies",
+      "Cladding products",
+      "Facade coatings"
+    ],
+    "Roofs": [
+      "Roof coverings",
+      "Roof membranes and underlays",
+      "Roof systems",
+      "Roof accessories"
+    ],
+    "Insulation": [
+      "Board and mat insulation",
+      "Loose and formed insulation",
+      "Insulation systems",
+      "Thermal breaks"
+    ],
+    "Doors, Windows and Glazing": [
+      "Doors",
+      "Windows",
+      "Glazing and infill",
+      "Frames and profiles",
+      "Rooflights"
+    ],
+    "Finishes": [
+      "Wall and ceiling finishes",
+      "Paints and coatings",
+      "Primers and adhesives",
+      "Multi-application stone products"
+    ],
+    "Connections and Accessories": [
+      "Fixings and fittings",
+      "Seals and joints",
+      "Membranes and barriers",
+      "Shading and opening devices"
+    ],
+    "Building Services / MEP": [
+      "Lighting and electrical",
+      "Heating and hot water",
+      "Ventilation and cooling",
+      "Water and drainage",
+      "Conveyance",
+      "Fire protection"
+    ],
+    "General Building Materials": [
+      "Concrete and mortar",
+      "Binders and additives",
+      "Aggregates and fill",
+      "Timber and boards",
+      "Metal stock",
+      "Unspecified building products"
+    ],
+    "Ceilings": [
+      "Ceiling systems",
+      "Ceiling panels and acoustic products"
+    ],
+    "Other Materials": [
+      "Manufacturing feedstocks",
+      "Manufacturing intermediates",
+      "Energy and transport",
+      "Treatment and industrial processes",
+      "Application unresolved"
+    ]
+  },
+  "roles": [
+    "Finished building product",
+    "Building assembly",
+    "General construction material",
+    "Architectural accessory or component",
+    "Raw manufacturing feedstock",
+    "Intermediate manufacturing product",
+    "Energy or transport activity",
+    "Other industrial dataset",
+    "Unresolved"
+  ],
+  "eligibility": [
+    "Architectural — reviewed",
+    "Architectural — conditional",
+    "Other / unresolved"
+  ],
+  "principle": "Application first; composition remains a separate source facet. Reviewed means documented agent evidence review, not expert certification or user approval."
+}

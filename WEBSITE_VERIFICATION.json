@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-10",
+  "checkedPages": 44,
+  "missingLinks": [],
+  "staticBuild": "HTML, no bundler required",
+  "browserVisualTest": "not performed",
+  "binary": "withheld: rights and clean-install gates",
+  "sourceCodePublished": false
+}

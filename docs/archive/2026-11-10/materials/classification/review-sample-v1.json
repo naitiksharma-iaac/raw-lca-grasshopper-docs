@@ -1,0 +1,678 @@
+{
+  "status": "Agent evidence reviews, not expert validation or user approval",
+  "reviews": [
+    {
+      "review_id": "R01",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "845d5186-c889-4ea1-a7e2-c0d2e749b65a"
+      ],
+      "source_version": "12.00.000",
+      "house": "Building Services / MEP",
+      "subcategory": "Lighting and electrical",
+      "role": "Architectural accessory or component",
+      "reason": "Official purpose identifies office lighting; technology describes a channel with separately ordered parts. Treat as a lighting component, not a complete installed luminaire.",
+      "finding": "Official purpose identifies office lighting; technology describes a channel with separately ordered parts. Treat as a lighting component, not a complete installed luminaire.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/845d5186-c889-4ea1-a7e2-c0d2e749b65a?version=12.00.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R02",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "d9bfad25-c581-4fe3-b5e3-171ddb59c808"
+      ],
+      "source_version": "20.26.070",
+      "house": "Other Materials",
+      "subcategory": "Manufacturing intermediates",
+      "role": "Intermediate manufacturing product",
+      "reason": "The source allows construction use broadly but identifies an aluminium cast part at the factory gate. No installed building application is specified; retain intermediate role.",
+      "finding": "The source allows construction use broadly but identifies an aluminium cast part at the factory gate. No installed building application is specified; retain intermediate role.",
+      "eligibility": "Other / unresolved",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/d9bfad25-c581-4fe3-b5e3-171ddb59c808?version=20.26.070"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R03",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "7aba3603-0689-4da5-8d24-fd92ae398d07"
+      ],
+      "source_version": "00.00.032",
+      "house": "Structure",
+      "subcategory": "Structural timber",
+      "role": "Finished building product",
+      "reason": "Official technical purpose identifies structural building and bridge components. Source flow and m3 quantity describe KVH timber; project grading/design checks remain separate.",
+      "finding": "Official technical purpose identifies structural building and bridge components. Source flow and m3 quantity describe KVH timber; project grading/design checks remain separate.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/7aba3603-0689-4da5-8d24-fd92ae398d07?version=00.00.032"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": false,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R04",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "d712008c-140f-4811-bee0-219cb6034244"
+      ],
+      "source_version": "00.01.200",
+      "house": "Facades and Cladding",
+      "subcategory": "Facade assemblies",
+      "role": "Building assembly",
+      "reason": "Official description includes standing-seam profiles and clips for roofs and facades. Retain facade as primary navigation and roof as a secondary use; do not split its factor into separate parts.",
+      "finding": "Official description includes standing-seam profiles and clips for roofs and facades. Retain facade as primary navigation and roof as a secondary use; do not split its factor into separate parts.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [
+        "Roofs"
+      ],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/d712008c-140f-4811-bee0-219cb6034244?version=00.01.200"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R05",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "98775611-4588-49a7-b539-9beb7492fc4f"
+      ],
+      "source_version": "00.00.011",
+      "house": "Other Materials",
+      "subcategory": "Application unresolved",
+      "role": "Unresolved",
+      "reason": "Technical purpose is erosion control, slopes and channels. Technical textile does not establish a building membrane. Consider a future landscape/civil works facet after scope agreement.",
+      "finding": "Technical purpose is erosion control, slopes and channels. Technical textile does not establish a building membrane. Consider a future landscape/civil works facet after scope agreement.",
+      "eligibility": "Other / unresolved",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/98775611-4588-49a7-b539-9beb7492fc4f?version=00.00.011"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R06",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "11078fc0-f5b5-46d2-8d6d-e93b2cea577b"
+      ],
+      "source_version": "00.02.000",
+      "house": "Finishes",
+      "subcategory": "Multi-application stone products",
+      "role": "Finished building product",
+      "reason": "Official purpose describes finished natural-stone cladding, floors, roofs and special pieces. Concrete aggregates is a misleading navigation parent here; use multi-application stone products rather than Concrete or raw aggregate.",
+      "finding": "Official purpose describes finished natural-stone cladding, floors, roofs and special pieces. Concrete aggregates is a misleading navigation parent here; use multi-application stone products rather than Concrete or raw aggregate.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [
+        "Facades and Cladding",
+        "Floors",
+        "Roofs"
+      ],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/11078fc0-f5b5-46d2-8d6d-e93b2cea577b?version=00.02.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R07",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "4e754af4-9517-4078-8a7c-75745e54846c"
+      ],
+      "source_version": "01.00.002",
+      "house": "Walls and Partitions",
+      "subcategory": "Partition systems",
+      "role": "Building assembly",
+      "reason": "Technical purpose identifies a modular wall system for healthcare, laboratories and sanitary/sterile areas. Preserve the system boundary; the powder-coated steel composition does not make it generic metal stock.",
+      "finding": "Technical purpose identifies a modular wall system for healthcare, laboratories and sanitary/sterile areas. Preserve the system boundary; the powder-coated steel composition does not make it generic metal stock.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/4e754af4-9517-4078-8a7c-75745e54846c?version=01.00.002"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R08",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "fe64ddf7-d556-4589-98cc-c97a0aad0c8e"
+      ],
+      "source_version": "00.01.001",
+      "house": "Floors",
+      "subcategory": "Surface finishes",
+      "role": "Finished building product",
+      "reason": "Source taxonomy and technology identify tufted carpet. It is a representative worst-case construction rather than an identified purchasable product; a matching PRODIS product/use class is still needed.",
+      "finding": "Source taxonomy and technology identify tufted carpet. It is a representative worst-case construction rather than an identified purchasable product; a matching PRODIS product/use class is still needed.",
+      "eligibility": "Architectural — conditional",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/fe64ddf7-d556-4589-98cc-c97a0aad0c8e?version=00.01.001"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R09",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "5a0c9f26-8f9e-4f77-a93c-7eac3f4a312e"
+      ],
+      "source_version": "00.00.003",
+      "house": "Doors, Windows and Glazing",
+      "subcategory": "Frames and profiles",
+      "role": "Architectural accessory or component",
+      "reason": "Technical purpose describes steel door frames with hinges/hardware and optional glazing fitted later. Correct the broad Doors leaf to frames; do not represent a complete door.",
+      "finding": "Technical purpose describes steel door frames with hinges/hardware and optional glazing fitted later. Correct the broad Doors leaf to frames; do not represent a complete door.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/5a0c9f26-8f9e-4f77-a93c-7eac3f4a312e?version=00.00.003"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R10",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "9394795b-a620-4f54-b72c-c535bb0a02f0"
+      ],
+      "source_version": "00.02.000",
+      "house": "Ceilings",
+      "subcategory": "Ceiling panels and acoustic products",
+      "role": "Finished building product",
+      "reason": "Official purpose identifies suspended-ceiling mineral tiles for cladding/acoustics. Do not infer a structural floor from the source ceiling-panel class.",
+      "finding": "Official purpose identifies suspended-ceiling mineral tiles for cladding/acoustics. Do not infer a structural floor from the source ceiling-panel class.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/9394795b-a620-4f54-b72c-c535bb0a02f0?version=00.02.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": false,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R11",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "a1027332-3580-4521-a8a1-34ee644a6f5c"
+      ],
+      "source_version": "00.00.007",
+      "house": "Roofs",
+      "subcategory": "Roof membranes and underlays",
+      "role": "Finished building product",
+      "reason": "Official purpose identifies moisture protection under roofs and on walls. Roof is the primary navigation choice; wall application is retained separately.",
+      "finding": "Official purpose identifies moisture protection under roofs and on walls. Roof is the primary navigation choice; wall application is retained separately.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [
+        "Walls and Partitions"
+      ],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/a1027332-3580-4521-a8a1-34ee644a6f5c?version=00.00.007"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": false,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R12",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "9d287136-525a-4d37-b698-b834d4cc59ae"
+      ],
+      "source_version": "00.12.000",
+      "house": "Doors, Windows and Glazing",
+      "subcategory": "Frames and profiles",
+      "role": "Architectural accessory or component",
+      "reason": "Official application is supporting window/window-door installation in the insulation layer. EPS composition alone incorrectly suggests bulk insulation; this is a frame-system component.",
+      "finding": "Official application is supporting window/window-door installation in the insulation layer. EPS composition alone incorrectly suggests bulk insulation; this is a frame-system component.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [
+        "Insulation"
+      ],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/9d287136-525a-4d37-b698-b834d4cc59ae?version=00.12.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R13",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "f86784a7-155b-462f-8e9a-ba20b7469024"
+      ],
+      "source_version": "00.04.000",
+      "house": "Finishes",
+      "subcategory": "Wall and ceiling finishes",
+      "role": "Finished building product",
+      "reason": "Official purpose identifies a wetroom wall-covering panel installed over existing surfaces or plasterboard. It is a finish product, not an entire wall assembly.",
+      "finding": "Official purpose identifies a wetroom wall-covering panel installed over existing surfaces or plasterboard. It is a finish product, not an entire wall assembly.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/f86784a7-155b-462f-8e9a-ba20b7469024?version=00.04.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": false,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R14",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "d24a85e3-f395-4124-9874-c01f977a893f"
+      ],
+      "source_version": "20.26.070",
+      "house": "Other Materials",
+      "subcategory": "Application unresolved",
+      "role": "Unresolved",
+      "reason": "The source provides only broad construction-use advice and an asphalt production description. A building-floor/roof application is not established; retain unresolved rather than infer one from asphalt.",
+      "finding": "The source provides only broad construction-use advice and an asphalt production description. A building-floor/roof application is not established; retain unresolved rather than infer one from asphalt.",
+      "eligibility": "Other / unresolved",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/d24a85e3-f395-4124-9874-c01f977a893f?version=20.26.070"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R15",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "a60489dc-32f2-4ff6-83d2-eb8f4f630ebd"
+      ],
+      "source_version": "20.26.070",
+      "house": "Other Materials",
+      "subcategory": "Manufacturing feedstocks",
+      "role": "Raw manufacturing feedstock",
+      "reason": "Source technology describes extracted, dried and milled clay powder at the factory gate. Broad construction-use advice does not define a finished brick, plaster or panel. A specified mix/application is required.",
+      "finding": "Source technology describes extracted, dried and milled clay powder at the factory gate. Broad construction-use advice does not define a finished brick, plaster or panel. A specified mix/application is required.",
+      "eligibility": "Other / unresolved",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/a60489dc-32f2-4ff6-83d2-eb8f4f630ebd?version=20.26.070"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R16",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "53945e96-502a-4c3f-b487-f087b1fabcb7"
+      ],
+      "source_version": "20.26.070",
+      "house": "Other Materials",
+      "subcategory": "Treatment and industrial processes",
+      "role": "Other industrial dataset",
+      "reason": "Technical description identifies incineration with energy recovery. Generic construction-use advice must not override this process boundary or classify it as new timber.",
+      "finding": "Technical description identifies incineration with energy recovery. Generic construction-use advice must not override this process boundary or classify it as new timber.",
+      "eligibility": "Other / unresolved",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/53945e96-502a-4c3f-b487-f087b1fabcb7?version=20.26.070"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R17",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "b0230a76-0440-4c88-afb6-922c1ccdb815"
+      ],
+      "source_version": "20.26.070",
+      "house": "Other Materials",
+      "subcategory": "Energy and transport",
+      "role": "Energy or transport activity",
+      "reason": "Source Use class, Electricity reference flow and MJ quantity identify an operational activity. This is not installed ventilation equipment.",
+      "finding": "Source Use class, Electricity reference flow and MJ quantity identify an operational activity. This is not installed ventilation equipment.",
+      "eligibility": "Other / unresolved",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/b0230a76-0440-4c88-afb6-922c1ccdb815?version=20.26.070"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R18",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "d9bbd813-2f53-4695-98c8-17d5b54b62e5"
+      ],
+      "source_version": "00.03.001",
+      "house": "Facades and Cladding",
+      "subcategory": "Facade coatings",
+      "role": "Intermediate manufacturing product",
+      "reason": "Official technical purpose explicitly names metal facades, while technology describes supplied coating powder. Conditional architectural coating intermediate; requires application/substrate specification and applied-quantity evidence. It is not steel.",
+      "finding": "Official technical purpose explicitly names metal facades, while technology describes supplied coating powder. Conditional architectural coating intermediate; requires application/substrate specification and applied-quantity evidence. It is not steel.",
+      "eligibility": "Architectural — conditional",
+      "confidence": "medium",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/d9bbd813-2f53-4695-98c8-17d5b54b62e5?version=00.03.001"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R19",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "699e3d57-72b4-402d-a0ee-cebb06f3cdf1"
+      ],
+      "source_version": "00.08.000",
+      "house": "Insulation",
+      "subcategory": "Loose and formed insulation",
+      "role": "Finished building product",
+      "reason": "Official purpose covers building and technical insulation, including multiple forms. Retain Insulation; matching density range, product form and application are still required.",
+      "finding": "Official purpose covers building and technical insulation, including multiple forms. Retain Insulation; matching density range, product form and application are still required.",
+      "eligibility": "Architectural — conditional",
+      "confidence": "medium",
+      "secondary_applications": [
+        "Walls and Partitions",
+        "Roofs",
+        "Ceilings",
+        "Building Services / MEP"
+      ],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/699e3d57-72b4-402d-a0ee-cebb06f3cdf1?version=00.08.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": false,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R20",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "dd902c86-84dd-47b8-a45a-bab0b054bc72"
+      ],
+      "source_version": "00.03.000",
+      "house": "Connections and Accessories",
+      "subcategory": "Fixings and fittings",
+      "role": "Architectural accessory or component",
+      "reason": "Technical description identifies a mortise lock for building doors, despite an opaque product name. Do not classify from the name alone.",
+      "finding": "Technical description identifies a mortise lock for building doors, despite an opaque product name. Do not classify from the name alone.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/dd902c86-84dd-47b8-a45a-bab0b054bc72?version=00.03.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": false,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R21",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "cc9bd425-82d6-41c5-9d4d-72e0dfa6ba38"
+      ],
+      "source_version": "00.01.001",
+      "house": "General Building Materials",
+      "subcategory": "Concrete and mortar",
+      "role": "General construction material",
+      "reason": "Official purpose lists walls, stairs, floors and foundations. Keep generic placed concrete accessible as conditional construction material, requiring project mix/application and geographical representativeness.",
+      "finding": "Official purpose lists walls, stairs, floors and foundations. Keep generic placed concrete accessible as conditional construction material, requiring project mix/application and geographical representativeness.",
+      "eligibility": "Architectural — conditional",
+      "confidence": "medium",
+      "secondary_applications": [
+        "Structure",
+        "Floors",
+        "Walls and Partitions"
+      ],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/cc9bd425-82d6-41c5-9d4d-72e0dfa6ba38?version=00.01.001"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R22",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "be06a50c-9a4a-4af7-837d-abc46d0d3da9"
+      ],
+      "source_version": "00.03.000",
+      "house": "Floors",
+      "subcategory": "Screeds and subfloors",
+      "role": "Finished building product",
+      "reason": "Technical purpose describes dry screed on a load-bearing substrate, with floor covering added later. It is neither the load-bearing slab nor the final surface finish.",
+      "finding": "Technical purpose describes dry screed on a load-bearing substrate, with floor covering added later. It is neither the load-bearing slab nor the final surface finish.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/be06a50c-9a4a-4af7-837d-abc46d0d3da9?version=00.03.000"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R23",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "755a481d-a74b-4ba0-b417-cc26767b2d50"
+      ],
+      "source_version": "20.26.070",
+      "house": "Structure",
+      "subcategory": "Structural profiles",
+      "role": "Finished building product",
+      "reason": "Official purpose identifies load-bearing steel profiles, with coating/exposure qualifications. Keep structural profile navigation while leaving engineering approval and exact section specification to the project.",
+      "finding": "Official purpose identifies load-bearing steel profiles, with coating/exposure qualifications. Keep structural profile navigation while leaving engineering approval and exact section specification to the project.",
+      "eligibility": "Architectural — conditional",
+      "confidence": "medium",
+      "secondary_applications": [
+        "Floors",
+        "Walls and Partitions",
+        "Roofs"
+      ],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/755a481d-a74b-4ba0-b417-cc26767b2d50?version=20.26.070"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R24",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "436e6be4-1b00-4885-a984-f509330b02d6"
+      ],
+      "source_version": "00.01.001",
+      "house": "Walls and Partitions",
+      "subcategory": "Masonry units",
+      "role": "Finished building product",
+      "reason": "Official purpose identifies load-bearing, non-load-bearing and foundation walls; production describes moulded/pressed precast units. Correct the broad precast family to wall masonry, not a generic slab.",
+      "finding": "Official purpose identifies load-bearing, non-load-bearing and foundation walls; production describes moulded/pressed precast units. Correct the broad precast family to wall masonry, not a generic slab.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/436e6be4-1b00-4885-a984-f509330b02d6?version=00.01.001"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    },
+    {
+      "review_id": "R25",
+      "source_pack": "okobaudat",
+      "provider_ids": [
+        "764c4ff5-33ec-45e9-b6ee-c7b0dec8b2fe"
+      ],
+      "source_version": "00.03.001",
+      "house": "Facades and Cladding",
+      "subcategory": "Cladding products",
+      "role": "Finished building product",
+      "reason": "Official purpose identifies a ventilated-facade cladding panel. Mineral-wool source composition does not make it bulk thermal insulation.",
+      "finding": "Official purpose identifies a ventilated-facade cladding panel. Mineral-wool source composition does not make it bulk thermal insulation.",
+      "eligibility": "Architectural — reviewed",
+      "confidence": "high",
+      "secondary_applications": [],
+      "urls": [
+        "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/764c4ff5-33ec-45e9-b6ee-c7b0dec8b2fe?version=00.03.001"
+      ],
+      "reviewer": "Codex agent — source evidence inspected; no human approval",
+      "review_date": "2026-10-19",
+      "scope": "Product application, including pinned scenario variants; not a factor/method or structural certification review.",
+      "difficult": true,
+      "flags": [
+        "individual_application_review"
+      ]
+    }
+  ]
+}

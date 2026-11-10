@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RAW Architectural classification overlay V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "inventory_sha256",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "revision",
+          "source_pack",
+          "house",
+          "subcategory",
+          "role",
+          "eligibility",
+          "review_status",
+          "confidence",
+          "evidence",
+          "taxonomy_version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "house": {
+            "enum": [
+              "Structure",
+              "Walls and Partitions",
+              "Floors",
+              "Facades and Cladding",
+              "Roofs",
+              "Insulation",
+              "Doors, Windows and Glazing",
+              "Finishes",
+              "Connections and Accessories",
+              "Building Services / MEP",
+              "General Building Materials",
+              "Ceilings",
+              "Other Materials"
+            ]
+          },
+          "confidence": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "evidence": {
+            "type": "array"
+          },
+          "source_pack": {
+            "enum": [
+              "okobaudat",
+              "denmark_br18_table7"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "description": "Research metadata only. No factors. Public projection permits okobaudat records only. House/subcategory compatibility is verified by taxonomy-v1.json; stable ID plus revision is the key."
+}
