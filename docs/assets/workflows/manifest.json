@@ -1,0 +1,9 @@
+{
+  "source": "Existing RAW local modelling captures",
+  "wall": "RAW_Tabbycrete_Eelgrass_Timber_Wall/native-wall.png",
+  "wall-network": "RAW_Tabbycrete_Eelgrass_Timber_Wall/native-canvas.png",
+  "building": "vertikal-nydalen/screenshots/01_overall_vertikal_nydalen_interpretation.png",
+  "facade": "vertikal-nydalen/screenshots/04_facade_wood_slats_balconies.png",
+  "structure": "vertikal-nydalen/screenshots/03_structure_slabs_core.png",
+  "qualification": "Vertikal is modelling evidence only. Wall results are partial. External project photography not copied."
+}
